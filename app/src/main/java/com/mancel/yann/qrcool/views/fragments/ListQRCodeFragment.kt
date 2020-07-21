@@ -34,7 +34,7 @@ class ListQRCodeFragment : BaseFragment() {
      * Configures the FloatingActionButton to navigate to ScanQRCodeFragment
      */
     private fun configureFABToNavigateToScanQRCodeFragment() {
-        this._RootView.fragment_list_fab.setOnClickListener {
+        this._rootView.fragment_list_fab.setOnClickListener {
             this.findNavController().navigate(R.id.action_listQRCodeFragment_to_scanQRCodeFragment)
         }
     }

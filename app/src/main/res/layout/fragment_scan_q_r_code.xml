@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+<!-- ConstraintLayout -->
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
@@ -8,10 +9,10 @@
     android:layout_height="match_parent"
     tools:context=".views.fragments.ScanQRCodeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- ZXingScannerView: QR Code scanner -->
+    <me.dm7.barcodescanner.zxing.ZXingScannerView
+        android:id="@+id/fragment_scan_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="SCAN QR Code" />
+        android:layout_height="match_parent"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

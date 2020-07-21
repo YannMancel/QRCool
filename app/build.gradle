@@ -48,6 +48,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    // QR Code scanner
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
     // TESTS ---------------------------------------------------------------------------------------
 
     testImplementation 'junit:junit:4.12'

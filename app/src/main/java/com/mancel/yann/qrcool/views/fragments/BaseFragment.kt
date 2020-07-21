@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
 /**
  * Created by Yann MANCEL on 21/07/2020.
@@ -21,7 +22,7 @@ abstract class BaseFragment : Fragment() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    protected lateinit var _RootView: View
+    protected lateinit var _rootView: View
 
     companion object {
         const val REQUEST_CODE_PERMISSION_CAMERA = 1000
@@ -49,11 +50,11 @@ abstract class BaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        this._RootView = inflater.inflate(this.getFragmentLayout(), container, false)
+        this._rootView = inflater.inflate(this.getFragmentLayout(), container, false)
 
         this.configureDesign()
 
-        return this._RootView
+        return this._rootView
     }
 
     override fun onRequestPermissionsResult(
@@ -67,13 +68,13 @@ abstract class BaseFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
                     this.actionAfterPermission()
                 }
+                else {
+                    this.findNavController().popBackStack()
+                }
             }
 
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            // we can use: this.findNavController().popBackStack()
         }
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     // -- Permission --
