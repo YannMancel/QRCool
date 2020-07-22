@@ -1,10 +1,11 @@
 package com.mancel.yann.qrcool.views.fragments
 
-import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.zxing.Result
 import com.mancel.yann.qrcool.BuildConfig
 import com.mancel.yann.qrcool.R
+import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_scan_q_r_code.view.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
@@ -16,6 +17,10 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
  * A [BaseFragment] subclass which implements [ZXingScannerView.ResultHandler].
  */
 class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
+
+    // FIELDS --------------------------------------------------------------------------------------
+
+    private val _viewModel: SharedViewModel by activityViewModels()
 
     // METHODS -------------------------------------------------------------------------------------
 
@@ -74,9 +79,14 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
 
     // -- QR Code --
 
-    private fun notifyScanOfQRCode(text: String) {
-        Log.d("Scan", "QR Code: $text")
-        // todo - 22/07/2020 - Add QRCode
+    /**
+     * Notifies when a QR Code has been checked
+     */
+    private fun notifyScanOfQRCode(textOfQRCode: String) {
+        // Add QR Code
+        this._viewModel.addQRCode(textOfQRCode)
+
+        // Finishes this fragment
         this.findNavController().popBackStack()
     }
 }
