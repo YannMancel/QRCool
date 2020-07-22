@@ -1,7 +1,9 @@
 package com.mancel.yann.qrcool.views.fragments
 
 import android.util.Log
+import androidx.navigation.fragment.findNavController
 import com.google.zxing.Result
+import com.mancel.yann.qrcool.BuildConfig
 import com.mancel.yann.qrcool.R
 import kotlinx.android.synthetic.main.fragment_scan_q_r_code.view.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -21,7 +23,11 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_scan_q_r_code
 
-    override fun configureDesign() { /* Do nothing here */ }
+    override fun configureDesign() {
+        if (BuildConfig.QRCODE_SIMULATOR_ENABLED) {
+            this.notifyScanOfQRCode("http://qrcode.scan")
+        }
+    }
 
     override fun actionAfterPermission() = this.startCamera()
 
@@ -40,8 +46,9 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
     // -- ZXingScannerView.ResultHandler interface --
 
     override fun handleResult(rawResult: Result?) {
-        Log.d("Scan", "QR Code: ${rawResult?.text}")
-        // todo - 21/07/2020 - Create a popup
+        rawResult?.let {
+            this.notifyScanOfQRCode(it.text)
+        }
     }
 
     // -- Camera --
@@ -63,5 +70,13 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
      */
     private fun stopCamera() {
         this._rootView.fragment_scan_view.stopCamera()
+    }
+
+    // -- QR Code --
+
+    private fun notifyScanOfQRCode(text: String) {
+        Log.d("Scan", "QR Code: $text")
+        // todo - 22/07/2020 - Add QRCode
+        this.findNavController().popBackStack()
     }
 }

@@ -21,7 +21,7 @@
 
     </fragment>
 
-    <!-- QRCodeFragment -->
+    <!-- ScanQRCodeFragment -->
     <fragment
         android:id="@+id/scanQRCodeFragment"
         android:name="com.mancel.yann.qrcool.views.fragments.ScanQRCodeFragment"
