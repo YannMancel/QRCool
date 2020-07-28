@@ -1,6 +1,7 @@
 package com.mancel.yann.qrcool.views.fragments
 
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -26,7 +27,6 @@ class ListQRCodeFragment : BaseFragment() {
 
     private lateinit var _adapter: QRCodeAdapter
     private val _viewModel: SharedViewModel by activityViewModels()
-    private var _isFABMenuOpen = false
 
     // METHODS -------------------------------------------------------------------------------------
 
@@ -38,6 +38,7 @@ class ListQRCodeFragment : BaseFragment() {
         this.configureListenerOfFABs()
         this.configureRecyclerView()
         this.configureQRCodeEvents()
+        this.configureFABMenuEvents()
     }
 
     // -- Listener --
@@ -48,7 +49,7 @@ class ListQRCodeFragment : BaseFragment() {
     private fun configureListenerOfFABs() {
         // Normal FAB
         this._rootView.fragment_list_fab.setOnClickListener {
-            this.actionOnFabMenu()
+            this._viewModel.toogleFabMenu()
         }
 
         // Mini FABs
@@ -103,24 +104,37 @@ class ListQRCodeFragment : BaseFragment() {
             )
     }
 
-    // -- FAB Events --
-
     /**
-     * Displays the FloatingActionButton menu
+     * Configures the FloatingActionButton menu events from LiveData
      */
-    private fun actionOnFabMenu() {
-        if (!this._isFABMenuOpen)
-            this.openFABMenu()
-        else
-            this.closeFABMenu()
-
-        this._isFABMenuOpen = !this._isFABMenuOpen
+    private fun configureFABMenuEvents() {
+        this._viewModel
+            .isFABMenuOpen()
+            .observe(
+                this.viewLifecycleOwner,
+                Observer { isOpen ->
+                    if (isOpen)
+                        this.openFABMenu()
+                    else
+                        this.closeFABMenu()
+                }
+            )
     }
+
+    // -- FAB Events --
 
     /**
      * Opens the FloatingActionButton menu
      */
     private fun openFABMenu() {
+        // Animate normal FAB
+        ViewCompat
+            .animate(this._rootView.fragment_list_fab)
+            .rotation(45F)
+            .setDuration(300L)
+            .setInterpolator(OvershootInterpolator(10F))
+            .start()
+
         this.animateOpenFAB(this.fragment_list_zxing_library)
         this.animateOpenFAB(this.fragment_list_ml_kit_library)
     }
@@ -129,6 +143,14 @@ class ListQRCodeFragment : BaseFragment() {
      * Closes the FloatingActionButton menu
      */
     private fun closeFABMenu() {
+        // Animate normal FAB
+        ViewCompat
+            .animate(this._rootView.fragment_list_fab)
+            .rotation(0F)
+            .setDuration(300L)
+            .setInterpolator(OvershootInterpolator(10F))
+            .start()
+
         this.animateCloseFAB(this.fragment_list_zxing_library)
         this.animateCloseFAB(this.fragment_list_ml_kit_library)
     }

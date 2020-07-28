@@ -17,8 +17,18 @@ class SharedViewModel :  ViewModel() {
     // FIELDS --------------------------------------------------------------------------------------
 
     private val _qRCodes = MutableLiveData<List<QRCode>>()
+    private var _isFABMenuOpen = MutableLiveData<Boolean>()
+
+    // CONSTRUCTORS --------------------------------------------------------------------------------
+
+    init {
+        // By default, the FAB menu is closed
+        this._isFABMenuOpen.value = false
+    }
 
     // METHODS -------------------------------------------------------------------------------------
+
+    // -- QR Code --
 
     /**
      * Gets the [LiveData] of [List] of [QRCode]
@@ -39,5 +49,19 @@ class SharedViewModel :  ViewModel() {
 
         // Notify
         this._qRCodes.value = currentData
+    }
+
+    // -- FAB Menu --
+
+    /**
+     * Gets the [LiveData] of [Boolean]
+     */
+    fun isFABMenuOpen() : LiveData<Boolean> = this._isFABMenuOpen
+
+    /**
+     * Toogles the FloatingActionButton menu
+     */
+    fun toogleFabMenu() {
+        this._isFABMenuOpen.value = !this._isFABMenuOpen.value!!
     }
 }

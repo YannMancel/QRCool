@@ -5,7 +5,7 @@
     <!-- Margin -->
     <dimen name="margin_little">8dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
-    <dimen name="margin_delta_normal_and_small_fab">22dp</dimen> <!-- (56/2 + 16) - (40/2) - 2 -->
+    <dimen name="margin_delta_normal_and_small_fab">6dp</dimen> <!-- 56/2 - 40/2 - 2 -->
 
     <!-- Padding -->
     <dimen name="padding_little">8dp</dimen>
@@ -15,7 +15,7 @@
     <dimen name="size_image_view">50dp</dimen>
 
     <!-- Offset Y -->
-    <dimen name="offset_y_1">64dp</dimen> <!-- (16 + 56 + 16 + 40/2) - (16 + 56/2) -->
-    <dimen name="offset_y_2">120dp</dimen> <!-- (16 + 56 + 16 + 40 + 16 + 40/2) - (16 + 56/2) -->
+    <dimen name="offset_y_1">64dp</dimen> <!-- 56/2 + 16 + 40/2 -->
+    <dimen name="offset_y_2">120dp</dimen> <!-- 56/2 + 16 + 40 + 16 + 40/2 -->
 
 </resources>
