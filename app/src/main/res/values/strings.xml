@@ -6,4 +6,8 @@
     <string name="name_fragment_scan_q_r_code">Scan of QR Code</string>
     <string name="name_fragment_list_q_r_code">List of QR Code</string>
 
+    <!-- fragment_list_q_r_code.xml -->
+    <string name="small_fab_ml_kit">ML Kit</string>
+    <string name="small_fab_zxing">ZXing</string>
+
 </resources>

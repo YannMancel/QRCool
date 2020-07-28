@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <declare-styleable name="FabSmall">
+        <attr name="name" format="string"/>
+        <attr name="offset_y" format="dimension"/>
+        <attr name="iconSrc" format="reference"/>
+    </declare-styleable>
+
+</resources>

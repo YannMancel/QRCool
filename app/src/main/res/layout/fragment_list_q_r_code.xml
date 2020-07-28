@@ -4,6 +4,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/fragment_list_coordinator_layout"
     android:layout_width="match_parent"
@@ -20,14 +21,41 @@
         android:clipToPadding="false"
         tools:listitem="@layout/item_q_r_code"/>
 
+    <!-- FabSmall: FAB with its label -->
+    <com.mancel.yann.qrcool.widgets.FabSmall
+        android:id="@+id/fragment_list_zxing_library"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_delta_normal_and_small_fab"
+        android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
+        app:layout_anchor="@id/fragment_list_recycler_view"
+        app:layout_anchorGravity="bottom|end"
+        app:name="@string/small_fab_zxing"
+        app:iconSrc="@drawable/ic_qrcode"
+        app:offset_y="@dimen/offset_y_1"/>
+
+    <!-- FabSmall: FAB with its label -->
+    <com.mancel.yann.qrcool.widgets.FabSmall
+        android:id="@+id/fragment_list_ml_kit_library"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_delta_normal_and_small_fab"
+        android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
+        app:layout_anchor="@id/fragment_list_recycler_view"
+        app:layout_anchorGravity="bottom|end"
+        app:name="@string/small_fab_ml_kit"
+        app:iconSrc="@drawable/ic_qrcode"
+        app:offset_y="@dimen/offset_y_2"/>
+
     <!-- FloatingActionButton -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
-        android:layout_gravity="bottom|end"
         android:src="@drawable/ic_add"
+        app:layout_anchor="@id/fragment_list_recycler_view"
+        app:layout_anchorGravity="bottom|end"
         style="@style/FloatingActionButtonStyle"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
