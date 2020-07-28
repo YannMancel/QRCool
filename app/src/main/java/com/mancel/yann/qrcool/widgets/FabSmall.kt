@@ -22,7 +22,8 @@ class FabSmall(
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private var _offsetYAnimation = 0.0F
+    var _offsetYAnimation = 0.0F
+        private set
 
     val _labelView: TextView
         get() = this.view_label
