@@ -6,7 +6,7 @@ import com.google.zxing.Result
 import com.mancel.yann.qrcool.BuildConfig
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_scan_q_r_code.view.*
+import kotlinx.android.synthetic.main.fragment_zxing.view.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 /**
@@ -16,7 +16,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
  *
  * A [BaseFragment] subclass which implements [ZXingScannerView.ResultHandler].
  */
-class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
+class ZXingFragment : BaseFragment(), ZXingScannerView.ResultHandler {
 
     // FIELDS --------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
 
     // -- BaseFragment --
 
-    override fun getFragmentLayout(): Int = R.layout.fragment_scan_q_r_code
+    override fun getFragmentLayout(): Int = R.layout.fragment_zxing
 
     override fun configureDesign() {
         if (BuildConfig.QRCODE_SIMULATOR_ENABLED) {
@@ -64,7 +64,7 @@ class ScanQRCodeFragment : BaseFragment(), ZXingScannerView.ResultHandler {
     private fun startCamera() {
         if (this.hasCameraPermission()) {
             with(this._rootView.fragment_scan_view) {
-                setResultHandler(this@ScanQRCodeFragment)
+                setResultHandler(this@ZXingFragment)
                 startCamera()
             }
         }

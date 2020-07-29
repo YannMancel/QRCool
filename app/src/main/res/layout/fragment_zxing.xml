@@ -7,7 +7,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.ScanQRCodeFragment">
+    tools:context=".views.fragments.ZXingFragment">
 
     <!-- ZXingScannerView: QR Code scanner -->
     <me.dm7.barcodescanner.zxing.ZXingScannerView

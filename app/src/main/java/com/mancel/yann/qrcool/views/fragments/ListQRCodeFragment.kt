@@ -53,24 +53,26 @@ class ListQRCodeFragment : BaseFragment() {
         }
 
         // Mini FABs
-        this.configureFABToNavigateToScanQRCodeFragment()
-        this.configureFABToNavigateToOtherFragment()
+        this.configureFABToNavigateToZXingFragment()
+        this.configureFABToNavigateToMLKitFragment()
     }
 
     /**
-     * Configures the mini FloatingActionButton to navigate to ScanQRCodeFragment
+     * Configures the mini FloatingActionButton to navigate to ZXingFragment
      */
-    private fun configureFABToNavigateToScanQRCodeFragment() {
+    private fun configureFABToNavigateToZXingFragment() {
         this._rootView.fragment_list_zxing_library.setOnClickListener {
-            this.findNavController().navigate(R.id.action_listQRCodeFragment_to_scanQRCodeFragment)
+            this.findNavController().navigate(R.id.action_listQRCodeFragment_to_zXingFragment)
         }
     }
 
     /**
-     * Configures the mini FloatingActionButton to navigate to other Fragment
+     * Configures the mini FloatingActionButton to navigate to MLKitFragment
      */
-    private fun configureFABToNavigateToOtherFragment() {
-        this._rootView.fragment_list_ml_kit_library.setOnClickListener { /* Do nothing here */ }
+    private fun configureFABToNavigateToMLKitFragment() {
+        this._rootView.fragment_list_ml_kit_library.setOnClickListener {
+            this.findNavController().navigate(R.id.action_listQRCodeFragment_to_mLKitFragment)
+        }
     }
 
     // -- RecyclerView --

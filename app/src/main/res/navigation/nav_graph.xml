@@ -16,16 +16,27 @@
         tools:layout="@layout/fragment_list_q_r_code" >
 
         <action
-            android:id="@+id/action_listQRCodeFragment_to_scanQRCodeFragment"
-            app:destination="@id/scanQRCodeFragment" />
+            android:id="@+id/action_listQRCodeFragment_to_zXingFragment"
+            app:destination="@id/zXingFragment" />
+
+        <action
+            android:id="@+id/action_listQRCodeFragment_to_mLKitFragment"
+            app:destination="@id/mLKitFragment" />
 
     </fragment>
 
-    <!-- ScanQRCodeFragment -->
+    <!-- ZXingFragment -->
     <fragment
-        android:id="@+id/scanQRCodeFragment"
-        android:name="com.mancel.yann.qrcool.views.fragments.ScanQRCodeFragment"
-        android:label="@string/name_fragment_scan_q_r_code"
-        tools:layout="@layout/fragment_scan_q_r_code" />
+        android:id="@+id/zXingFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.ZXingFragment"
+        android:label="@string/name_fragment_zxing"
+        tools:layout="@layout/fragment_zxing" />
+
+    <!-- MLKitFragment -->
+    <fragment
+        android:id="@+id/mLKitFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.MLKitFragment"
+        android:label="@string/name_fragment_m_l_kit"
+        tools:layout="@layout/fragment_m_l_kit" />
 
 </navigation>

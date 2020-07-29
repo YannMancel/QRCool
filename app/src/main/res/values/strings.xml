@@ -3,8 +3,9 @@
     <string name="app_name">QRCool</string>
 
     <!-- nav_graph.xml -->
-    <string name="name_fragment_scan_q_r_code">Scan of QR Code</string>
     <string name="name_fragment_list_q_r_code">List of QR Code</string>
+    <string name="name_fragment_zxing">Zxing Scan</string>
+    <string name="name_fragment_m_l_kit">ML Kit Scan</string>
 
     <!-- fragment_list_q_r_code.xml -->
     <string name="small_fab_ml_kit">ML Kit</string>
