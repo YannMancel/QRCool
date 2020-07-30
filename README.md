@@ -27,6 +27,7 @@
     * [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
     * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
     * [Navigation](https://developer.android.com/guide/navigation/)
+  * [Behavior CameraX](https://developer.android.com/training/camerax)
   * [KTX Extensions](https://developer.android.com/kotlin/ktx)
 * [Library Material Components](https://github.com/material-components/material-components-android)
 * [Library dm77/barcodescanner](https://github.com/dm77/barcodescanner)
