@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.google.common.util.concurrent.ListenableFuture
@@ -42,6 +39,7 @@ class MLKitFragment : BaseFragment() {
     private lateinit var _cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private var _camera: Camera? = null
     private var _preview: Preview? = null
+    private var _imageAnalysis: ImageAnalysis? = null
 
     // Blocking camera operations are performed using this executor
     private lateinit var _cameraExecutor: ExecutorService
@@ -102,17 +100,17 @@ class MLKitFragment : BaseFragment() {
         this._cameraProviderFuture.addListener(
             Runnable {
                 val cameraProvider = this._cameraProviderFuture.get()
-                this.bindPreview(cameraProvider)
+                this.bindPreviewAndImageAnalysis(cameraProvider)
             },
             ContextCompat.getMainExecutor(this.requireContext())
         )
     }
 
     /**
-     * Binds the use case, called [Preview], to the Fragment's lifecycle
+     * Binds the use cases, called [Preview] and [ImageAnalysis], to the Fragment's lifecycle
      * @param cameraProvider a [ProcessCameraProvider]
      */
-    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+    private fun bindPreviewAndImageAnalysis(cameraProvider: ProcessCameraProvider) {
         // CameraSelector
         val cameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
@@ -135,6 +133,27 @@ class MLKitFragment : BaseFragment() {
             .setTargetRotation(rotation)
             .build()
 
+        // Use case: ImageAnalysis
+        this._imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setTargetAspectRatio(screenAspectRatio)
+            .setTargetRotation(rotation)
+            .build()
+            .also {
+                it.setAnalyzer(
+                    this._cameraExecutor,
+                    ImageAnalysis.Analyzer { image ->
+                        // Test on result
+                        Log.d(
+                            this.javaClass.simpleName,
+                            "Rotation degrees = ${image.imageInfo.rotationDegrees}"
+                        )
+
+                        image.close()
+                    }
+                )
+            }
+
         // Must unbind the use-cases before rebinding them
         cameraProvider.unbindAll()
 
@@ -143,7 +162,7 @@ class MLKitFragment : BaseFragment() {
             this._camera = cameraProvider.bindToLifecycle(
                 this.viewLifecycleOwner,
                 cameraSelector,
-                this._preview
+                this._preview, this._imageAnalysis
             )
 
             // Connects Preview to the view into xml file
