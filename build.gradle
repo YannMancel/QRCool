@@ -8,6 +8,7 @@ buildscript {
     ext.zwing_version = '1.9.13'
     ext.camerax_version = '1.0.0-beta07'
     ext.camerax_view_version = '1.0.0-alpha14'
+    ext.mlkit_version = '16.1.1'
 
     repositories {
         google()

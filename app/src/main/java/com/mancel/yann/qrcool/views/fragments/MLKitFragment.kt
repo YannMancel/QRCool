@@ -3,12 +3,18 @@ package com.mancel.yann.qrcool.views.fragments
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
 import android.view.View
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
+import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
+import com.mancel.yann.qrcool.utils.MessageTools
+import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -23,6 +29,7 @@ import kotlin.math.min
  *
  * A [BaseFragment] subclass.
  */
+@androidx.camera.core.ExperimentalGetImage
 class MLKitFragment : BaseFragment() {
 
     /*
@@ -32,13 +39,17 @@ class MLKitFragment : BaseFragment() {
         See CameraX's uses cases
             [2]: https://developer.android.com/training/camerax/preview
             [3]: https://developer.android.com/training/camerax/analyze
+            [4]: https://developer.android.com/training/camerax/take-photo
      */
 
     // FIELDS --------------------------------------------------------------------------------------
 
+    private val _viewModel: SharedViewModel by activityViewModels()
+
     private lateinit var _cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private var _camera: Camera? = null
     private var _preview: Preview? = null
+    private var _imageCapture: ImageCapture? = null
     private var _imageAnalysis: ImageAnalysis? = null
 
     // Blocking camera operations are performed using this executor
@@ -55,7 +66,7 @@ class MLKitFragment : BaseFragment() {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_m_l_kit
 
-    override fun configureDesign() { /* Do nothing here */ }
+    override fun configureDesign() = this.configureListenerOfFAB()
 
     override fun actionAfterPermission() = this.configureCameraX()
 
@@ -80,6 +91,15 @@ class MLKitFragment : BaseFragment() {
         this._cameraExecutor.shutdown()
     }
 
+    // -- Actions -
+
+    /**
+     * Configures the listener of FAB
+     */
+    private fun configureListenerOfFAB() {
+        this._rootView.fragment_m_l_kit_fab.setOnClickListener { this.takePicture() }
+    }
+
     // -- CameraX --
 
     /**
@@ -100,17 +120,17 @@ class MLKitFragment : BaseFragment() {
         this._cameraProviderFuture.addListener(
             Runnable {
                 val cameraProvider = this._cameraProviderFuture.get()
-                this.bindPreviewAndImageAnalysis(cameraProvider)
+                this.bindAllUseCases(cameraProvider)
             },
             ContextCompat.getMainExecutor(this.requireContext())
         )
     }
 
     /**
-     * Binds the use cases, called [Preview] and [ImageAnalysis], to the Fragment's lifecycle
+     * Binds all use cases, [Preview], [ImageCapture] and [ImageAnalysis], to the Fragment's lifecycle
      * @param cameraProvider a [ProcessCameraProvider]
      */
-    private fun bindPreviewAndImageAnalysis(cameraProvider: ProcessCameraProvider) {
+    private fun bindAllUseCases(cameraProvider: ProcessCameraProvider) {
         // CameraSelector
         val cameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
@@ -133,24 +153,44 @@ class MLKitFragment : BaseFragment() {
             .setTargetRotation(rotation)
             .build()
 
+        // Use case: ImageCapture
+        this._imageCapture = ImageCapture.Builder()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .setTargetResolution(Size(1920, 1080))
+            .setTargetRotation(rotation)
+            .setFlashMode(ImageCapture.FLASH_MODE_OFF)
+            .build()
+
         // Use case: ImageAnalysis
         this._imageAnalysis = ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setTargetAspectRatio(screenAspectRatio)
+//            .setTargetResolution(Size(1920, 1080))
             .setTargetRotation(rotation)
             .build()
             .also {
                 it.setAnalyzer(
                     this._cameraExecutor,
                     ImageAnalysis.Analyzer { image ->
-                        // Test on result
-                        Log.d(
-                            this.javaClass.simpleName,
-                            "Rotation degrees = ${image.imageInfo.rotationDegrees}"
-                        )
+                        /*
+                            if [ImageAnalysis]..setTargetAspectRatio(screenAspectRatio)     [Fail]
+                                W/TAG A: cropRect: Rect(0, 0 - 864, 480)
+                                W/TAG A: width: 864
+                                W/TAG A: height: 480
 
+                            if [ImageAnalysis].setTargetResolution(Size(1920, 1080))        [Fail]
+                                W/TAG A: cropRect: Rect(0, 0 - 480, 640)
+                                W/TAG A: width: 480
+                                W/TAG A: height: 640
+                         */
                         image.close()
                     }
+//                    QRCodeAnalyzer { barcodes ->
+//                        MessageTools.showMessageWithSnackbar(
+//                            this@MLKitFragment._rootView.fragment_m_l_kit_coordinator_layout,
+//                            if(barcodes.isNotEmpty()) "${barcodes[0].rawValue}" else "No data"
+//                        )
+//                    }
                 )
             }
 
@@ -162,7 +202,7 @@ class MLKitFragment : BaseFragment() {
             this._camera = cameraProvider.bindToLifecycle(
                 this.viewLifecycleOwner,
                 cameraSelector,
-                this._preview, this._imageAnalysis
+                this._preview, this._imageCapture //, this._imageAnalysis
             )
 
             // Connects Preview to the view into xml file
@@ -175,6 +215,57 @@ class MLKitFragment : BaseFragment() {
                 "Use case binding failed: $e"
             )
         }
+    }
+
+    /**
+     * Take picture thanks to [ImageCapture] use case of CameraX
+     */
+    private fun takePicture() {
+        this._imageCapture?.takePicture(
+            this._cameraExecutor,
+            object : ImageCapture.OnImageCapturedCallback() {
+
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    /*
+                        if [ImageCapture].setTargetAspectRatio(screenAspectRatio)   [Fail]
+                        so
+                            width: 3840
+                            height: 2160
+                            Rect(0, 0 - 3840, 2160)
+
+                        if [ImageCapture].setTargetResolution(Size(1920, 1080))     [Success]
+                        so
+                            width: 480
+                            height: 640
+                            Rect(60, 0 - 420, 640)
+                     */
+
+                    QRCodeAnalyzer { barcodes ->
+                        if(barcodes.isEmpty()) {
+                            MessageTools.showMessageWithSnackbar(
+                                this@MLKitFragment._rootView.fragment_m_l_kit_coordinator_layout,
+                                this@MLKitFragment.getString(R.string.no_data)
+                            )
+                        } else {
+                            this@MLKitFragment.notifyScanOfQRCode(
+                                barcodes.first().rawValue
+                                    ?: this@MLKitFragment.getString(R.string.no_raw_value)
+                            )
+                        }
+                    }
+                    .also {
+                        it.analyze(image)
+                    }
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e(
+                        this.javaClass.simpleName,
+                        "Image capture failed: $exception"
+                    )
+                }
+            }
+        )
     }
 
     // -- Ratio --
@@ -195,5 +286,18 @@ class MLKitFragment : BaseFragment() {
             return AspectRatio.RATIO_4_3
         }
         return AspectRatio.RATIO_16_9
+    }
+
+    // -- QR Code --
+
+    /**
+     * Notifies when a QR Code has been checked
+     */
+    private fun notifyScanOfQRCode(textOfQRCode: String) {
+        // Add QR Code
+        this._viewModel.addQRCode(textOfQRCode)
+
+        // Finishes this fragment
+        this.findNavController().popBackStack()
     }
 }

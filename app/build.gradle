@@ -65,6 +65,9 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
     implementation "androidx.camera:camera-view:$camerax_view_version"
 
+    // ML Kit - Barcode scanner
+    implementation "com.google.android.gms:play-services-mlkit-barcode-scanning:$mlkit_version"
+
     // TESTS ---------------------------------------------------------------------------------------
 
     testImplementation 'junit:junit:4.12'

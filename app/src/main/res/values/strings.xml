@@ -11,4 +11,8 @@
     <string name="small_fab_ml_kit">ML Kit</string>
     <string name="small_fab_zxing">ZXing</string>
 
+    <!-- MLKitFragment.kt -->
+    <string name="no_data">No data</string>
+    <string name="no_raw_value">No raw value</string>
+
 </resources>
