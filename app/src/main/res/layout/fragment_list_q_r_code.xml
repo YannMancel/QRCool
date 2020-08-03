@@ -31,7 +31,7 @@
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
         app:name="@string/small_fab_zxing"
-        app:iconSrc="@drawable/ic_qrcode"
+        app:iconSrc="@drawable/ic_qrcode_scan"
         app:offset_y="@dimen/offset_y_1"/>
 
     <!-- FabSmall: FAB with its label -->
@@ -44,7 +44,7 @@
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
         app:name="@string/small_fab_ml_kit"
-        app:iconSrc="@drawable/ic_qrcode"
+        app:iconSrc="@drawable/ic_qrcode_scan"
         app:offset_y="@dimen/offset_y_2"/>
 
     <!-- FloatingActionButton -->

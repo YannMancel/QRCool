@@ -1,5 +1,6 @@
 package com.mancel.yann.qrcool.views.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
-import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
 import java.util.concurrent.ExecutorService
@@ -38,8 +38,7 @@ class MLKitFragment : BaseFragment() {
 
         See CameraX's uses cases
             [2]: https://developer.android.com/training/camerax/preview
-            [3]: https://developer.android.com/training/camerax/analyze
-            [4]: https://developer.android.com/training/camerax/take-photo
+            [3]: https://developer.android.com/training/camerax/take-photo
      */
 
     // FIELDS --------------------------------------------------------------------------------------
@@ -49,7 +48,6 @@ class MLKitFragment : BaseFragment() {
     private lateinit var _cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private var _camera: Camera? = null
     private var _preview: Preview? = null
-    private var _imageCapture: ImageCapture? = null
     private var _imageAnalysis: ImageAnalysis? = null
 
     // Blocking camera operations are performed using this executor
@@ -66,7 +64,7 @@ class MLKitFragment : BaseFragment() {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_m_l_kit
 
-    override fun configureDesign() = this.configureListenerOfFAB()
+    override fun configureDesign() { /* Do nothing here */ }
 
     override fun actionAfterPermission() = this.configureCameraX()
 
@@ -89,15 +87,6 @@ class MLKitFragment : BaseFragment() {
 
         // Shut down our background executor
         this._cameraExecutor.shutdown()
-    }
-
-    // -- Actions -
-
-    /**
-     * Configures the listener of FAB
-     */
-    private fun configureListenerOfFAB() {
-        this._rootView.fragment_m_l_kit_fab.setOnClickListener { this.takePicture() }
     }
 
     // -- CameraX --
@@ -127,72 +116,29 @@ class MLKitFragment : BaseFragment() {
     }
 
     /**
-     * Binds all use cases, [Preview], [ImageCapture] and [ImageAnalysis], to the Fragment's lifecycle
+     * Binds all use cases, [Preview] and [ImageAnalysis], to the Fragment's lifecycle
      * @param cameraProvider a [ProcessCameraProvider]
      */
     private fun bindAllUseCases(cameraProvider: ProcessCameraProvider) {
-        // CameraSelector
-        val cameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-            .build()
-
         // Metrics
         val metrics = DisplayMetrics().also {
             this._rootView.fragment_m_l_kit_camera.display.getRealMetrics(it)
         }
 
-        // Ratio
-        val screenAspectRatio = this.getAspectRatio(metrics.widthPixels, metrics.heightPixels)
-
         // Rotation
         val rotation = this._rootView.fragment_m_l_kit_camera.display.rotation
 
         // Use case: Preview
-        this._preview = Preview.Builder()
-            .setTargetAspectRatio(screenAspectRatio)
-            .setTargetRotation(rotation)
-            .build()
-
-        // Use case: ImageCapture
-        this._imageCapture = ImageCapture.Builder()
-            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-            .setTargetResolution(Size(1920, 1080))
-            .setTargetRotation(rotation)
-            .setFlashMode(ImageCapture.FLASH_MODE_OFF)
-            .build()
+        this._preview = this.buildPreview(
+            this.getAspectRatio(metrics.widthPixels, metrics.heightPixels),
+            rotation
+        )
 
         // Use case: ImageAnalysis
-        this._imageAnalysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .setTargetAspectRatio(screenAspectRatio)
-//            .setTargetResolution(Size(1920, 1080))
-            .setTargetRotation(rotation)
-            .build()
-            .also {
-                it.setAnalyzer(
-                    this._cameraExecutor,
-                    ImageAnalysis.Analyzer { image ->
-                        /*
-                            if [ImageAnalysis]..setTargetAspectRatio(screenAspectRatio)     [Fail]
-                                W/TAG A: cropRect: Rect(0, 0 - 864, 480)
-                                W/TAG A: width: 864
-                                W/TAG A: height: 480
-
-                            if [ImageAnalysis].setTargetResolution(Size(1920, 1080))        [Fail]
-                                W/TAG A: cropRect: Rect(0, 0 - 480, 640)
-                                W/TAG A: width: 480
-                                W/TAG A: height: 640
-                         */
-                        image.close()
-                    }
-//                    QRCodeAnalyzer { barcodes ->
-//                        MessageTools.showMessageWithSnackbar(
-//                            this@MLKitFragment._rootView.fragment_m_l_kit_coordinator_layout,
-//                            if(barcodes.isNotEmpty()) "${barcodes[0].rawValue}" else "No data"
-//                        )
-//                    }
-                )
-            }
+        this._imageAnalysis = this.buildImageAnalysis(
+            this.getResolution(),
+            rotation
+        )
 
         // Must unbind the use-cases before rebinding them
         cameraProvider.unbindAll()
@@ -201,8 +147,8 @@ class MLKitFragment : BaseFragment() {
             // Binds Preview to the Fragment's lifecycle
             this._camera = cameraProvider.bindToLifecycle(
                 this.viewLifecycleOwner,
-                cameraSelector,
-                this._preview, this._imageCapture //, this._imageAnalysis
+                this.buildCameraSelector(),
+                this._preview, this._imageAnalysis
             )
 
             // Connects Preview to the view into xml file
@@ -218,61 +164,53 @@ class MLKitFragment : BaseFragment() {
     }
 
     /**
-     * Take picture thanks to [ImageCapture] use case of CameraX
+     * Builds a [CameraSelector] of CameraX
+     * @return a [CameraSelector]
      */
-    private fun takePicture() {
-        this._imageCapture?.takePicture(
-            this._cameraExecutor,
-            object : ImageCapture.OnImageCapturedCallback() {
+    private fun buildCameraSelector(): CameraSelector {
+        return CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+    }
 
-                override fun onCaptureSuccess(image: ImageProxy) {
-                    /*
-                        if [ImageCapture].setTargetAspectRatio(screenAspectRatio)   [Fail]
-                        so
-                            width: 3840
-                            height: 2160
-                            Rect(0, 0 - 3840, 2160)
+    /**
+     * Builds [Preview] use case of CameraX
+     * @param ratio     an [Int] that contains the ratio
+     * @param rotation  an [Int] that contains the rotation
+     * @return a [Preview]
+     */
+    private fun buildPreview(ratio: Int, rotation: Int): Preview {
+        return Preview.Builder()
+            .setTargetAspectRatio(ratio)
+            .setTargetRotation(rotation)
+            .build()
+    }
 
-                        if [ImageCapture].setTargetResolution(Size(1920, 1080))     [Success]
-                        so
-                            width: 480
-                            height: 640
-                            Rect(60, 0 - 420, 640)
-                     */
-
-                    QRCodeAnalyzer { barcodes ->
-                        if(barcodes.isEmpty()) {
-                            MessageTools.showMessageWithSnackbar(
-                                this@MLKitFragment._rootView.fragment_m_l_kit_coordinator_layout,
-                                this@MLKitFragment.getString(R.string.no_data)
-                            )
-                        } else {
-                            this@MLKitFragment.notifyScanOfQRCode(
-                                barcodes.first().rawValue
-                                    ?: this@MLKitFragment.getString(R.string.no_raw_value)
-                            )
-                        }
-                    }
-                    .also {
-                        it.analyze(image)
-                    }
-                }
-
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e(
-                        this.javaClass.simpleName,
-                        "Image capture failed: $exception"
-                    )
-                }
+    /**
+     * Builds [ImageAnalysis] use case of CameraX
+     * @param resolution    a [Size] that contains the resolution
+     * @param rotation      an [Int] that contains the rotation
+     * @return a [ImageAnalysis]
+     */
+    private fun buildImageAnalysis(resolution: Size, rotation: Int): ImageAnalysis {
+        return ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setTargetResolution(resolution)
+            .setTargetRotation(rotation)
+            .build()
+            .also {
+                it.setAnalyzer(
+                    this._cameraExecutor,
+                    this.getAnalyzer(it)
+                )
             }
-        )
     }
 
     // -- Ratio --
 
     /**
-     *  [androidx.camera.core.ImageAnalysisConfig] requires enum value of
-     *  [androidx.camera.core.AspectRatio]. Currently it has values of 4:3 & 16:9.
+     *  [ImageAnalysis] requires enum value of [androidx.camera.core.AspectRatio].
+     *  Currently it has values of 4:3 & 16:9.
      *
      *  Detecting the most suitable ratio for dimensions provided in @params by counting absolute
      *  of preview ratio to one of the provided values.
@@ -281,11 +219,82 @@ class MLKitFragment : BaseFragment() {
      *  @return suitable aspect ratio
      */
     private fun getAspectRatio(width: Int, height: Int): Int {
-        val previewRatio = max(width, height).toDouble() / min(width, height)
+        /*
+            Ex:
+                width ..................................... 1080
+                height .................................... 2400
+
+                previewRatio .............................. 2400/1080 = 2.2
+
+                Ratio 4/3 ................................. 1.3
+                Ratio 16/9 ................................ 1.7
+
+                Absolute of [previewRatio - Ratio 4/3] .... 0.8
+                Absolute of [previewRatio - Ratio 16/9] ... 0.4
+         */
+
+        val previewRatio = max(width, height).toDouble() / min(width, height).toDouble()
         if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
             return AspectRatio.RATIO_4_3
         }
         return AspectRatio.RATIO_16_9
+    }
+
+    // -- Resolution --
+
+    /**
+     * Gets the resolution to be in accordance with ML Kit
+     * @return a [Size]
+     */
+    private fun getResolution() =
+        // For ML Kit: 1280x720 or 1920x1080 -> Ratio: 1.7
+        if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                Size(1080,1920)
+            else
+                Size(1920, 1080)
+
+    // -- Analyzer --
+
+    /**
+     * Gets a [QRCodeAnalyzer]
+     * @param imageAnalysis an [ImageAnalysis]
+     * @return a [ImageAnalysis.Analyzer]
+     */
+    private fun getAnalyzer(imageAnalysis: ImageAnalysis): ImageAnalysis.Analyzer {
+        return QRCodeAnalyzer { barcodes ->
+            /*
+                ex: In Portrait mode
+
+                    if [ImageAnalysis].setTargetAspectRatio(screenAspectRatio)   [Fail]
+                    so
+                        image.width ....................... 864
+                        image.height ...................... 480
+                        image.cropRect .................... Rect(0, 0 - 864, 480)
+
+                    if [ImageAnalysis].setTargetResolution(Size(1920, 1080))     [Fail]
+                    so
+                        image.width ....................... 480
+                        image.height ...................... 640
+                        image.cropRect .................... Rect(0, 0 - 480, 640)
+
+                    if [ImageAnalysis].setTargetResolution(Size(1080, 1920))     [Success]
+                    so
+                        image.width ....................... 1920
+                        image.height ...................... 1080
+                        image.cropRect .................... Rect(0, 0 - 1920, 1080)
+             */
+
+            if(barcodes.isNotEmpty()) {
+                // Clears QRCodeAnalyzer to avoid the same multiple answers
+                imageAnalysis.clearAnalyzer()
+
+                // Add new QRCode(s)
+                this.notifyScanOfQRCode(
+                    barcodes.first().rawValue
+                        ?: this.getString(R.string.no_raw_value)
+                )
+            }
+        }
     }
 
     // -- QR Code --
