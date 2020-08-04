@@ -14,5 +14,6 @@
     <!-- MLKitFragment.kt -->
     <string name="no_data">No data</string>
     <string name="no_raw_value">No raw value</string>
+    <string name="no_permission">No permission</string>
 
 </resources>

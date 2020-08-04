@@ -10,10 +10,12 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
+import com.mancel.yann.qrcool.states.CameraState
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
 import java.util.concurrent.ExecutorService
@@ -45,6 +47,8 @@ class MLKitFragment : BaseFragment() {
 
     private val _viewModel: SharedViewModel by activityViewModels()
 
+    private lateinit var _currentCameraState: CameraState
+
     private lateinit var _cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private var _camera: Camera? = null
     private var _preview: Preview? = null
@@ -64,7 +68,7 @@ class MLKitFragment : BaseFragment() {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_m_l_kit
 
-    override fun configureDesign() { /* Do nothing here */ }
+    override fun configureDesign() = this.configureCameraState()
 
     override fun actionAfterPermission() = this.configureCameraX()
 
@@ -78,7 +82,7 @@ class MLKitFragment : BaseFragment() {
 
         // Wait for the views to be properly laid out
         this._rootView.fragment_m_l_kit_camera.post {
-            this.configureCameraX()
+            this._viewModel.changeCameraStateToSetupCamera()
         }
     }
 
@@ -89,6 +93,55 @@ class MLKitFragment : BaseFragment() {
         this._cameraExecutor.shutdown()
     }
 
+    // -- CameraState --
+
+    /**
+     * Configures the LiveData of [CameraState]
+     */
+    private fun configureCameraState() {
+        this._viewModel
+            .getCameraState()
+            .observe(
+                this.viewLifecycleOwner,
+                Observer { cameraState ->
+                    cameraState?.let {
+                        this.updateUI(it)
+                    }
+                }
+            )
+    }
+
+    /**
+     * Updates UI thanks to a [CameraState]
+     * @param state a [CameraState]
+     */
+    private fun updateUI(state: CameraState) {
+        // To update CameraSelector
+        this._currentCameraState = state
+
+        when (state) {
+            is CameraState.SetupCamera -> this.handleStateSetupCamera()
+            is CameraState.PreviewReady -> this.handleStatePreviewReady()
+            is CameraState.Error -> this.handleStateError(state._errorMessage)
+        }
+    }
+
+    /**
+     * Handles the [CameraState.SetupCamera] state
+     */
+    private fun handleStateSetupCamera() = this.configureCameraX()
+
+    /**
+     * Handles the [CameraState.PreviewReady] state
+     */
+    private fun handleStatePreviewReady() { /* Do nothing here */ }
+
+    /**
+     * Handles the [CameraState.Error] state
+     * @param errorMessage a [String] that contains the error message
+     */
+    private fun handleStateError(errorMessage: String) { /* Do nothing here */ }
+
     // -- CameraX --
 
     /**
@@ -97,6 +150,8 @@ class MLKitFragment : BaseFragment() {
     private fun configureCameraX() {
         if (this.hasCameraPermission()) {
             this.configureCameraProvider()
+        } else {
+            this._viewModel.changeCameraStateToError(this.getString(R.string.no_permission))
         }
     }
 
@@ -110,6 +165,7 @@ class MLKitFragment : BaseFragment() {
             Runnable {
                 val cameraProvider = this._cameraProviderFuture.get()
                 this.bindAllUseCases(cameraProvider)
+                this._viewModel.changeCameraStateToPreviewReady()
             },
             ContextCompat.getMainExecutor(this.requireContext())
         )
@@ -169,7 +225,7 @@ class MLKitFragment : BaseFragment() {
      */
     private fun buildCameraSelector(): CameraSelector {
         return CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .requireLensFacing(this._currentCameraState._lensFacing)
             .build()
     }
 
