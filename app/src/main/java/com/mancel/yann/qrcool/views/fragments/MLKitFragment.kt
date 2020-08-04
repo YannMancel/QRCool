@@ -344,11 +344,17 @@ class MLKitFragment : BaseFragment() {
                 // Clears QRCodeAnalyzer to avoid the same multiple answers
                 imageAnalysis.clearAnalyzer()
 
+                // It is possible to scan several QR Codes on the same picture
+                val rawData = mutableListOf<String>().apply {
+                    barcodes.forEach {
+                        this.add(
+                            it.rawValue ?: this@MLKitFragment.getString(R.string.no_raw_value)
+                        )
+                    }
+                }
+
                 // Add new QRCode(s)
-                this.notifyScanOfQRCode(
-                    barcodes.first().rawValue
-                        ?: this.getString(R.string.no_raw_value)
-                )
+                this.notifyScanOfQRCode(rawData)
             }
         }
     }
@@ -356,11 +362,14 @@ class MLKitFragment : BaseFragment() {
     // -- QR Code --
 
     /**
-     * Notifies when a QR Code has been checked
+     * Notifies when QR Codes have been checked
+     * @param rawData a [List] of [String] that contains all raw QR Code values
      */
-    private fun notifyScanOfQRCode(textOfQRCode: String) {
-        // Add QR Code
-        this._viewModel.addQRCode(textOfQRCode)
+    private fun notifyScanOfQRCode(rawData: List<String>) {
+        // Add QR Codes
+        rawData.forEach {
+            this._viewModel.addQRCode(it)
+        }
 
         // Finishes this fragment
         this.findNavController().popBackStack()
