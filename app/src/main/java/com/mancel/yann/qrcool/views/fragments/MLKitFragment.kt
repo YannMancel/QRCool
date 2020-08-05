@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
+import com.mancel.yann.qrcool.lifecycles.FullScreenLifecycleObserver
 import com.mancel.yann.qrcool.states.CameraState
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
@@ -68,7 +69,10 @@ class MLKitFragment : BaseFragment() {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_m_l_kit
 
-    override fun configureDesign() = this.configureCameraState()
+    override fun configureDesign() {
+        this.configureFullScreenLifecycleObserver()
+        this.configureCameraState()
+    }
 
     override fun actionAfterPermission() = this.configureCameraX()
 
@@ -91,6 +95,18 @@ class MLKitFragment : BaseFragment() {
 
         // Shut down our background executor
         this._cameraExecutor.shutdown()
+    }
+
+    /**
+     * Configures a [FullScreenLifecycleObserver]
+     */
+    private fun configureFullScreenLifecycleObserver() {
+        this.lifecycle.addObserver(
+            FullScreenLifecycleObserver(
+                this.lifecycle,
+                this.requireActivity()
+            )
+        )
     }
 
     // -- CameraState --
