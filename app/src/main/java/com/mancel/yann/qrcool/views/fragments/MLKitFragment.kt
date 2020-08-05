@@ -15,12 +15,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
+import com.mancel.yann.qrcool.lifecycles.ExecutorLifecycleObserver
 import com.mancel.yann.qrcool.lifecycles.FullScreenLifecycleObserver
 import com.mancel.yann.qrcool.states.CameraState
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -56,7 +55,7 @@ class MLKitFragment : BaseFragment() {
     private var _imageAnalysis: ImageAnalysis? = null
 
     // Blocking camera operations are performed using this executor
-    private lateinit var _cameraExecutor: ExecutorService
+    private lateinit var _cameraExecutor: ExecutorLifecycleObserver
 
     companion object {
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
@@ -71,6 +70,7 @@ class MLKitFragment : BaseFragment() {
 
     override fun configureDesign() {
         this.configureFullScreenLifecycleObserver()
+        this.configureExecutorLifecycleObserver()
         this.configureCameraState()
     }
 
@@ -81,21 +81,13 @@ class MLKitFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize our background executor
-        this._cameraExecutor = Executors.newSingleThreadExecutor()
-
         // Wait for the views to be properly laid out
         this._rootView.fragment_m_l_kit_camera.post {
             this._viewModel.changeCameraStateToSetupCamera()
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Shut down our background executor
-        this._cameraExecutor.shutdown()
-    }
+    // -- LifecycleObserver --
 
     /**
      * Configures a [FullScreenLifecycleObserver]
@@ -107,6 +99,14 @@ class MLKitFragment : BaseFragment() {
                 this.requireActivity()
             )
         )
+    }
+
+    /**
+     * Configures a [FullScreenLifecycleObserver]
+     */
+    private fun configureExecutorLifecycleObserver() {
+        this._cameraExecutor = ExecutorLifecycleObserver()
+        this.lifecycle.addObserver(this._cameraExecutor)
     }
 
     // -- CameraState --
@@ -272,7 +272,7 @@ class MLKitFragment : BaseFragment() {
             .build()
             .also {
                 it.setAnalyzer(
-                    this._cameraExecutor,
+                    this._cameraExecutor._executor,
                     this.getAnalyzer(it)
                 )
             }
