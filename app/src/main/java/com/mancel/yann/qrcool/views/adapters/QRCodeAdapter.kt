@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.item_q_r_code.view.*
  *
  * A [RecyclerView.Adapter] subclass.
  */
-class QRCodeAdapter : RecyclerView.Adapter<QRCodeAdapter.QRCodeViewHolder>() {
+class QRCodeAdapter(
+    private val _actionOnClick: (QRCode) -> Unit
+) : RecyclerView.Adapter<QRCodeAdapter.QRCodeViewHolder>() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
@@ -37,7 +39,7 @@ class QRCodeAdapter : RecyclerView.Adapter<QRCodeAdapter.QRCodeViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: QRCodeViewHolder, position: Int) {
-        holder.bind(this._qRCodes[position])
+        holder.bind(this._qRCodes[position], this._actionOnClick)
     }
 
     override fun getItemCount(): Int = this._qRCodes.size
@@ -77,7 +79,13 @@ class QRCodeAdapter : RecyclerView.Adapter<QRCodeAdapter.QRCodeViewHolder>() {
         /**
          * Binds the [QRCodeAdapter] and the [QRCodeViewHolder]
          */
-        fun bind(qRCode: QRCode) {
+        fun bind(
+            qRCode: QRCode,
+            actionOnClick: (QRCode) -> Unit
+        ) {
+            // CardView
+            this.itemView.item_card_view.setOnClickListener { actionOnClick(qRCode) }
+
             // Name
             this.itemView.item_name.text = qRCode._text
         }

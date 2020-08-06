@@ -16,7 +16,9 @@ import com.google.mlkit.vision.common.InputImage
  * A class which implements [ImageAnalysis.Analyzer].
  */
 @androidx.camera.core.ExperimentalGetImage
-class QRCodeAnalyzer(val actionOnSuccess: (List<Barcode>) -> Unit) : ImageAnalysis.Analyzer {
+class QRCodeAnalyzer(
+    private val _actionOnSuccess: (List<Barcode>) -> Unit
+) : ImageAnalysis.Analyzer {
 
     /*
         See ML Kit:
@@ -86,7 +88,5 @@ class QRCodeAnalyzer(val actionOnSuccess: (List<Barcode>) -> Unit) : ImageAnalys
      * Analyses the barcodes in argument
      * @param barcodes a [List] of [Barcode]
      */
-    private fun analyseBarcodes(barcodes: List<Barcode>) {
-        this.actionOnSuccess(barcodes)
-    }
+    private fun analyseBarcodes(barcodes: List<Barcode>) = this._actionOnSuccess(barcodes)
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ConstraintLayout -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.fragments.DetailsQRCodeFragment">
+
+    <!-- ImageView: Image QR Code -->
+    <ImageView
+        android:id="@+id/fragment_details_image"
+        android:layout_width="@dimen/size_image_view_details"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin_normal"
+        android:src="@drawable/ic_qrcode"
+        android:contentDescription="@null"
+        app:tint="@color/colorPrimaryDark"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- TextView: Raw value label -->
+    <TextView
+        android:id="@+id/fragment_details_label_raw_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:text="@string/label_raw_value"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/TextViewStyleLabel"/>
+
+    <!-- TextView: Raw value of QR Code -->
+    <TextView
+        android:id="@+id/fragment_details_raw_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_label_raw_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="https://github.com/YannMancel"
+        style="@style/TextViewStyleContent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

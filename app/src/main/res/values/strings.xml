@@ -6,10 +6,14 @@
     <string name="name_fragment_list_q_r_code">List of QR Code</string>
     <string name="name_fragment_zxing">Zxing Scan</string>
     <string name="name_fragment_m_l_kit">ML Kit Scan</string>
+    <string name="name_fragment_details_q_r_code">Details</string>
 
     <!-- fragment_list_q_r_code.xml -->
     <string name="small_fab_ml_kit">ML Kit</string>
     <string name="small_fab_zxing">ZXing</string>
+
+    <!-- fragment_details_q_r_code.xml -->
+    <string name="label_raw_value">Raw value:</string>
 
     <!-- MLKitFragment.kt -->
     <string name="no_data">No data</string>

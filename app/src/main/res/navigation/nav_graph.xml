@@ -23,6 +23,10 @@
             android:id="@+id/action_listQRCodeFragment_to_mLKitFragment"
             app:destination="@id/mLKitFragment" />
 
+        <action
+            android:id="@+id/action_listQRCodeFragment_to_detailsQRCodeFragment"
+            app:destination="@id/detailsQRCodeFragment" />
+
     </fragment>
 
     <!-- ZXingFragment -->
@@ -38,5 +42,18 @@
         android:name="com.mancel.yann.qrcool.views.fragments.MLKitFragment"
         android:label="@string/name_fragment_m_l_kit"
         tools:layout="@layout/fragment_m_l_kit" />
+
+    <!-- DetailsQRCodeFragment -->
+    <fragment
+        android:id="@+id/detailsQRCodeFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.DetailsQRCodeFragment"
+        android:label="@string/name_fragment_details_q_r_code"
+        tools:layout="@layout/fragment_details_q_r_code" >
+
+        <argument
+            android:name="qrcode"
+            app:argType="com.mancel.yann.qrcool.models.QRCode" />
+
+    </fragment>
 
 </navigation>

@@ -13,6 +13,7 @@
 
     <!-- ImageView -->
     <dimen name="size_image_view">50dp</dimen>
+    <dimen name="size_image_view_details">250dp</dimen>
 
     <!-- Offset Y -->
     <dimen name="offset_y_1">64dp</dimen> <!-- 56/2 + 16 + 40/2 -->

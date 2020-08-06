@@ -17,4 +17,12 @@
         <item name="tint">@android:color/white</item>
     </style>
 
+    <!-- *********************************** TextView ****************************************** -->
+
+    <!-- TextView style: Label -->
+    <style name="TextViewStyleLabel" parent="@style/TextAppearance.MaterialComponents.Headline6"/>
+
+    <!-- TextView style: Content -->
+    <style name="TextViewStyleContent" parent="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+
 </resources>

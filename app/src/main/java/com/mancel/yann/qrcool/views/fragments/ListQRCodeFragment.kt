@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
+import com.mancel.yann.qrcool.models.QRCode
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import com.mancel.yann.qrcool.views.adapters.QRCodeAdapter
 import com.mancel.yann.qrcool.widgets.FabSmall
@@ -75,6 +76,18 @@ class ListQRCodeFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Event from a click on a CardView
+     */
+    private fun eventFromCardView(qrCode: QRCode) {
+        // Action with argument
+        val action =
+            ListQRCodeFragmentDirections
+                .actionListQRCodeFragmentToDetailsQRCodeFragment(qrCode)
+
+        this.findNavController().navigate(action)
+    }
+
     // -- RecyclerView --
 
     /**
@@ -82,7 +95,7 @@ class ListQRCodeFragment : BaseFragment() {
      */
     private fun configureRecyclerView() {
         // Adapter
-        this._adapter = QRCodeAdapter()
+        this._adapter = QRCodeAdapter(this::eventFromCardView)
 
         // RecyclerView
         with(this._rootView.fragment_list_recycler_view) {
