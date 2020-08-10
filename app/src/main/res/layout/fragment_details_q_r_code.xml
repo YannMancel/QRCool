@@ -48,4 +48,16 @@
         tools:text="https://github.com/YannMancel"
         style="@style/TextViewStyleContent"/>
 
+    <!-- MaterialButton -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fragment_details_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:text="@string/url_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/ButtonStyle"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

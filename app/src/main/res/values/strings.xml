@@ -14,6 +14,7 @@
 
     <!-- fragment_details_q_r_code.xml -->
     <string name="label_raw_value">Raw value:</string>
+    <string name="url_button">Go</string>
 
     <!-- MLKitFragment.kt -->
     <string name="no_data">No data</string>
