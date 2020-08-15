@@ -2,6 +2,9 @@
 
 <resources>
 
+    <!-- Elevation -->
+    <dimen name="elevation_card">6dp</dimen>
+
     <!-- Margin -->
     <dimen name="margin_little">8dp</dimen>
     <dimen name="margin_normal">16dp</dimen>

@@ -6,26 +6,26 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listQRCodeFragment">
+    app:startDestination="@id/barcodeListFragment">
 
-    <!-- ListQRCodeFragment -->
+    <!-- BarcodeListFragment -->
     <fragment
-        android:id="@+id/listQRCodeFragment"
-        android:name="com.mancel.yann.qrcool.views.fragments.ListQRCodeFragment"
-        android:label="@string/name_fragment_list_q_r_code"
-        tools:layout="@layout/fragment_list_q_r_code" >
+        android:id="@+id/barcodeListFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.BarcodeListFragment"
+        android:label="@string/name_fragment_list_barcode"
+        tools:layout="@layout/fragment_list_barcode" >
 
         <action
-            android:id="@+id/action_listQRCodeFragment_to_zXingFragment"
+            android:id="@+id/action_barcodeListFragment_to_zXingFragment"
             app:destination="@id/zXingFragment" />
 
         <action
-            android:id="@+id/action_listQRCodeFragment_to_mLKitFragment"
-            app:destination="@id/mLKitFragment" />
+            android:id="@+id/action_barcodeListFragment_to_cameraXFragment"
+            app:destination="@id/cameraXFragment" />
 
         <action
-            android:id="@+id/action_listQRCodeFragment_to_detailsQRCodeFragment"
-            app:destination="@id/detailsQRCodeFragment" />
+            android:id="@+id/action_barcodeListFragment_to_barcodeDetailsFragment"
+            app:destination="@id/barcodeDetailsFragment" />
 
     </fragment>
 
@@ -36,22 +36,29 @@
         android:label="@string/name_fragment_zxing"
         tools:layout="@layout/fragment_zxing" />
 
-    <!-- MLKitFragment -->
+    <!-- CameraXFragment -->
     <fragment
-        android:id="@+id/mLKitFragment"
-        android:name="com.mancel.yann.qrcool.views.fragments.MLKitFragment"
-        android:label="@string/name_fragment_m_l_kit"
-        tools:layout="@layout/fragment_m_l_kit" />
-
-    <!-- DetailsQRCodeFragment -->
-    <fragment
-        android:id="@+id/detailsQRCodeFragment"
-        android:name="com.mancel.yann.qrcool.views.fragments.DetailsQRCodeFragment"
-        android:label="@string/name_fragment_details_q_r_code"
-        tools:layout="@layout/fragment_details_q_r_code" >
+        android:id="@+id/cameraXFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.CameraXFragment"
+        android:label="@string/name_fragment_camera_x"
+        tools:layout="@layout/fragment_camera_x" >
 
         <argument
-            android:name="qrcode"
+            android:name="config"
+            app:argType="com.mancel.yann.qrcool.views.fragments.CameraXFragment$ScanConfig"
+            android:defaultValue="BARCODE_1D" />
+
+    </fragment>
+
+    <!-- BarcodeDetailsFragment -->
+    <fragment
+        android:id="@+id/barcodeDetailsFragment"
+        android:name="com.mancel.yann.qrcool.views.fragments.BarcodeDetailsFragment"
+        android:label="@string/name_fragment_details_barcode"
+        tools:layout="@layout/fragment_details_barcode" >
+
+        <argument
+            android:name="barcode"
             app:argType="com.mancel.yann.qrcool.models.QRCode" />
 
     </fragment>

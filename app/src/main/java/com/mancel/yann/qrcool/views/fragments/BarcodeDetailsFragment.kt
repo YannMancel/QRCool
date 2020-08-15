@@ -5,7 +5,7 @@ import android.net.Uri
 import android.view.View
 import android.webkit.URLUtil
 import com.mancel.yann.qrcool.R
-import kotlinx.android.synthetic.main.fragment_details_q_r_code.view.*
+import kotlinx.android.synthetic.main.fragment_details_barcode.view.*
 
 /**
  * Created by Yann MANCEL on 06/08/2020.
@@ -14,21 +14,21 @@ import kotlinx.android.synthetic.main.fragment_details_q_r_code.view.*
  *
  * A [BaseFragment] subclass.
  */
-class DetailsQRCodeFragment : BaseFragment() {
+class BarcodeDetailsFragment : BaseFragment() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _qRCode by lazy {
-        DetailsQRCodeFragmentArgs.fromBundle(this.requireArguments()).qrcode
+    private val _barcode by lazy {
+        BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).barcode
     }
 
     // METHODS -------------------------------------------------------------------------------------
 
     // -- BaseFragment --
 
-    override fun getFragmentLayout(): Int = R.layout.fragment_details_q_r_code
+    override fun getFragmentLayout(): Int = R.layout.fragment_details_barcode
 
-    override fun configureDesign() = this.updateUI()
+    override fun doOnCreateView() = this.updateUI()
 
     // -- UI --
 
@@ -36,7 +36,7 @@ class DetailsQRCodeFragment : BaseFragment() {
      * Updates the UI
      */
     private fun updateUI() {
-        val rawValue = this._qRCode._text
+        val rawValue = this._barcode._rawValue
 
         // Raw value
         this._rootView.fragment_details_raw_value.text = rawValue

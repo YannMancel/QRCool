@@ -9,9 +9,9 @@
     android:id="@+id/fragment_list_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.ListQRCodeFragment">
+    tools:context=".views.fragments.BarcodeListFragment">
 
-    <!-- RecyclerView: List of QR Codes -->
+    <!-- RecyclerView: List of barcodes -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_list_recycler_view"
         android:layout_width="match_parent"
@@ -19,31 +19,31 @@
         android:paddingTop="@dimen/padding_little"
         android:paddingBottom="@dimen/padding_heavy"
         android:clipToPadding="false"
-        tools:listitem="@layout/item_q_r_code"/>
+        tools:listitem="@layout/item_barcode"/>
 
     <!-- FabSmall: FAB with its label -->
     <com.mancel.yann.qrcool.widgets.FabSmall
-        android:id="@+id/fragment_list_zxing_library"
+        android:id="@+id/fragment_list_barcode_1d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_delta_normal_and_small_fab"
         android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
-        app:name="@string/small_fab_zxing"
-        app:iconSrc="@drawable/ic_qrcode_scan"
+        app:name="@string/small_fab_barcode_1d"
+        app:iconSrc="@drawable/ic_barcode_scan"
         app:offset_y="@dimen/offset_y_1"/>
 
     <!-- FabSmall: FAB with its label -->
     <com.mancel.yann.qrcool.widgets.FabSmall
-        android:id="@+id/fragment_list_ml_kit_library"
+        android:id="@+id/fragment_list_barcode_2d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_delta_normal_and_small_fab"
         android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
-        app:name="@string/small_fab_ml_kit"
+        app:name="@string/small_fab_barcode_2d"
         app:iconSrc="@drawable/ic_qrcode_scan"
         app:offset_y="@dimen/offset_y_2"/>
 

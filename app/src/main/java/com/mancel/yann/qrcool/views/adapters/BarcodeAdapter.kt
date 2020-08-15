@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.QRCode
-import kotlinx.android.synthetic.main.item_q_r_code.view.*
+import kotlinx.android.synthetic.main.item_barcode.view.*
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -16,13 +16,13 @@ import kotlinx.android.synthetic.main.item_q_r_code.view.*
  *
  * A [RecyclerView.Adapter] subclass.
  */
-class QRCodeAdapter(
+class BarcodeAdapter(
     private val _actionOnClick: (QRCode) -> Unit
-) : RecyclerView.Adapter<QRCodeAdapter.QRCodeViewHolder>() {
+) : RecyclerView.Adapter<BarcodeAdapter.QRCodeViewHolder>() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _qRCodes = mutableListOf<QRCode>()
+    private val _barcodes = mutableListOf<QRCode>()
 
     // METHODS -------------------------------------------------------------------------------------
 
@@ -33,36 +33,36 @@ class QRCodeAdapter(
         val view =
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_q_r_code, parent, false)
+                .inflate(R.layout.item_barcode, parent, false)
 
         return QRCodeViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: QRCodeViewHolder, position: Int) {
-        holder.bind(this._qRCodes[position], this._actionOnClick)
+        holder.bind(this._barcodes[position], this._actionOnClick)
     }
 
-    override fun getItemCount(): Int = this._qRCodes.size
+    override fun getItemCount(): Int = this._barcodes.size
 
-    // -- QRCode --
+    // -- Barcode --
 
     /**
-     * Updates data of [QRCodeAdapter]
+     * Updates data of [BarcodeAdapter]
      * @param newData a [List] of [QRCode]
      */
     fun updateData(newData: List<QRCode>) {
         // Optimizes the performances of RecyclerView
-        val diffCallback  = QRCodeDiffCallback(this._qRCodes, newData)
+        val diffCallback  = BarcodeDiffCallback(this._barcodes, newData)
         val diffResult  = DiffUtil.calculateDiff(diffCallback )
 
         // New data
-        with(this._qRCodes) {
+        with(this._barcodes) {
             clear()
             addAll(newData)
         }
 
         // Notifies adapter
-        diffResult.dispatchUpdatesTo(this@QRCodeAdapter)
+        diffResult.dispatchUpdatesTo(this@BarcodeAdapter)
     }
 
     // NESTED CLASSES ------------------------------------------------------------------------------
@@ -77,17 +77,17 @@ class QRCodeAdapter(
         // METHODS ---------------------------------------------------------------------------------
 
         /**
-         * Binds the [QRCodeAdapter] and the [QRCodeViewHolder]
+         * Binds the [BarcodeAdapter] and the [QRCodeViewHolder]
          */
         fun bind(
-            qRCode: QRCode,
+            barcode: QRCode,
             actionOnClick: (QRCode) -> Unit
         ) {
             // CardView
-            this.itemView.item_card_view.setOnClickListener { actionOnClick(qRCode) }
+            this.itemView.item_card_view.setOnClickListener { actionOnClick(barcode) }
 
             // Name
-            this.itemView.item_name.text = qRCode._text
+            this.itemView.item_name.text = barcode._rawValue
         }
     }
 }

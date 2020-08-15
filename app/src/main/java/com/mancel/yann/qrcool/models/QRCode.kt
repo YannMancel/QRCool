@@ -10,5 +10,5 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class QRCode(
-    val _text: String
+    val _rawValue: String
 ) : Parcelable

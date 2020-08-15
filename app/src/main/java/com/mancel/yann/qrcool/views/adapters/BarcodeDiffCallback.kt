@@ -10,7 +10,7 @@ import com.mancel.yann.qrcool.models.QRCode
  *
  * A [DiffUtil.Callback] subclass.
  */
-class QRCodeDiffCallback(
+class BarcodeDiffCallback(
     private val _oldList: List<QRCode>,
     private val _newList: List<QRCode>
 ) : DiffUtil.Callback() {

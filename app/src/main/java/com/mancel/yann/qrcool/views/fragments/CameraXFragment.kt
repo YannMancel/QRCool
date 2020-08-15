@@ -14,12 +14,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.analyzers.QRCodeAnalyzer
+import com.mancel.yann.qrcool.analyzers.MLKitBarcodeAnalyzer
 import com.mancel.yann.qrcool.lifecycles.ExecutorLifecycleObserver
 import com.mancel.yann.qrcool.lifecycles.FullScreenLifecycleObserver
+import com.mancel.yann.qrcool.models.QRCode
 import com.mancel.yann.qrcool.states.CameraState
+import com.mancel.yann.qrcool.states.ScanState
+import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_m_l_kit.view.*
+import kotlinx.android.synthetic.main.fragment_camera_x.view.*
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -32,7 +35,7 @@ import kotlin.math.min
  * A [BaseFragment] subclass.
  */
 @androidx.camera.core.ExperimentalGetImage
-class MLKitFragment : BaseFragment() {
+class CameraXFragment : BaseFragment() {
 
     /*
         See GitHub example:
@@ -43,7 +46,15 @@ class MLKitFragment : BaseFragment() {
             [3]: https://developer.android.com/training/camerax/take-photo
      */
 
+    // ENUMS ---------------------------------------------------------------------------------------
+
+    enum class ScanConfig { BARCODE_1D, BARCODE_2D }
+
     // FIELDS --------------------------------------------------------------------------------------
+
+    private val _scanConfig: ScanConfig by lazy {
+        CameraXFragmentArgs.fromBundle(this.requireArguments()).config
+    }
 
     private val _viewModel: SharedViewModel by activityViewModels()
 
@@ -66,9 +77,9 @@ class MLKitFragment : BaseFragment() {
 
     // -- BaseFragment --
 
-    override fun getFragmentLayout(): Int = R.layout.fragment_m_l_kit
+    override fun getFragmentLayout(): Int = R.layout.fragment_camera_x
 
-    override fun configureDesign() {
+    override fun doOnCreateView() {
         this.configureFullScreenLifecycleObserver()
         this.configureExecutorLifecycleObserver()
         this.configureCameraState()
@@ -82,7 +93,7 @@ class MLKitFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Wait for the views to be properly laid out
-        this._rootView.fragment_m_l_kit_camera.post {
+        this._rootView.fragment_camera_preview.post {
             this._viewModel.changeCameraStateToSetupCamera()
         }
     }
@@ -164,11 +175,10 @@ class MLKitFragment : BaseFragment() {
      * Configures CameraX with Camera permission
      */
     private fun configureCameraX() {
-        if (this.hasCameraPermission()) {
+        if (this.hasCameraPermission())
             this.configureCameraProvider()
-        } else {
+        else
             this._viewModel.changeCameraStateToError(this.getString(R.string.no_permission))
-        }
     }
 
     /**
@@ -194,11 +204,11 @@ class MLKitFragment : BaseFragment() {
     private fun bindAllUseCases(cameraProvider: ProcessCameraProvider) {
         // Metrics
         val metrics = DisplayMetrics().also {
-            this._rootView.fragment_m_l_kit_camera.display.getRealMetrics(it)
+            this._rootView.fragment_camera_preview.display.getRealMetrics(it)
         }
 
         // Rotation
-        val rotation = this._rootView.fragment_m_l_kit_camera.display.rotation
+        val rotation = this._rootView.fragment_camera_preview.display.rotation
 
         // Use case: Preview
         this._preview = this.buildPreview(
@@ -225,7 +235,7 @@ class MLKitFragment : BaseFragment() {
 
             // Connects Preview to the view into xml file
             this._preview?.setSurfaceProvider(
-                this._rootView.fragment_m_l_kit_camera.createSurfaceProvider()
+                this._rootView.fragment_camera_preview.createSurfaceProvider()
             )
         } catch(e: Exception) {
             Log.e(
@@ -321,19 +331,19 @@ class MLKitFragment : BaseFragment() {
     private fun getResolution() =
         // For ML Kit: 1280x720 or 1920x1080 -> Ratio: 1.7
         if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-                Size(1080,1920)
-            else
-                Size(1920, 1080)
+            Size(1080,1920)
+        else
+            Size(1920, 1080)
 
     // -- Analyzer --
 
     /**
-     * Gets a [QRCodeAnalyzer]
+     * Gets a [MLKitBarcodeAnalyzer]
      * @param imageAnalysis an [ImageAnalysis]
      * @return a [ImageAnalysis.Analyzer]
      */
     private fun getAnalyzer(imageAnalysis: ImageAnalysis): ImageAnalysis.Analyzer {
-        return QRCodeAnalyzer { barcodes ->
+        return MLKitBarcodeAnalyzer(this.requireContext(), this._scanConfig) { scanState ->
             /*
                 ex: In Portrait mode
 
@@ -356,36 +366,38 @@ class MLKitFragment : BaseFragment() {
                         image.cropRect .................... Rect(0, 0 - 1920, 1080)
              */
 
-            if(barcodes.isNotEmpty()) {
-                // Clears QRCodeAnalyzer to avoid the same multiple answers
-                imageAnalysis.clearAnalyzer()
+            when (scanState) {
+                is ScanState.SuccessScan -> {
+                    val barcodes = scanState._barcodes
 
-                // It is possible to scan several QR Codes on the same picture
-                val rawData = mutableListOf<String>().apply {
-                    barcodes.forEach {
-                        this.add(
-                            it.rawValue ?: this@MLKitFragment.getString(R.string.no_raw_value)
-                        )
+                    if (barcodes.isNotEmpty()) {
+                        // Clears QRCodeAnalyzer to avoid the same multiple answers
+                        imageAnalysis.clearAnalyzer()
+
+                        // Add new barcode(s)
+                        this.notifyScanOfBarcodes(barcodes)
                     }
                 }
 
-                // Add new QRCode(s)
-                this.notifyScanOfQRCode(rawData)
+                is ScanState.FailedScan -> {
+                    MessageTools.showMessageWithSnackbar(
+                        this._rootView.fragment_camera_coordinator_layout,
+                        scanState._errorMessage
+                    )
+                }
             }
         }
     }
 
-    // -- QR Code --
+    // -- Barcode --
 
     /**
-     * Notifies when QR Codes have been checked
-     * @param rawData a [List] of [String] that contains all raw QR Code values
+     * Notifies when barcodes have been checked
+     * @param barcodes a [List] of [QRCode] that contains all barcodes
      */
-    private fun notifyScanOfQRCode(rawData: List<String>) {
-        // Add QR Codes
-        rawData.forEach {
-            this._viewModel.addQRCode(it)
-        }
+    private fun notifyScanOfBarcodes(barcodes: List<QRCode>) {
+        // Add barcodes
+        this._viewModel.addBarcodes(barcodes)
 
         // Finishes this fragment
         this.findNavController().popBackStack()

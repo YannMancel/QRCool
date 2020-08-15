@@ -23,15 +23,15 @@ abstract class BaseActivity : AppCompatActivity() {
     protected abstract fun getActivityLayout(): Int
 
     /**
-     * Configures the design of each daughter class
+     * Calls this method on [AppCompatActivity]#onCreate method
      */
-    protected abstract fun configureDesign()
+    protected abstract fun doOnCreate()
 
     // -- AppCompatActivity --
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(this.getActivityLayout())
-        this.configureDesign()
+        this.doOnCreate()
     }
 }

@@ -13,7 +13,8 @@
     android:layout_marginVertical="@dimen/margin_little"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardElevation="@dimen/elevation_card">
 
     <!-- ConstraintLayout -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,12 +27,12 @@
             android:layout_width="@dimen/size_image_view"
             android:layout_height="@dimen/size_image_view"
             android:layout_margin="@dimen/margin_little"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_qrcode"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_qrcode"
-            android:tint="@color/colorPrimaryDark"
-            android:contentDescription="@null"/>
+            app:tint="@color/colorPrimaryDark"/>
 
         <!-- TextView -->
         <TextView

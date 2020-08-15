@@ -18,7 +18,8 @@ class SharedViewModel :  ViewModel() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _qRCodes = MutableLiveData<List<QRCode>>()
+    private val _barcodes = MutableLiveData<List<QRCode>>()
+
     private val _isFABMenuOpen = MutableLiveData<Boolean>()
 
     private val _cameraState = MutableLiveData<CameraState>()
@@ -33,27 +34,45 @@ class SharedViewModel :  ViewModel() {
 
     // METHODS -------------------------------------------------------------------------------------
 
-    // -- QR Code --
+    // -- Barcode --
 
     /**
      * Gets the [LiveData] of [List] of [QRCode]
      */
-    fun getQRCodes(): LiveData<List<QRCode>> = this._qRCodes
+    fun getBarcodes(): LiveData<List<QRCode>> = this._barcodes
 
     /**
-     * Adds a new value to the QRCodes
+     * Adds barcodes to the [MutableLiveData] of [List] of [QRCode]
+     * @param barcodes a [List] of [QRCode]
      */
-    fun addQRCode(textOfQRCode: String) {
-        val currentData =  this._qRCodes.value?.toMutableList() ?: mutableListOf()
+    fun addBarcodes(barcodes: List<QRCode>) {
+        val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
 
-        val newQRCode = QRCode(textOfQRCode)
-
-        if (!currentData.contains(newQRCode)) {
-            currentData.add(newQRCode)
+        barcodes.forEach { newBarcode ->
+            // IMPOSSIBLE: 2 barcodes with the same raw value
+            if (currentData.none { it._rawValue == newBarcode._rawValue }) {
+                currentData.add(newBarcode)
+            }
         }
 
         // Notify
-        this._qRCodes.value = currentData
+        this._barcodes.value = currentData
+    }
+
+    /**
+     * Adds a barcode to the [MutableLiveData] of [List] of [QRCode]
+     * @param barcode a [QRCode]
+     */
+    fun addBarcode(barcode: QRCode) {
+        val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
+
+        // IMPOSSIBLE: 2 barcodes with the same raw value
+        if (currentData.none { it._rawValue == barcode._rawValue }) {
+            currentData.add(barcode)
+        }
+
+        // Notify
+        this._barcodes.value = currentData
     }
 
     // -- FAB Menu --

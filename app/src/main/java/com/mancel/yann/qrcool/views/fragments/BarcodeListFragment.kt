@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.QRCode
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
-import com.mancel.yann.qrcool.views.adapters.QRCodeAdapter
+import com.mancel.yann.qrcool.views.adapters.BarcodeAdapter
 import com.mancel.yann.qrcool.widgets.FabSmall
-import kotlinx.android.synthetic.main.fragment_list_q_r_code.*
-import kotlinx.android.synthetic.main.fragment_list_q_r_code.view.*
+import kotlinx.android.synthetic.main.fragment_list_barcode.*
+import kotlinx.android.synthetic.main.fragment_list_barcode.view.*
 
 /**
  * Created by Yann MANCEL on 21/07/2020.
@@ -22,23 +22,23 @@ import kotlinx.android.synthetic.main.fragment_list_q_r_code.view.*
  *
  * A [BaseFragment] subclass.
  */
-class ListQRCodeFragment : BaseFragment() {
+class BarcodeListFragment : BaseFragment() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private lateinit var _adapter: QRCodeAdapter
+    private lateinit var _adapter: BarcodeAdapter
     private val _viewModel: SharedViewModel by activityViewModels()
 
     // METHODS -------------------------------------------------------------------------------------
 
     // -- BaseFragment --
 
-    override fun getFragmentLayout(): Int = R.layout.fragment_list_q_r_code
+    override fun getFragmentLayout(): Int = R.layout.fragment_list_barcode
 
-    override fun configureDesign() {
+    override fun doOnCreateView() {
         this.configureListenerOfFABs()
         this.configureRecyclerView()
-        this.configureQRCodeEvents()
+        this.configureBarcodeEvents()
         this.configureFABMenuEvents()
     }
 
@@ -54,36 +54,44 @@ class ListQRCodeFragment : BaseFragment() {
         }
 
         // Mini FABs
-        this.configureFABToNavigateToZXingFragment()
-        this.configureFABToNavigateToMLKitFragment()
+        this.configureFABToNavigateToCameraXFragmentInBarcode1D()
+        this.configureFABToNavigateToCameraXFragmentInBarcode2D()
     }
 
     /**
-     * Configures the mini FloatingActionButton to navigate to ZXingFragment
+     * Configures the mini FloatingActionButton to navigate to CameraXFragment in barcode 1D
      */
-    private fun configureFABToNavigateToZXingFragment() {
-        this._rootView.fragment_list_zxing_library.setOnClickListener {
-            this.findNavController().navigate(R.id.action_listQRCodeFragment_to_zXingFragment)
+    private fun configureFABToNavigateToCameraXFragmentInBarcode1D() {
+        this._rootView.fragment_list_barcode_1d.setOnClickListener {
+            // Action with argument
+            val action =
+                BarcodeListFragmentDirections
+                    .actionBarcodeListFragmentToCameraXFragment(CameraXFragment.ScanConfig.BARCODE_1D)
+            this.findNavController().navigate(action)
         }
     }
 
     /**
-     * Configures the mini FloatingActionButton to navigate to MLKitFragment
+     * Configures the mini FloatingActionButton to navigate to CameraXFragment in barcode 2D
      */
-    private fun configureFABToNavigateToMLKitFragment() {
-        this._rootView.fragment_list_ml_kit_library.setOnClickListener {
-            this.findNavController().navigate(R.id.action_listQRCodeFragment_to_mLKitFragment)
+    private fun configureFABToNavigateToCameraXFragmentInBarcode2D() {
+        this._rootView.fragment_list_barcode_2d.setOnClickListener {
+            // Action with argument
+            val action =
+                BarcodeListFragmentDirections
+                    .actionBarcodeListFragmentToCameraXFragment(CameraXFragment.ScanConfig.BARCODE_2D)
+            this.findNavController().navigate(action)
         }
     }
 
     /**
      * Event from a click on a CardView
      */
-    private fun eventFromCardView(qrCode: QRCode) {
+    private fun eventFromCardView(barcode: QRCode) {
         // Action with argument
         val action =
-            ListQRCodeFragmentDirections
-                .actionListQRCodeFragmentToDetailsQRCodeFragment(qrCode)
+            BarcodeListFragmentDirections
+                .actionBarcodeListFragmentToBarcodeDetailsFragment(barcode)
 
         this.findNavController().navigate(action)
     }
@@ -95,24 +103,24 @@ class ListQRCodeFragment : BaseFragment() {
      */
     private fun configureRecyclerView() {
         // Adapter
-        this._adapter = QRCodeAdapter(this::eventFromCardView)
+        this._adapter = BarcodeAdapter(this::eventFromCardView)
 
         // RecyclerView
         with(this._rootView.fragment_list_recycler_view) {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@ListQRCodeFragment.requireContext())
-            adapter = this@ListQRCodeFragment._adapter
+            layoutManager = LinearLayoutManager(this@BarcodeListFragment.requireContext())
+            adapter = this@BarcodeListFragment._adapter
         }
     }
 
     // -- LiveData --
 
     /**
-     * Configures the QR Code events from LiveData
+     * Configures the barcode events from LiveData
      */
-    private fun configureQRCodeEvents() {
+    private fun configureBarcodeEvents() {
         this._viewModel
-            .getQRCodes()
+            .getBarcodes()
             .observe(
                 this.viewLifecycleOwner,
                 Observer { this._adapter.updateData(it) }
@@ -150,8 +158,8 @@ class ListQRCodeFragment : BaseFragment() {
             .setInterpolator(OvershootInterpolator(10F))
             .start()
 
-        this.animateOpenFAB(this.fragment_list_zxing_library)
-        this.animateOpenFAB(this.fragment_list_ml_kit_library)
+        this.animateOpenFAB(this.fragment_list_barcode_1d)
+        this.animateOpenFAB(this.fragment_list_barcode_2d)
     }
 
     /**
@@ -166,8 +174,8 @@ class ListQRCodeFragment : BaseFragment() {
             .setInterpolator(OvershootInterpolator(10F))
             .start()
 
-        this.animateCloseFAB(this.fragment_list_zxing_library)
-        this.animateCloseFAB(this.fragment_list_ml_kit_library)
+        this.animateCloseFAB(this.fragment_list_barcode_1d)
+        this.animateCloseFAB(this.fragment_list_barcode_2d)
     }
 
     /**

@@ -38,9 +38,9 @@ abstract class BaseFragment : Fragment() {
     protected abstract fun getFragmentLayout(): Int
 
     /**
-     * Configures the design of each daughter class
+     * Calls this method on [Fragment]#onCreateView method
      */
-    protected abstract fun configureDesign()
+    protected abstract fun doOnCreateView()
 
     // -- Fragment --
 
@@ -52,7 +52,7 @@ abstract class BaseFragment : Fragment() {
         // Inflate the layout for this fragment
         this._rootView = inflater.inflate(this.getFragmentLayout(), container, false)
 
-        this.configureDesign()
+        this.doOnCreateView()
 
         return this._rootView
     }

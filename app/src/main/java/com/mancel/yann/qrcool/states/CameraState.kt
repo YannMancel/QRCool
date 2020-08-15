@@ -13,7 +13,7 @@ sealed class CameraState(
 
     /**
      * State:  SetupCamera
-     * Where:  MLKitFragment#onViewCreated
+     * Where:  CameraXFragment#onViewCreated
      * Why:    After post method of Preview widget
      */
     class SetupCamera(
@@ -22,7 +22,7 @@ sealed class CameraState(
 
     /**
      * State:  PreviewReady
-     * Where:  MLKitFragment#configureCameraProvider
+     * Where:  CameraXFragment#configureCameraProvider
      * Why:    After to bind Preview use case
      */
     class PreviewReady(
@@ -31,7 +31,7 @@ sealed class CameraState(
 
     /**
      * State:  Error
-     * Where:  MLKitFragment#configureCameraX
+     * Where:  CameraXFragment#configureCameraX
      * Why:    No permission
      */
     class Error(

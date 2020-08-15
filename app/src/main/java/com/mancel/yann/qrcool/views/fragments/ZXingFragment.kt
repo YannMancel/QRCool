@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.zxing.Result
 import com.mancel.yann.qrcool.BuildConfig
 import com.mancel.yann.qrcool.R
+import com.mancel.yann.qrcool.models.QRCode
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_zxing.view.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -28,7 +29,7 @@ class ZXingFragment : BaseFragment(), ZXingScannerView.ResultHandler {
 
     override fun getFragmentLayout(): Int = R.layout.fragment_zxing
 
-    override fun configureDesign() {
+    override fun doOnCreateView() {
         if (BuildConfig.QRCODE_SIMULATOR_ENABLED) {
             this.notifyScanOfQRCode("http://qrcode.scan")
         }
@@ -84,7 +85,9 @@ class ZXingFragment : BaseFragment(), ZXingScannerView.ResultHandler {
      */
     private fun notifyScanOfQRCode(textOfQRCode: String) {
         // Add QR Code
-        this._viewModel.addQRCode(textOfQRCode)
+        this._viewModel.addBarcode(
+            QRCode(textOfQRCode)
+        )
 
         // Finishes this fragment
         this.findNavController().popBackStack()

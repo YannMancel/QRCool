@@ -30,7 +30,7 @@
   * [Behavior CameraX](https://developer.android.com/training/camerax)
   * [KTX Extensions](https://developer.android.com/kotlin/ktx)
 * [Library Material Components](https://github.com/material-components/material-components-android)
-* [Library dm77/barcodescanner](https://github.com/dm77/barcodescanner)
+* [Library dm77/barcodescanner (Just for comparison)](https://github.com/dm77/barcodescanner)
 * [Library ML Kit - Barcode scanning](https://developers.google.com/ml-kit/vision/barcode-scanning/android)
 
 

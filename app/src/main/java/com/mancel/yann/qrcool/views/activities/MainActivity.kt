@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
 
     override fun getActivityLayout(): Int = R.layout.activity_main
 
-    override fun configureDesign() = this.configureActionBarForNavigation()
+    override fun doOnCreate() = this.configureActionBarForNavigation()
 
     // -- Activity --
 

@@ -8,9 +8,9 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.DetailsQRCodeFragment">
+    tools:context=".views.fragments.BarcodeDetailsFragment">
 
-    <!-- ImageView: Image QR Code -->
+    <!-- ImageView: Image barcode -->
     <ImageView
         android:id="@+id/fragment_details_image"
         android:layout_width="@dimen/size_image_view_details"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/TextViewStyleLabel"/>
 
-    <!-- TextView: Raw value of QR Code -->
+    <!-- TextView: Raw value of barcode -->
     <TextView
         android:id="@+id/fragment_details_raw_value"
         android:layout_width="0dp"

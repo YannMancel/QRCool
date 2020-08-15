@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:fabSize="mini"
-        tools:src="@drawable/ic_qrcode"
+        tools:src="@drawable/ic_qrcode_scan"
         style="@style/FloatingActionButtonStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
