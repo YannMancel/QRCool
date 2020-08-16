@@ -21,20 +21,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- ImageView -->
+        <!-- ImageView: Image -->
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="@dimen/size_image_view"
             android:layout_height="@dimen/size_image_view"
             android:layout_margin="@dimen/margin_little"
             android:contentDescription="@null"
-            android:src="@drawable/ic_qrcode"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tint="@color/colorPrimaryDark"/>
+            app:tint="@color/colorPrimaryDark"
+            tools:src="@drawable/ic_qrcode"/>
 
-        <!-- TextView -->
+        <!-- TextView: Raw value -->
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"
@@ -45,6 +45,20 @@
             app:layout_constraintStart_toEndOf="@id/item_image"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="URL"/>
+
+        <!-- TextView: Date -->
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_little"
+            android:layout_marginBottom="@dimen/margin_tiny"
+            android:textSize="12sp"
+            android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="16/08/2020 21:28"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -44,10 +44,19 @@ class BarcodeDetailsFragment : BaseFragment() {
      */
     private fun updateUI() {
         // There is only one item that can be not null
-        val rawValue = this._barcodes.find { it != null }?._rawValue
-            ?: this.getString(R.string.no_raw_value)
+        val barcode = this._barcodes.find { it != null }
+
+        // Image
+        val resource = when (barcode?._format) {
+            BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
+            BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D -> R.drawable.ic_qrcode
+            else -> R.drawable.ic_unknown
+        }
+        this._rootView.fragment_details_image.setImageResource(resource)
 
         // Raw value
+        val rawValue = barcode?._rawValue
+            ?: this.getString(R.string.no_raw_value)
         this._rootView.fragment_details_raw_value.text = rawValue
 
         // Button according to if raw value is a valid url
@@ -61,7 +70,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         } else {
             View.GONE
         }
-
         this._rootView.fragment_details_button.visibility = visibility
     }
 

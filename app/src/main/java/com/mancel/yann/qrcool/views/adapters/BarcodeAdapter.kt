@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.BarcodeOverlay
 import kotlinx.android.synthetic.main.item_barcode.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -88,6 +90,20 @@ class BarcodeAdapter(
 
             // Name
             this.itemView.item_name.text = barcode._rawValue
+
+            // Image
+            val resource = when (barcode._format) {
+                BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
+                BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D -> R.drawable.ic_qrcode
+                else -> R.drawable.ic_unknown
+            }
+            this.itemView.item_image.setImageResource(resource)
+
+            // Date
+            val formattedDate =
+                SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault())
+                    .format(barcode._date)
+            this.itemView.item_date.text = formattedDate
         }
     }
 }
