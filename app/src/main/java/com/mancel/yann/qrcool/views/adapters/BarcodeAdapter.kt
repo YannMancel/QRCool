@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 import kotlinx.android.synthetic.main.item_barcode.view.*
 
 /**
@@ -17,12 +17,12 @@ import kotlinx.android.synthetic.main.item_barcode.view.*
  * A [RecyclerView.Adapter] subclass.
  */
 class BarcodeAdapter(
-    private val _actionOnClick: (QRCode) -> Unit
+    private val _actionOnClick: (BarcodeOverlay) -> Unit
 ) : RecyclerView.Adapter<BarcodeAdapter.QRCodeViewHolder>() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _barcodes = mutableListOf<QRCode>()
+    private val _barcodes = mutableListOf<BarcodeOverlay>()
 
     // METHODS -------------------------------------------------------------------------------------
 
@@ -48,9 +48,9 @@ class BarcodeAdapter(
 
     /**
      * Updates data of [BarcodeAdapter]
-     * @param newData a [List] of [QRCode]
+     * @param newData a [List] of [BarcodeOverlay]
      */
-    fun updateData(newData: List<QRCode>) {
+    fun updateData(newData: List<BarcodeOverlay>) {
         // Optimizes the performances of RecyclerView
         val diffCallback  = BarcodeDiffCallback(this._barcodes, newData)
         val diffResult  = DiffUtil.calculateDiff(diffCallback )
@@ -80,8 +80,8 @@ class BarcodeAdapter(
          * Binds the [BarcodeAdapter] and the [QRCodeViewHolder]
          */
         fun bind(
-            barcode: QRCode,
-            actionOnClick: (QRCode) -> Unit
+            barcode: BarcodeOverlay,
+            actionOnClick: (BarcodeOverlay) -> Unit
         ) {
             // CardView
             this.itemView.item_card_view.setOnClickListener { actionOnClick(barcode) }

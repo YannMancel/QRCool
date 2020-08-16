@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.View
 import android.webkit.URLUtil
 import com.mancel.yann.qrcool.R
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 import kotlinx.android.synthetic.main.fragment_details_barcode.view.*
 
 /**
@@ -18,8 +19,14 @@ class BarcodeDetailsFragment : BaseFragment() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _barcode by lazy {
-        BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).barcode
+    private val _barcodes by lazy {
+        mutableListOf<BarcodeOverlay?>().also {
+            it.add(BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).textBarcode)
+            it.add(BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).wifiBarcode)
+            it.add(BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).urlBarcode)
+            it.add(BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).smsBarcode)
+            it.add(BarcodeDetailsFragmentArgs.fromBundle(this.requireArguments()).geoBarcode)
+        }
     }
 
     // METHODS -------------------------------------------------------------------------------------
@@ -36,7 +43,9 @@ class BarcodeDetailsFragment : BaseFragment() {
      * Updates the UI
      */
     private fun updateUI() {
-        val rawValue = this._barcode._rawValue
+        // There is only one item that can be not null
+        val rawValue = this._barcodes.find { it != null }?._rawValue
+            ?: this.getString(R.string.no_raw_value)
 
         // Raw value
         this._rootView.fragment_details_raw_value.text = rawValue

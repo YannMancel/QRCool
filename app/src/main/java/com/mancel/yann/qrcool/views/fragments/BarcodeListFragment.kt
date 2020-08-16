@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.*
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import com.mancel.yann.qrcool.views.adapters.BarcodeAdapter
 import com.mancel.yann.qrcool.widgets.FabSmall
@@ -87,11 +87,35 @@ class BarcodeListFragment : BaseFragment() {
     /**
      * Event from a click on a CardView
      */
-    private fun eventFromCardView(barcode: QRCode) {
+    private fun eventFromCardView(barcode: BarcodeOverlay) {
         // Action with argument
-        val action =
-            BarcodeListFragmentDirections
-                .actionBarcodeListFragmentToBarcodeDetailsFragment(barcode)
+        val action = when (barcode) {
+            is TextBarcode -> {
+                BarcodeListFragmentDirections.actionBarcodeListFragmentToBarcodeDetailsFragment(
+                    textBarcode = barcode
+                )
+            }
+            is WifiBarcode -> {
+                BarcodeListFragmentDirections.actionBarcodeListFragmentToBarcodeDetailsFragment(
+                    wifiBarcode = barcode
+                )
+            }
+            is UrlBarcode -> {
+                BarcodeListFragmentDirections.actionBarcodeListFragmentToBarcodeDetailsFragment(
+                    urlBarcode = barcode
+                )
+            }
+            is SMSBarcode -> {
+                BarcodeListFragmentDirections.actionBarcodeListFragmentToBarcodeDetailsFragment(
+                    smsBarcode = barcode
+                )
+            }
+            is GeoPointBarcode -> {
+                BarcodeListFragmentDirections.actionBarcodeListFragmentToBarcodeDetailsFragment(
+                    geoBarcode = barcode
+                )
+            }
+        }
 
         this.findNavController().navigate(action)
     }

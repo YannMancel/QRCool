@@ -58,8 +58,34 @@
         tools:layout="@layout/fragment_details_barcode" >
 
         <argument
-            android:name="barcode"
-            app:argType="com.mancel.yann.qrcool.models.QRCode" />
+            android:name="textBarcode"
+            app:argType="com.mancel.yann.qrcool.models.TextBarcode"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="wifiBarcode"
+            app:argType="com.mancel.yann.qrcool.models.WifiBarcode"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="urlBarcode"
+            app:argType="com.mancel.yann.qrcool.models.UrlBarcode"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="smsBarcode"
+            app:argType="com.mancel.yann.qrcool.models.SMSBarcode"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="geoBarcode"
+            app:argType="com.mancel.yann.qrcool.models.GeoPointBarcode"
+            app:nullable="true"
+            android:defaultValue="@null" />
 
     </fragment>
 

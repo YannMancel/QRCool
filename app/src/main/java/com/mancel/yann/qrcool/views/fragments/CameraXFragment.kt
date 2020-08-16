@@ -17,7 +17,7 @@ import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.analyzers.MLKitBarcodeAnalyzer
 import com.mancel.yann.qrcool.lifecycles.ExecutorLifecycleObserver
 import com.mancel.yann.qrcool.lifecycles.FullScreenLifecycleObserver
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 import com.mancel.yann.qrcool.states.CameraState
 import com.mancel.yann.qrcool.states.ScanState
 import com.mancel.yann.qrcool.utils.MessageTools
@@ -343,7 +343,7 @@ class CameraXFragment : BaseFragment() {
      * @return a [ImageAnalysis.Analyzer]
      */
     private fun getAnalyzer(imageAnalysis: ImageAnalysis): ImageAnalysis.Analyzer {
-        return MLKitBarcodeAnalyzer(this.requireContext(), this._scanConfig) { scanState ->
+        return MLKitBarcodeAnalyzer(this._scanConfig) { scanState ->
             /*
                 ex: In Portrait mode
 
@@ -382,7 +382,7 @@ class CameraXFragment : BaseFragment() {
                 is ScanState.FailedScan -> {
                     MessageTools.showMessageWithSnackbar(
                         this._rootView.fragment_camera_coordinator_layout,
-                        scanState._errorMessage
+                        this.getString(R.string.analyzer_failed_scan, scanState._exception.message)
                     )
                 }
             }
@@ -393,9 +393,9 @@ class CameraXFragment : BaseFragment() {
 
     /**
      * Notifies when barcodes have been checked
-     * @param barcodes a [List] of [QRCode] that contains all barcodes
+     * @param barcodes a [List] of [BarcodeOverlay] that contains all barcodes
      */
-    private fun notifyScanOfBarcodes(barcodes: List<QRCode>) {
+    private fun notifyScanOfBarcodes(barcodes: List<BarcodeOverlay>) {
         // Add barcodes
         this._viewModel.addBarcodes(barcodes)
 

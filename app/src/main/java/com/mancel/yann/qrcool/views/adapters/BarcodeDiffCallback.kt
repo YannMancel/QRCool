@@ -1,7 +1,7 @@
 package com.mancel.yann.qrcool.views.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -11,8 +11,8 @@ import com.mancel.yann.qrcool.models.QRCode
  * A [DiffUtil.Callback] subclass.
  */
 class BarcodeDiffCallback(
-    private val _oldList: List<QRCode>,
-    private val _newList: List<QRCode>
+    private val _oldList: List<BarcodeOverlay>,
+    private val _newList: List<BarcodeOverlay>
 ) : DiffUtil.Callback() {
 
     // METHODS -------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import androidx.camera.core.CameraSelector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 import com.mancel.yann.qrcool.states.CameraState
 
 /**
@@ -18,7 +18,7 @@ class SharedViewModel :  ViewModel() {
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _barcodes = MutableLiveData<List<QRCode>>()
+    private val _barcodes = MutableLiveData<List<BarcodeOverlay>>()
 
     private val _isFABMenuOpen = MutableLiveData<Boolean>()
 
@@ -37,15 +37,15 @@ class SharedViewModel :  ViewModel() {
     // -- Barcode --
 
     /**
-     * Gets the [LiveData] of [List] of [QRCode]
+     * Gets the [LiveData] of [List] of [BarcodeOverlay]
      */
-    fun getBarcodes(): LiveData<List<QRCode>> = this._barcodes
+    fun getBarcodes(): LiveData<List<BarcodeOverlay>> = this._barcodes
 
     /**
-     * Adds barcodes to the [MutableLiveData] of [List] of [QRCode]
-     * @param barcodes a [List] of [QRCode]
+     * Adds barcodes to the [MutableLiveData] of [List] of [BarcodeOverlay]
+     * @param barcodes a [List] of [BarcodeOverlay]
      */
-    fun addBarcodes(barcodes: List<QRCode>) {
+    fun addBarcodes(barcodes: List<BarcodeOverlay>) {
         val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
 
         barcodes.forEach { newBarcode ->
@@ -60,10 +60,10 @@ class SharedViewModel :  ViewModel() {
     }
 
     /**
-     * Adds a barcode to the [MutableLiveData] of [List] of [QRCode]
-     * @param barcode a [QRCode]
+     * Adds a barcode to the [MutableLiveData] of [List] of [BarcodeOverlay]
+     * @param barcode a [BarcodeOverlay]
      */
-    fun addBarcode(barcode: QRCode) {
+    fun addBarcode(barcode: BarcodeOverlay) {
         val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
 
         // IMPOSSIBLE: 2 barcodes with the same raw value

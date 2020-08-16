@@ -5,7 +5,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.zxing.Result
 import com.mancel.yann.qrcool.BuildConfig
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
+import com.mancel.yann.qrcool.models.TextBarcode
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_zxing.view.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -86,7 +87,11 @@ class ZXingFragment : BaseFragment(), ZXingScannerView.ResultHandler {
     private fun notifyScanOfQRCode(textOfQRCode: String) {
         // Add QR Code
         this._viewModel.addBarcode(
-            QRCode(textOfQRCode)
+            TextBarcode(
+                _rawValue = textOfQRCode,
+                _type = BarcodeOverlay.BarcodeType.TYPE_TEXT,
+                _format = BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D
+            )
         )
 
         // Finishes this fragment

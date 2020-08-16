@@ -1,6 +1,6 @@
 package com.mancel.yann.qrcool.states
 
-import com.mancel.yann.qrcool.models.QRCode
+import com.mancel.yann.qrcool.models.BarcodeOverlay
 
 /**
  * Created by Yann MANCEL on 15/08/2020.
@@ -16,12 +16,12 @@ sealed class ScanState {
      * Where:  MLKitBarcodeAnalyzer#scanBarcodes
      * Why:    Scan is a success
      */
-    class SuccessScan(val _barcodes: List<QRCode>) : ScanState()
+    class SuccessScan(val _barcodes: List<BarcodeOverlay>) : ScanState()
 
     /**
      * State:  FailedScan
      * Where:  MLKitBarcodeAnalyzer#scanBarcodes
      * Why:    Scan is a fail
      */
-    class FailedScan(val _errorMessage: String) : ScanState()
+    class FailedScan(val _exception: Exception) : ScanState()
 }
