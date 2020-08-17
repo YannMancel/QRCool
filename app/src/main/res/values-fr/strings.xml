@@ -7,10 +7,15 @@
     <string name="name_fragment_details_barcode">Détails</string>
     <string name="small_fab_barcode_2d">Code-barre 2D</string>
     <string name="small_fab_barcode_1d">Code-barre 1D</string>
-    <string name="label_raw_value">Donnée brute</string>
+    <string name="label_data">Données</string>
     <string name="label_date">Date</string>
     <string name="no_permission">Aucune permission</string>
     <string name="analyzer_failed_scan">Scan de code-barre échoué :\n%1$s</string>
     <string name="no_raw_value">Aucune donnée brute</string>
+    <string name="raw_value_to_text">Texte : %1$s</string>
+    <string name="raw_value_to_wifi">Nom du réseau : %1$s\nMot de passe : %2$s\nCryptage : %3$s</string>
+    <string name="raw_value_to_url">Titre : %1$s\nUrl : %2$s</string>
+    <string name="raw_value_to_sms">Numéro : %1$s\nMessage : %2$s</string>
+    <string name="raw_value_to_geo">Latitude : %1$s\nLongitude : %2$s</string>
 
 </resources>

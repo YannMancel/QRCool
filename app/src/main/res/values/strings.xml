@@ -13,7 +13,7 @@
     <string name="small_fab_barcode_1d">Barcode 1D</string>
 
     <!-- fragment_details_barcode.xml -->
-    <string name="label_raw_value">Raw value</string>
+    <string name="label_data">Data</string>
     <string name="label_date">Date</string>
     <string name="url_button" translatable="false">Go</string>
 
@@ -21,7 +21,12 @@
     <string name="no_permission">No permission</string>
     <string name="analyzer_failed_scan">Barcode scanning failed:\n%1$s</string>
 
-    <!-- BarcodeDetailsFragment.kt & BarcodeAdapter.kt -->
+    <!-- BarcodeTools.kt -->
     <string name="no_raw_value">No raw value</string>
+    <string name="raw_value_to_text">Text: %1$s</string>
+    <string name="raw_value_to_wifi">Network Name: %1$s\nPassword: %2$s\nEncryption: %3$s</string>
+    <string name="raw_value_to_url">Title: %1$s\nUrl: %2$s</string>
+    <string name="raw_value_to_sms">Number: %1$s\nMessage: %2$s</string>
+    <string name="raw_value_to_geo">Latitude: %1$s\nLongitude: %2$s</string>
 
 </resources>

@@ -5,7 +5,8 @@ import android.net.Uri
 import android.view.View
 import android.webkit.URLUtil
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.models.BarcodeOverlay
+import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.utils.BarcodeTools
 import kotlinx.android.synthetic.main.fragment_details_barcode.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,7 +51,7 @@ class BarcodeDetailsFragment : BaseFragment() {
 
         // UI
         this.updateImage(barcode!!._format)
-        this.updateRawValue(barcode._rawValue)
+        this.updateData(barcode)
         this.updateDate(barcode._date)
         this.updateButton(barcode._rawValue)
     }
@@ -59,7 +60,7 @@ class BarcodeDetailsFragment : BaseFragment() {
      * Updates the image
      */
     private fun updateImage(format: BarcodeOverlay.BarcodeFormat) {
-        val resource = when(format) {
+        val resource = when (format) {
             BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
             BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D -> R.drawable.ic_qrcode
             else -> R.drawable.ic_unknown
@@ -68,11 +69,11 @@ class BarcodeDetailsFragment : BaseFragment() {
     }
 
     /**
-     * Updates the raw value
+     * Updates the data
      */
-    private fun updateRawValue(rawValue: String?) {
-        this._rootView.fragment_details_raw_value.text = rawValue
-            ?: this.getString(R.string.no_raw_value)
+    private fun updateData(barcode: BarcodeOverlay) {
+        this._rootView.fragment_details_data.text =
+            BarcodeTools.getStructuredDataOfBarcode(this.requireContext(), barcode)
     }
 
     /**

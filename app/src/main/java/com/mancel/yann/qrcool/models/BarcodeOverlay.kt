@@ -25,12 +25,19 @@ sealed class BarcodeOverlay {
         FORMAT_BARCODE_1D,
         FORMAT_BARCODE_2D
     }
+
     enum class BarcodeType {
         TYPE_TEXT,
         TYPE_WIFI,
         TYPE_URL,
         TYPE_SMS,
         TYPE_GEO
+    }
+
+    enum class WifiType {
+        TYPE_OPEN,
+        TYPE_WPA,
+        TYPE_WEP
     }
 }
 
@@ -50,7 +57,7 @@ data class WifiBarcode(
     override val _date: Date = Date(),
     val _sSID: String?,
     val _password: String?,
-    val _encryptionType: Int?
+    val _encryptionType: WifiType
 ) : BarcodeOverlay(), Parcelable
 
 @Parcelize

@@ -24,26 +24,26 @@
         app:tint="@color/colorPrimaryDark"
         tools:src="@drawable/ic_qrcode"/>
 
-    <!-- TextView: Raw value label -->
+    <!-- TextView: Data label -->
     <TextView
-        android:id="@+id/fragment_details_label_raw_value"
+        android:id="@+id/fragment_details_label_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
-        android:text="@string/label_raw_value"
+        android:text="@string/label_data"
         app:layout_constraintTop_toBottomOf="@id/fragment_details_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/TextViewStyleLabel"/>
 
-    <!-- TextView: Raw value of barcode -->
+    <!-- TextView: Data of barcode -->
     <TextView
-        android:id="@+id/fragment_details_raw_value"
+        android:id="@+id/fragment_details_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_little"
         android:layout_marginHorizontal="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/fragment_details_label_raw_value"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_label_data"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="https://github.com/YannMancel"
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
         android:text="@string/label_date"
-        app:layout_constraintTop_toBottomOf="@id/fragment_details_raw_value"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_data"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/TextViewStyleLabel"/>

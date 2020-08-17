@@ -149,7 +149,7 @@ class MLKitBarcodeAnalyzer(
         // It is possible to scan several barcodes on the same picture
         return mutableListOf<BarcodeOverlay>().also {
             barcodesFromMLKit.forEach { barcode ->
-                val newBarcode: BarcodeOverlay = when(barcode.valueType) {
+                val newBarcode: BarcodeOverlay = when (barcode.valueType) {
                     Barcode.TYPE_WIFI -> {
                         WifiBarcode(
                             _rawValue = barcode.rawValue,
@@ -157,7 +157,7 @@ class MLKitBarcodeAnalyzer(
                             _format = this.getFormat(barcode.format),
                             _sSID = barcode.wifi?.ssid,
                             _password =barcode.wifi?.password,
-                            _encryptionType = barcode.wifi?.encryptionType
+                            _encryptionType = this.getWifiType(barcode.wifi!!.encryptionType)
                         )
                     }
 
@@ -247,6 +247,21 @@ class MLKitBarcodeAnalyzer(
             Barcode.FORMAT_DATA_MATRIX -> BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D
 
             else -> BarcodeOverlay.BarcodeFormat.FORMAT_UNKNOWN
+        }
+    }
+
+    // -- Wifi type --
+
+    /**
+     * Gets the barcode's wifi type from ML Kit library to this application (abstract layer)
+     */
+    private fun getWifiType(
+        wifiTypeFromMLKit: Int
+    ) : BarcodeOverlay.WifiType {
+        return when (wifiTypeFromMLKit) {
+            Barcode.WiFi.TYPE_WEP -> BarcodeOverlay.WifiType.TYPE_WEP
+            Barcode.WiFi.TYPE_WPA -> BarcodeOverlay.WifiType.TYPE_WPA
+            else -> BarcodeOverlay.WifiType.TYPE_OPEN
         }
     }
 }

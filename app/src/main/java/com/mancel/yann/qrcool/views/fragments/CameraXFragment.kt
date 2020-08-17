@@ -330,7 +330,7 @@ class CameraXFragment : BaseFragment() {
      */
     private fun getResolution() =
         // For ML Kit: 1280x720 or 1920x1080 -> Ratio: 1.7
-        if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             Size(1080,1920)
         else
             Size(1920, 1080)

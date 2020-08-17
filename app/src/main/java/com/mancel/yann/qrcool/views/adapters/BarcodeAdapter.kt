@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mancel.yann.qrcool.R
-import com.mancel.yann.qrcool.models.BarcodeOverlay
+import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.utils.BarcodeTools
 import kotlinx.android.synthetic.main.item_barcode.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -95,22 +96,39 @@ class BarcodeAdapter(
             // CardView
             this.itemView.item_card_view.setOnClickListener { actionOnClick(barcode) }
 
-            // Name
-            this.itemView.item_name.text = barcode._rawValue
-                ?: context.getString(R.string.no_raw_value)
+            // UI
+            this.updateImage(barcode._format)
+            this.updateData(barcode, context)
+            this.updateDate(barcode._date)
+        }
 
-            // Image
-            val resource = when (barcode._format) {
+        /**
+         * Updates the image
+         */
+        private fun updateImage(format: BarcodeOverlay.BarcodeFormat) {
+            val resource = when (format) {
                 BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
                 BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_2D -> R.drawable.ic_qrcode
                 else -> R.drawable.ic_unknown
             }
             this.itemView.item_image.setImageResource(resource)
+        }
 
-            // Date
+        /**
+         * Updates the data
+         */
+        private fun updateData(barcode: BarcodeOverlay, context: Context) {
+            this.itemView.item_name.text =
+                BarcodeTools.getStructuredDataOfBarcode(context, barcode)
+        }
+
+        /**
+         * Updates the date
+         */
+        private fun updateDate(date: Date) {
             val formattedDate =
                 SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault())
-                    .format(barcode._date)
+                    .format(date)
             this.itemView.item_date.text = formattedDate
         }
     }
