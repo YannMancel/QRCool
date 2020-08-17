@@ -13,12 +13,15 @@
     <string name="small_fab_barcode_1d">Barcode 1D</string>
 
     <!-- fragment_details_barcode.xml -->
-    <string name="label_raw_value">Raw value:</string>
-    <string name="no_raw_value">No raw value</string>
+    <string name="label_raw_value">Raw value</string>
+    <string name="label_date">Date</string>
     <string name="url_button" translatable="false">Go</string>
 
     <!-- CameraXFragment.kt -->
     <string name="no_permission">No permission</string>
     <string name="analyzer_failed_scan">Barcode scanning failed:\n%1$s</string>
+
+    <!-- BarcodeDetailsFragment.kt & BarcodeAdapter.kt -->
+    <string name="no_raw_value">No raw value</string>
 
 </resources>

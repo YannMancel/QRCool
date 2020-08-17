@@ -8,8 +8,9 @@
     <string name="small_fab_barcode_2d">Code-barre 2D</string>
     <string name="small_fab_barcode_1d">Code-barre 1D</string>
     <string name="label_raw_value">Donnée brute</string>
-    <string name="no_raw_value">Aucune donnée brute</string>
+    <string name="label_date">Date</string>
     <string name="no_permission">Aucune permission</string>
     <string name="analyzer_failed_scan">Scan de code-barre échoué :\n%1$s</string>
+    <string name="no_raw_value">Aucune donnée brute</string>
 
 </resources>

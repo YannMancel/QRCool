@@ -1,5 +1,6 @@
 package com.mancel.yann.qrcool.views.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import java.util.*
  * A [RecyclerView.Adapter] subclass.
  */
 class BarcodeAdapter(
+    private val _context: Context,
     private val _actionOnClick: (BarcodeOverlay) -> Unit
 ) : RecyclerView.Adapter<BarcodeAdapter.QRCodeViewHolder>() {
 
@@ -41,7 +43,11 @@ class BarcodeAdapter(
     }
 
     override fun onBindViewHolder(holder: QRCodeViewHolder, position: Int) {
-        holder.bind(this._barcodes[position], this._actionOnClick)
+        holder.bind(
+            this._barcodes[position],
+            this._context,
+            this._actionOnClick
+        )
     }
 
     override fun getItemCount(): Int = this._barcodes.size
@@ -83,6 +89,7 @@ class BarcodeAdapter(
          */
         fun bind(
             barcode: BarcodeOverlay,
+            context: Context,
             actionOnClick: (BarcodeOverlay) -> Unit
         ) {
             // CardView
@@ -90,6 +97,7 @@ class BarcodeAdapter(
 
             // Name
             this.itemView.item_name.text = barcode._rawValue
+                ?: context.getString(R.string.no_raw_value)
 
             // Image
             val resource = when (barcode._format) {

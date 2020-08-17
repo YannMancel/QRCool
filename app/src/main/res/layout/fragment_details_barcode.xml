@@ -41,11 +41,37 @@
         android:id="@+id/fragment_details_raw_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_little"
+        android:layout_marginHorizontal="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/fragment_details_label_raw_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="https://github.com/YannMancel"
+        style="@style/TextViewStyleContent"/>
+
+    <!-- TextView: Date label -->
+    <TextView
+        android:id="@+id/fragment_details_label_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:text="@string/label_date"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_raw_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/TextViewStyleLabel"/>
+
+    <!-- TextView: Date of barcode -->
+    <TextView
+        android:id="@+id/fragment_details_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_little"
+        android:layout_marginHorizontal="@dimen/margin_normal"
+        app:layout_constraintTop_toBottomOf="@id/fragment_details_label_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="16/08/2020 21:28"
         style="@style/TextViewStyleContent"/>
 
     <!-- MaterialButton -->

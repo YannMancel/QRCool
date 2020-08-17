@@ -44,7 +44,7 @@
             app:layout_constraintBottom_toBottomOf="@id/item_image"
             app:layout_constraintStart_toEndOf="@id/item_image"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="URL"/>
+            tools:text="Raw value of barcode"/>
 
         <!-- TextView: Date -->
         <TextView

@@ -127,7 +127,7 @@ class BarcodeListFragment : BaseFragment() {
      */
     private fun configureRecyclerView() {
         // Adapter
-        this._adapter = BarcodeAdapter(this::eventFromCardView)
+        this._adapter = BarcodeAdapter(this.requireContext(), this::eventFromCardView)
 
         // RecyclerView
         with(this._rootView.fragment_list_recycler_view) {
