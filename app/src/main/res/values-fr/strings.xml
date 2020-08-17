@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="app_name">QRCool</string>
+    <string name="name_fragment_camera_x">Scan de code-barre</string>
+    <string name="name_fragment_details_barcode">Détails</string>
+    <string name="small_fab_barcode_2d">Code-barre 2D</string>
+    <string name="small_fab_barcode_1d">Code-barre 1D</string>
+    <string name="label_raw_value">Donnée brute</string>
+    <string name="no_raw_value">Aucune donnée brute</string>
+    <string name="no_permission">Aucune permission</string>
+    <string name="analyzer_failed_scan">Scan de code-barre échoué :\n%1$s</string>
+
+</resources>

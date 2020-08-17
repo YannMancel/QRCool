@@ -1,6 +1,6 @@
 # QR Cool
 
-**Goal**: Create an android application allowing to read QR Codes.
+**Goal**: Create an android application allowing to scan barcodes.
 
 
 ## Requirements
