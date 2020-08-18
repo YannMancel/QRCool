@@ -24,8 +24,8 @@ class BarcodeDiffCallback(
     override fun getNewListSize(): Int = this._newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        // Comparison on all fields
-        return this._oldList[oldItemPosition] == this._newList[newItemPosition]
+        // Comparison on their raw value
+        return this._oldList[oldItemPosition]._rawValue == this._newList[newItemPosition]._rawValue
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

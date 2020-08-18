@@ -53,7 +53,7 @@ class BarcodeDetailsFragment : BaseFragment() {
         this.updateImage(barcode!!._format)
         this.updateData(barcode)
         this.updateDate(barcode._date)
-        this.updateButton(barcode._rawValue)
+        this.updateButton(barcode)
     }
 
     /**
@@ -89,15 +89,20 @@ class BarcodeDetailsFragment : BaseFragment() {
     /**
      * Updates the button
      */
-    private fun updateButton(rawValue: String?) {
-        // Button according to if raw value is a valid url
-        val visibility = if (URLUtil.isValidUrl(rawValue)) View.VISIBLE else View.GONE
+    private fun updateButton(barcode: BarcodeOverlay) {
+        val validUrlOrNull =
+            if (URLUtil.isValidUrl(barcode._rawValue)) barcode._rawValue
+            else if (barcode is UrlBarcode && URLUtil.isValidUrl(barcode._url)) barcode._url
+            else null
+
+        // Visibility according to the valid url
+        val visibility = if (!validUrlOrNull.isNullOrEmpty()) View.VISIBLE else View.GONE
         this._rootView.fragment_details_button.visibility = visibility
 
         // Listener of Button (so rawValue is not null)
         if (visibility == View.VISIBLE) {
             this._rootView.fragment_details_button.setOnClickListener {
-                this.openLinkFromUrl(rawValue!!)
+                this.openLinkFromUrl(validUrlOrNull!!)
             }
         }
     }
