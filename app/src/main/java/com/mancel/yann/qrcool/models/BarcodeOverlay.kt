@@ -1,6 +1,9 @@
 package com.mancel.yann.qrcool.models
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -13,6 +16,7 @@ sealed class BarcodeOverlay {
 
     // FIELDS --------------------------------------------------------------------------------------
 
+    abstract val _id: Long
     abstract val _rawValue: String?
     abstract val _type: BarcodeType
     abstract val _format: BarcodeFormat
@@ -41,51 +45,66 @@ sealed class BarcodeOverlay {
     }
 }
 
+@Entity(tableName = "text_barcode")
 @Parcelize
 data class TextBarcode(
-    override val _rawValue: String?,
-    override val _type: BarcodeType,
-    override val _format: BarcodeFormat,
-    override val _date: Date = Date()
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_barcode") override val _id: Long = 0L,
+    @ColumnInfo(name = "raw_value") override val _rawValue: String?,
+    @ColumnInfo(name = "type") override val _type: BarcodeType,
+    @ColumnInfo(name = "format") override val _format: BarcodeFormat,
+    @ColumnInfo(name = "date") override val _date: Date = Date()
 ) : BarcodeOverlay(), Parcelable
 
+@Entity(tableName = "wifi_barcode")
 @Parcelize
 data class WifiBarcode(
-    override val _rawValue: String?,
-    override val _type: BarcodeType,
-    override val _format: BarcodeFormat,
-    override val _date: Date = Date(),
-    val _sSID: String?,
-    val _password: String?,
-    val _encryptionType: WifiType
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_barcode") override val _id: Long = 0L,
+    @ColumnInfo(name = "raw_value") override val _rawValue: String?,
+    @ColumnInfo(name = "type") override val _type: BarcodeType,
+    @ColumnInfo(name = "format") override val _format: BarcodeFormat,
+    @ColumnInfo(name = "date") override val _date: Date = Date(),
+    @ColumnInfo(name = "ssid") val _sSID: String?,
+    @ColumnInfo(name = "password") val _password: String?,
+    @ColumnInfo(name = "encryption_type") val _encryptionType: WifiType
 ) : BarcodeOverlay(), Parcelable
 
+@Entity(tableName = "url_barcode")
 @Parcelize
 data class UrlBarcode(
-    override val _rawValue: String?,
-    override val _type: BarcodeType,
-    override val _format: BarcodeFormat,
-    override val _date: Date = Date(),
-    val _title: String?,
-    val _url: String?
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_barcode") override val _id: Long = 0L,
+    @ColumnInfo(name = "raw_value") override val _rawValue: String?,
+    @ColumnInfo(name = "type") override val _type: BarcodeType,
+    @ColumnInfo(name = "format") override val _format: BarcodeFormat,
+    @ColumnInfo(name = "date") override val _date: Date = Date(),
+    @ColumnInfo(name = "title") val _title: String?,
+    @ColumnInfo(name = "url") val _url: String?
 ) : BarcodeOverlay(), Parcelable
 
+@Entity(tableName = "sms_barcode")
 @Parcelize
 data class SMSBarcode(
-    override val _rawValue: String?,
-    override val _type: BarcodeType,
-    override val _format: BarcodeFormat,
-    override val _date: Date = Date(),
-    val _phoneNumber: String?,
-    val _message: String?
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_barcode") override val _id: Long = 0L,
+    @ColumnInfo(name = "raw_value") override val _rawValue: String?,
+    @ColumnInfo(name = "type") override val _type: BarcodeType,
+    @ColumnInfo(name = "format") override val _format: BarcodeFormat,
+    @ColumnInfo(name = "date") override val _date: Date = Date(),
+    @ColumnInfo(name = "phone_number") val _phoneNumber: String?,
+    @ColumnInfo(name = "message") val _message: String?
 ) : BarcodeOverlay(), Parcelable
 
+@Entity(tableName = "geo_point_barcode")
 @Parcelize
 data class GeoPointBarcode(
-    override val _rawValue: String?,
-    override val _type: BarcodeType,
-    override val _format: BarcodeFormat,
-    override val _date: Date = Date(),
-    val _latitude: Double?,
-    val _longitude: Double?
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_barcode") override val _id: Long = 0L,
+    @ColumnInfo(name = "raw_value") override val _rawValue: String?,
+    @ColumnInfo(name = "type") override val _type: BarcodeType,
+    @ColumnInfo(name = "format") override val _format: BarcodeFormat,
+    @ColumnInfo(name = "date") override val _date: Date = Date(),
+    @ColumnInfo(name = "latitude") val _latitude: Double?,
+    @ColumnInfo(name = "longitude") val _longitude: Double?
 ) : BarcodeOverlay(), Parcelable

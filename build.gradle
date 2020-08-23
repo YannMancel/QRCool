@@ -4,6 +4,7 @@ buildscript {
     ext.kotlin_version = "1.4.0"
     ext.material_design_version = '1.2.0'
     ext.nav_version = '2.3.0'
+    ext.room_version = '2.2.5'
     ext.fragment_ktx_version = '1.2.5'
     ext.zwing_version = '1.9.13'
     ext.camerax_version = '1.0.0-beta07'
