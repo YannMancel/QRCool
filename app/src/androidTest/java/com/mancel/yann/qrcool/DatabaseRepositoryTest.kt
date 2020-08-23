@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mancel.yann.qrcool.databases.AppDatabase
-import com.mancel.yann.qrcool.databases.BarcodeDAO
 import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.repositories.DatabaseRepository
+import com.mancel.yann.qrcool.repositories.RoomDatabaseRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -23,15 +24,15 @@ import java.util.*
  * Name of the project: QRCool
  * Name of the package: com.mancel.yann.qrcool
  *
- * An android test on [AppDatabase] and its DAO.
+ * An android test on [DatabaseRepository].
  */
 @RunWith(AndroidJUnit4::class)
-class AppDatabaseTest {
+class DatabaseRepositoryTest {
 
     // FIELDS --------------------------------------------------------------------------------------
 
     private lateinit var _database: AppDatabase
-    private lateinit var _barcodeDAO: BarcodeDAO
+    private lateinit var _repository: DatabaseRepository
 
     // RULES ---------------------------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ class AppDatabaseTest {
             .allowMainThreadQueries()
             .build()
 
-        this._barcodeDAO = this._database.barcodeDAO()
+        this._repository = RoomDatabaseRepository(this._database.barcodeDAO())
     }
 
     @After
@@ -73,14 +74,14 @@ class AppDatabaseTest {
         )
 
         // BEFORE: Add barcode
-        val ids = this@AppDatabaseTest._barcodeDAO.insertTextBarcodes(barcode)
+        val ids = this@DatabaseRepositoryTest._repository.insertTextBarcodes(barcode)
 
         // TEST
         assertEquals(1, ids.size)
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getTextBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(this@DatabaseRepositoryTest._repository.getTextBarcodes())
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -104,14 +105,14 @@ class AppDatabaseTest {
         )
 
         // BEFORE: Add barcode
-        val ids = this@AppDatabaseTest._barcodeDAO.insertWifiBarcodes(barcode)
+        val ids = this@DatabaseRepositoryTest._repository.insertWifiBarcodes(barcode)
 
         // TEST
         assertEquals(1, ids.size)
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getWifiBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(this@DatabaseRepositoryTest._repository.getWifiBarcodes())
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -137,14 +138,14 @@ class AppDatabaseTest {
         )
 
         // BEFORE: Add barcode
-        val ids = this@AppDatabaseTest._barcodeDAO.insertUrlBarcodes(barcode)
+        val ids = this@DatabaseRepositoryTest._repository.insertUrlBarcodes(barcode)
 
         // TEST
         assertEquals(1, ids.size)
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getUrlBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(this@DatabaseRepositoryTest._repository.getUrlBarcodes())
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -169,14 +170,14 @@ class AppDatabaseTest {
         )
 
         // BEFORE: Add barcode
-        val ids = this@AppDatabaseTest._barcodeDAO.insertSMSBarcodes(barcode)
+        val ids = this@DatabaseRepositoryTest._repository.insertSMSBarcodes(barcode)
 
         // TEST
         assertEquals(1, ids.size)
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getSMSBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(this@DatabaseRepositoryTest._repository.getSMSBarcodes())
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -201,14 +202,14 @@ class AppDatabaseTest {
         )
 
         // BEFORE: Add barcode
-        val ids = this@AppDatabaseTest._barcodeDAO.insertGeoPointBarcodes(barcode)
+        val ids = this@DatabaseRepositoryTest._repository.insertGeoPointBarcodes(barcode)
 
         // TEST
         assertEquals(1, ids.size)
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getGeoPointBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(this@DatabaseRepositoryTest._repository.getGeoPointBarcodes())
 
         // TEST
         assertEquals(1, barcodes.size)

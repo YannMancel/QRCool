@@ -40,6 +40,31 @@ class BarcodeListFragment : BaseFragment() {
         this.configureRecyclerView()
         this.configureBarcodeEvents()
         this.configureFABMenuEvents()
+
+        // -----------------------------------------------------------------------------------------
+        // TEST
+        // -----------------------------------------------------------------------------------------
+        /*
+            val db = AppDatabase.getDatabase(this.requireContext())
+            val repo = RoomDatabaseRepository(db.barcodeDAO())
+            val barcode = TextBarcode(
+                _rawValue = "raw value",
+                _type = BarcodeOverlay.BarcodeType.TYPE_TEXT,
+                _format = BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D,
+                _date = Date(5L)
+            )
+
+            GlobalScope.launch(context = Dispatchers.IO) {
+                val deferredIds = async {
+                    repo.insertTextBarcodes(barcode)
+                }
+
+                Log.d("Database", "${deferredIds.await()}")
+            }
+         */
+        // -----------------------------------------------------------------------------------------
+        // TEST
+        // -----------------------------------------------------------------------------------------
     }
 
     // -- Listener --
