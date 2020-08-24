@@ -16,10 +16,6 @@
         tools:layout="@layout/fragment_list_barcode" >
 
         <action
-            android:id="@+id/action_barcodeListFragment_to_zXingFragment"
-            app:destination="@id/zXingFragment" />
-
-        <action
             android:id="@+id/action_barcodeListFragment_to_cameraXFragment"
             app:destination="@id/cameraXFragment" />
 
@@ -28,13 +24,6 @@
             app:destination="@id/barcodeDetailsFragment" />
 
     </fragment>
-
-    <!-- ZXingFragment -->
-    <fragment
-        android:id="@+id/zXingFragment"
-        android:name="com.mancel.yann.qrcool.views.fragments.ZXingFragment"
-        android:label="@string/name_fragment_zxing"
-        tools:layout="@layout/fragment_zxing" />
 
     <!-- CameraXFragment -->
     <fragment

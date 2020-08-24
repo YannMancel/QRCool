@@ -9,7 +9,6 @@ import android.view.View
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
@@ -23,6 +22,7 @@ import com.mancel.yann.qrcool.states.ScanState
 import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_camera_x.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -56,7 +56,7 @@ class CameraXFragment : BaseFragment() {
         CameraXFragmentArgs.fromBundle(this.requireArguments()).config
     }
 
-    private val _viewModel: SharedViewModel by activityViewModels()
+    private val _viewModel: SharedViewModel by sharedViewModel()
 
     private lateinit var _currentCameraState: CameraState
 

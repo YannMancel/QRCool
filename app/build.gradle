@@ -64,12 +64,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    // Fragment KTX for ViewModel
-    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
-
-    // QR Code scanner
-    implementation "me.dm7.barcodescanner:zxing:$zwing_version"
-
     // CameraX
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
@@ -77,6 +71,10 @@ dependencies {
 
     // ML Kit - Barcode scanner
     implementation "com.google.android.gms:play-services-mlkit-barcode-scanning:$mlkit_version"
+
+    // Koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // TESTS ---------------------------------------------------------------------------------------
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mancel.yann.qrcool.models.BarcodeOverlay
+import com.mancel.yann.qrcool.repositories.DatabaseRepository
 import com.mancel.yann.qrcool.states.CameraState
 
 /**
@@ -14,7 +15,9 @@ import com.mancel.yann.qrcool.states.CameraState
  *
  * A [ViewModel] subclass.
  */
-class SharedViewModel :  ViewModel() {
+class SharedViewModel(
+    private val _databaseRepository: DatabaseRepository
+) :  ViewModel() {
 
     // FIELDS --------------------------------------------------------------------------------------
 

@@ -2,13 +2,12 @@ package com.mancel.yann.qrcool
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mancel.yann.qrcool.databases.AppDatabase
+import com.mancel.yann.qrcool.koin.roomTestModule
 import com.mancel.yann.qrcool.models.*
 import com.mancel.yann.qrcool.repositories.DatabaseRepository
-import com.mancel.yann.qrcool.repositories.RoomDatabaseRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -16,6 +15,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.Koin
+import org.koin.dsl.koinApplication
 import java.io.IOException
 import java.util.*
 
@@ -31,6 +33,7 @@ class DatabaseRepositoryTest {
 
     // FIELDS --------------------------------------------------------------------------------------
 
+    private lateinit var _koin: Koin
     private lateinit var _database: AppDatabase
     private lateinit var _repository: DatabaseRepository
 
@@ -47,21 +50,21 @@ class DatabaseRepositoryTest {
     fun createDatabase() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
-        this._database =
-            Room.inMemoryDatabaseBuilder(
-                context,
-                AppDatabase::class.java
-            )
-            .allowMainThreadQueries()
-            .build()
+        this._koin =
+            koinApplication {
+                androidContext(context)
+                modules(roomTestModule)
+            }.koin
 
-        this._repository = RoomDatabaseRepository(this._database.barcodeDAO())
+        this._database = this._koin.get()
+        this._repository = this._koin.get()
     }
 
     @After
     @Throws(IOException::class)
     fun closeDatabase() {
         this._database.close()
+        this._koin.close()
     }
 
     @Test

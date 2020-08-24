@@ -3,7 +3,6 @@ package com.mancel.yann.qrcool.views.fragments
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.mancel.yann.qrcool.views.adapters.BarcodeAdapter
 import com.mancel.yann.qrcool.widgets.FabSmall
 import kotlinx.android.synthetic.main.fragment_list_barcode.*
 import kotlinx.android.synthetic.main.fragment_list_barcode.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * Created by Yann MANCEL on 21/07/2020.
@@ -27,7 +27,7 @@ class BarcodeListFragment : BaseFragment() {
     // FIELDS --------------------------------------------------------------------------------------
 
     private lateinit var _adapter: BarcodeAdapter
-    private val _viewModel: SharedViewModel by activityViewModels()
+    private val _viewModel: SharedViewModel by sharedViewModel()
 
     // METHODS -------------------------------------------------------------------------------------
 
