@@ -3,7 +3,6 @@ package com.mancel.yann.qrcool.views.fragments
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
@@ -145,10 +144,10 @@ class BarcodeListFragment : BaseFragment() {
     private fun configureBarcodeEvents() {
         this._viewModel
             .getBarcodes()
-            .observe(
-                this.viewLifecycleOwner,
-                Observer { this._adapter.updateData(it) }
-            )
+            .observe(this.viewLifecycleOwner) {
+                val sortedData = it.sortedWith(BarcodeOverlay.AscendingDateComparator())
+                this._adapter.updateData(sortedData)
+            }
     }
 
     /**
@@ -157,15 +156,12 @@ class BarcodeListFragment : BaseFragment() {
     private fun configureFABMenuEvents() {
         this._viewModel
             .isFABMenuOpen()
-            .observe(
-                this.viewLifecycleOwner,
-                Observer { isOpen ->
-                    if (isOpen)
-                        this.openFABMenu()
-                    else
-                        this.closeFABMenu()
-                }
-            )
+            .observe(this.viewLifecycleOwner) { isOpen ->
+                if (isOpen)
+                    this.openFABMenu()
+                else
+                    this.closeFABMenu()
+            }
     }
 
     // -- FAB Events --

@@ -9,7 +9,6 @@ import android.view.View
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.mancel.yann.qrcool.R
@@ -128,14 +127,11 @@ class CameraXFragment : BaseFragment() {
     private fun configureCameraState() {
         this._viewModel
             .getCameraState()
-            .observe(
-                this.viewLifecycleOwner,
-                Observer { cameraState ->
-                    cameraState?.let {
-                        this.updateUI(it)
-                    }
+            .observe(this.viewLifecycleOwner) { cameraState ->
+                cameraState?.let {
+                    this.updateUI(it)
                 }
-            )
+            }
     }
 
     /**

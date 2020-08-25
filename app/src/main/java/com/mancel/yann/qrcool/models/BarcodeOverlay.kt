@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.util.*
+import kotlin.Comparator
 
 /**
  * Created by Yann MANCEL on 15/08/2020.
@@ -42,6 +43,21 @@ sealed class BarcodeOverlay {
         TYPE_OPEN,
         TYPE_WPA,
         TYPE_WEP
+    }
+
+    // CLASSES -------------------------------------------------------------------------------------
+
+    /**
+     * A [Comparator] of [BarcodeOverlay] subclass.
+     */
+    class AscendingDateComparator : Comparator<BarcodeOverlay> {
+        override fun compare(left: BarcodeOverlay?, right: BarcodeOverlay?): Int {
+            // Comparison on the date
+            val dateLeft = left?._date?.time ?: 0L
+            val dateRight = right?._date?.time ?: 0L
+
+            return dateRight.compareTo(dateLeft)
+        }
     }
 }
 
