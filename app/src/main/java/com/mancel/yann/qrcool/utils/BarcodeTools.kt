@@ -57,4 +57,31 @@ object BarcodeTools {
             }
         }
     }
+
+    /**
+     * Combine data from several LiveData
+     */
+    fun <T : BarcodeOverlay> combineDataFromSeveralLiveData(
+        currentData: List<BarcodeOverlay>?,
+        newData: List<T>
+    ) : List<BarcodeOverlay> {
+        // Current data is null
+        if (currentData.isNullOrEmpty()) {
+            return mutableListOf<BarcodeOverlay>().apply {
+                addAll(newData)
+            }
+        }
+
+        // Filter to have only barcodes that are really new
+        val dataToAdd = newData.filterNot { newBarcode ->
+            currentData.any { currentBarcode ->
+                newBarcode._rawValue == currentBarcode._rawValue
+            }
+        }
+
+        return mutableListOf<BarcodeOverlay>().apply {
+            addAll(currentData)
+            addAll(dataToAdd)
+        }
+    }
 }

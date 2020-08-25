@@ -1,12 +1,13 @@
 package com.mancel.yann.qrcool.viewModels
 
 import androidx.camera.core.CameraSelector
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.mancel.yann.qrcool.models.BarcodeOverlay
+import androidx.lifecycle.*
+import com.mancel.yann.qrcool.models.*
 import com.mancel.yann.qrcool.repositories.DatabaseRepository
 import com.mancel.yann.qrcool.states.CameraState
+import com.mancel.yann.qrcool.utils.BarcodeTools
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -21,7 +22,7 @@ class SharedViewModel(
 
     // FIELDS --------------------------------------------------------------------------------------
 
-    private val _barcodes = MutableLiveData<List<BarcodeOverlay>>()
+    private val _barcodes: MediatorLiveData<List<BarcodeOverlay>>
 
     private val _isFABMenuOpen = MutableLiveData<Boolean>()
 
@@ -33,11 +34,60 @@ class SharedViewModel(
     init {
         // By default, the FAB menu is closed
         this._isFABMenuOpen.value = false
+
+        this._barcodes = this.configureMediatorLiveData()
     }
 
     // METHODS -------------------------------------------------------------------------------------
 
     // -- Barcode --
+
+    /**
+     * Configure the [MediatorLiveData] of [List] of [BarcodeOverlay]
+     */
+    private fun configureMediatorLiveData(): MediatorLiveData<List<BarcodeOverlay>> {
+        return MediatorLiveData<List<BarcodeOverlay>>().also {
+            it.addSource(this._databaseRepository.getTextBarcodes()) { textBarcodes ->
+                it.value =
+                    BarcodeTools.combineDataFromSeveralLiveData(
+                        it.value,
+                        textBarcodes
+                    )
+            }
+
+            it.addSource(this._databaseRepository.getWifiBarcodes()) { wifiBarcodes ->
+                it.value =
+                    BarcodeTools.combineDataFromSeveralLiveData(
+                        it.value,
+                        wifiBarcodes
+                    )
+            }
+
+            it.addSource(this._databaseRepository.getUrlBarcodes()) { urlBarcodes ->
+                it.value =
+                    BarcodeTools.combineDataFromSeveralLiveData(
+                        it.value,
+                        urlBarcodes
+                    )
+            }
+
+            it.addSource(this._databaseRepository.getSMSBarcodes()) { smsBarcodes ->
+                it.value =
+                    BarcodeTools.combineDataFromSeveralLiveData(
+                        it.value,
+                        smsBarcodes
+                    )
+            }
+
+            it.addSource(this._databaseRepository.getGeoPointBarcodes()) { geoPointBarcodes ->
+                it.value =
+                    BarcodeTools.combineDataFromSeveralLiveData(
+                        it.value,
+                        geoPointBarcodes
+                    )
+            }
+        }
+    }
 
     /**
      * Gets the [LiveData] of [List] of [BarcodeOverlay]
@@ -48,34 +98,23 @@ class SharedViewModel(
      * Adds barcodes to the [MutableLiveData] of [List] of [BarcodeOverlay]
      * @param barcodes a [List] of [BarcodeOverlay]
      */
-    fun addBarcodes(barcodes: List<BarcodeOverlay>) {
-        val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
+    fun addBarcodes(barcodes: List<BarcodeOverlay>) = viewModelScope.launch(context = Dispatchers.IO) {
+        // Filter to have only barcodes that are really new
+        val barcodeToAdd = barcodes.filterNot { newBarcode ->
+            this@SharedViewModel._barcodes.value?.any { currentBarcode ->
+                newBarcode._rawValue == currentBarcode._rawValue
+            } ?: false
+        }
 
-        barcodes.forEach { newBarcode ->
-            // IMPOSSIBLE: 2 barcodes with the same raw value
-            if (currentData.none { it._rawValue == newBarcode._rawValue }) {
-                currentData.add(newBarcode)
+        barcodeToAdd.forEach {
+            when (it) {
+                is TextBarcode -> this@SharedViewModel._databaseRepository.insertTextBarcodes(it)
+                is WifiBarcode -> this@SharedViewModel._databaseRepository.insertWifiBarcodes(it)
+                is UrlBarcode -> this@SharedViewModel._databaseRepository.insertUrlBarcodes(it)
+                is SMSBarcode -> this@SharedViewModel._databaseRepository.insertSMSBarcodes(it)
+                is GeoPointBarcode -> this@SharedViewModel._databaseRepository.insertGeoPointBarcodes(it)
             }
         }
-
-        // Notify
-        this._barcodes.value = currentData
-    }
-
-    /**
-     * Adds a barcode to the [MutableLiveData] of [List] of [BarcodeOverlay]
-     * @param barcode a [BarcodeOverlay]
-     */
-    fun addBarcode(barcode: BarcodeOverlay) {
-        val currentData =  this._barcodes.value?.toMutableList() ?: mutableListOf()
-
-        // IMPOSSIBLE: 2 barcodes with the same raw value
-        if (currentData.none { it._rawValue == barcode._rawValue }) {
-            currentData.add(barcode)
-        }
-
-        // Notify
-        this._barcodes.value = currentData
     }
 
     // -- FAB Menu --
