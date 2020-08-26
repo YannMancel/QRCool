@@ -90,10 +90,10 @@ class BarcodeDetailsFragment : BaseFragment() {
      * Updates the button
      */
     private fun updateButton(barcode: BarcodeOverlay) {
-        val validUrlOrNull =
-            if (URLUtil.isValidUrl(barcode._rawValue)) barcode._rawValue
-            else if (barcode is UrlBarcode && URLUtil.isValidUrl(barcode._url)) barcode._url
-            else null
+        val validUrlOrNull = when (barcode) {
+            is UrlBarcode -> { this.checkValidityOfUrl(barcode._url) }
+            else -> { this.checkValidityOfUrl(barcode._rawValue) }
+        }
 
         // Visibility according to the valid url
         val visibility = if (!validUrlOrNull.isNullOrEmpty()) View.VISIBLE else View.GONE
@@ -108,6 +108,22 @@ class BarcodeDetailsFragment : BaseFragment() {
     }
 
     // -- URL --
+
+    /**
+     * Checks the validity of URL thanks to the URL in argument
+     * @param url a [String] that contains the URL
+     * @return a [String] if is a valid url else null
+     */
+    private fun checkValidityOfUrl(url: String?): String? {
+        // No data
+        if (url.isNullOrEmpty()) return null
+
+        return when {
+            URLUtil.isValidUrl(url) -> url
+            url.startsWith("www") -> "https://${url}"
+            else -> null
+        }
+    }
 
     /**
      * Opens a link thanks to the URL in argument
