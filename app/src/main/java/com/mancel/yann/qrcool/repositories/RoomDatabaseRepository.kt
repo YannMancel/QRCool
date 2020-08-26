@@ -50,4 +50,21 @@ class RoomDatabaseRepository(
 
     override fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>> =
         this._barcodeDAO.getGeoPointBarcodes()
+
+    // -- Delete --
+
+    override suspend fun removeTextBarcodes(vararg barcodes: TextBarcode): Int =
+        this._barcodeDAO.removeTextBarcodes(*barcodes)
+
+    override suspend fun removeWifiBarcodes(vararg barcodes: WifiBarcode): Int =
+        this._barcodeDAO.removeWifiBarcodes(*barcodes)
+
+    override suspend fun removeUrlBarcodes(vararg barcodes: UrlBarcode): Int =
+        this._barcodeDAO.removeUrlBarcodes(*barcodes)
+
+    override suspend fun removeSMSBarcodes(vararg barcodes: SMSBarcode): Int =
+        this._barcodeDAO.removeSMSBarcodes(*barcodes)
+
+    override suspend fun removeGeoPointBarcodes(vararg barcodes: GeoPointBarcode): Int =
+        this._barcodeDAO.removeGeoPointBarcodes(*barcodes)
 }

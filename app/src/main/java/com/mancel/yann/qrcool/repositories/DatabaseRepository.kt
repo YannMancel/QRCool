@@ -27,4 +27,12 @@ interface DatabaseRepository {
     fun getUrlBarcodes(): LiveData<List<UrlBarcode>>
     fun getSMSBarcodes(): LiveData<List<SMSBarcode>>
     fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>>
+
+    // -- Delete --
+
+    suspend fun removeTextBarcodes(vararg barcodes: TextBarcode): Int
+    suspend fun removeWifiBarcodes(vararg barcodes: WifiBarcode): Int
+    suspend fun removeUrlBarcodes(vararg barcodes: UrlBarcode): Int
+    suspend fun removeSMSBarcodes(vararg barcodes: SMSBarcode): Int
+    suspend fun removeGeoPointBarcodes(vararg barcodes: GeoPointBarcode): Int
 }

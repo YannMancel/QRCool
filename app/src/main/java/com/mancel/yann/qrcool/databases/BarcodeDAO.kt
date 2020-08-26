@@ -2,6 +2,7 @@ package com.mancel.yann.qrcool.databases
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.mancel.yann.qrcool.models.*
@@ -64,4 +65,21 @@ interface BarcodeDAO {
         FROM geo_point_barcode
     """)
     fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>>
+
+    // -- Delete --
+
+    @Delete
+    suspend fun removeTextBarcodes(vararg barcodes: TextBarcode): Int
+
+    @Delete
+    suspend fun removeWifiBarcodes(vararg barcodes: WifiBarcode): Int
+
+    @Delete
+    suspend fun removeUrlBarcodes(vararg barcodes: UrlBarcode): Int
+
+    @Delete
+    suspend fun removeSMSBarcodes(vararg barcodes: SMSBarcode): Int
+
+    @Delete
+    suspend fun removeGeoPointBarcodes(vararg barcodes: GeoPointBarcode): Int
 }
