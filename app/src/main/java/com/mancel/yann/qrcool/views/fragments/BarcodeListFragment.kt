@@ -4,11 +4,14 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import com.mancel.yann.qrcool.views.adapters.BarcodeAdapter
+import com.mancel.yann.qrcool.views.adapters.HorizontalSwipeCallback
 import com.mancel.yann.qrcool.widgets.FabSmall
 import kotlinx.android.synthetic.main.fragment_list_barcode.*
 import kotlinx.android.synthetic.main.fragment_list_barcode.view.*
@@ -133,6 +136,22 @@ class BarcodeListFragment : BaseFragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@BarcodeListFragment.requireContext())
             adapter = this@BarcodeListFragment._adapter
+
+            ItemTouchHelper(
+                HorizontalSwipeCallback { adapterPosition ->
+                    val barcode = this@BarcodeListFragment._adapter.getDataAt(adapterPosition)
+
+                    // TODO - 26/08/2020 - Remove item
+
+                    MessageTools.showMessageWithSnackbar(
+                        this@BarcodeListFragment._rootView.fragment_list_coordinator_layout,
+                        this@BarcodeListFragment.getString(R.string.remove_item, barcode._rawValue),
+                        this@BarcodeListFragment.getString(android.R.string.cancel)
+                    ) {
+                        // TODO - 26/08/2020 - Add item
+                    }
+                }
+            ).attachToRecyclerView(this)
         }
     }
 

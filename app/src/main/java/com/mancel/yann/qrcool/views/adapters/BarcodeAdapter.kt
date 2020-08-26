@@ -22,7 +22,7 @@ import java.util.*
  */
 class BarcodeAdapter(
     private val _context: Context,
-    private val _actionOnClick: (BarcodeOverlay) -> Unit
+    private val _actionOnClick: (item: BarcodeOverlay) -> Unit
 ) : RecyclerView.Adapter<BarcodeAdapter.QRCodeViewHolder>() {
 
     // FIELDS --------------------------------------------------------------------------------------
@@ -73,6 +73,11 @@ class BarcodeAdapter(
         // Notifies adapter
         diffResult.dispatchUpdatesTo(this@BarcodeAdapter)
     }
+
+    /**
+     * Gets the [BarcodeOverlay] at the position in argument
+     */
+    fun getDataAt(position: Int): BarcodeOverlay = this._barcodes[position]
 
     // NESTED CLASSES ------------------------------------------------------------------------------
 

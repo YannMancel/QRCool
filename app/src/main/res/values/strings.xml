@@ -11,6 +11,7 @@
     <!-- fragment_list_barcode.xml -->
     <string name="small_fab_barcode_2d">Barcode 2D</string>
     <string name="small_fab_barcode_1d">Barcode 1D</string>
+    <string name="remove_item">Remove: %1$s</string>
 
     <!-- fragment_details_barcode.xml -->
     <string name="label_data">Data</string>

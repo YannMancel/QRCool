@@ -7,6 +7,7 @@
     <string name="name_fragment_details_barcode">Détails</string>
     <string name="small_fab_barcode_2d">Code-barre 2D</string>
     <string name="small_fab_barcode_1d">Code-barre 1D</string>
+    <string name="remove_item">Suppression : %1$s</string>
     <string name="label_data">Données</string>
     <string name="label_date">Date</string>
     <string name="no_permission">Aucune permission</string>
