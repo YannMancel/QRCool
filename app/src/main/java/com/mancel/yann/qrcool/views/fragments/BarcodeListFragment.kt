@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.utils.BarcodeTools
 import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
 import com.mancel.yann.qrcool.views.adapters.BarcodeAdapter
@@ -139,17 +140,7 @@ class BarcodeListFragment : BaseFragment() {
 
             ItemTouchHelper(
                 HorizontalSwipeCallback { adapterPosition ->
-                    val barcode = this@BarcodeListFragment._adapter.getDataAt(adapterPosition)
-
-                    // TODO - 26/08/2020 - Remove item
-
-                    MessageTools.showMessageWithSnackbar(
-                        this@BarcodeListFragment._rootView.fragment_list_coordinator_layout,
-                        this@BarcodeListFragment.getString(R.string.remove_item, barcode._rawValue),
-                        this@BarcodeListFragment.getString(android.R.string.cancel)
-                    ) {
-                        // TODO - 26/08/2020 - Add item
-                    }
+                    this@BarcodeListFragment.actionAfterHorizontalSwipe(adapterPosition)
                 }
             ).attachToRecyclerView(this)
         }
@@ -181,6 +172,29 @@ class BarcodeListFragment : BaseFragment() {
                 else
                     this.closeFABMenu()
             }
+    }
+
+    // -- Actions --
+
+    /**
+     * Action after the horizontal swipe on RecyclerView's item
+     */
+    private fun actionAfterHorizontalSwipe(adapterPosition: Int) {
+        val barcode = this._adapter.getDataAt(adapterPosition)
+
+        // Remove barcode
+        this@BarcodeListFragment._viewModel.removeBarcode(barcode)
+
+        MessageTools.showMessageWithSnackbar(
+            this._rootView.fragment_list_coordinator_layout,
+            this.getString(R.string.remove_item, barcode._rawValue),
+            this.getString(android.R.string.cancel)
+        ) {
+            val newBarcode = BarcodeTools.createNewBarcodeFromCopy(barcode)
+
+            // Add barcode
+            this._viewModel.addBarcodes(listOf(newBarcode))
+        }
     }
 
     // -- FAB Events --

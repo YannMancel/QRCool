@@ -63,7 +63,8 @@ object BarcodeTools {
      */
     fun <T : BarcodeOverlay> combineDataFromSeveralLiveData(
         currentData: List<BarcodeOverlay>?,
-        newData: List<T>
+        newData: List<T>,
+        klass: Class<T>
     ) : List<BarcodeOverlay> {
         // Current data is null
         if (currentData.isNullOrEmpty()) {
@@ -72,9 +73,32 @@ object BarcodeTools {
             }
         }
 
+        // Current data with the SAME CLASS of new data
+        val currentDataWithSameInstance = currentData.filterIsInstance(klass) as List<BarcodeOverlay>
+
         // Filter to have only barcodes that are really new
+        /*
+            currentDataOfSameInstance    newData
+                B                           B
+                B                           B
+                B                           B
+                                           [B]
+        */
         val dataToAdd = newData.filterNot { newBarcode ->
-            currentData.any { currentBarcode ->
+            currentDataWithSameInstance.any { currentBarcode ->
+                currentBarcode._rawValue == newBarcode._rawValue
+            }
+        }
+
+        // Filter to have only barcodes that have been removed
+        /*
+            currentDataOfSameInstance    newData
+                B                           B
+                B                          [ ]
+                B                           B
+        */
+        val dataToRemove = currentDataWithSameInstance.filterNot { currentBarcode ->
+            newData.any { newBarcode ->
                 newBarcode._rawValue == currentBarcode._rawValue
             }
         }
@@ -82,6 +106,21 @@ object BarcodeTools {
         return mutableListOf<BarcodeOverlay>().apply {
             addAll(currentData)
             addAll(dataToAdd)
+            removeAll(dataToRemove)
+        }
+    }
+
+    /**
+     * Creates a new [BarcodeOverlay] from a copy of a [BarcodeOverlay] in argument.
+     * The only difference is the id equals to 0 for the new [BarcodeOverlay]
+     */
+    fun createNewBarcodeFromCopy(barcode: BarcodeOverlay) : BarcodeOverlay {
+        return when (barcode) {
+            is TextBarcode -> { barcode.copy(_id = 0L) }
+            is WifiBarcode -> { barcode.copy(_id = 0L) }
+            is UrlBarcode -> { barcode.copy(_id = 0L) }
+            is SMSBarcode -> { barcode.copy(_id = 0L) }
+            is GeoPointBarcode -> { barcode.copy(_id = 0L) }
         }
     }
 }

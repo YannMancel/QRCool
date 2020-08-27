@@ -19,7 +19,7 @@ class BarcodeOverlayTest {
     // METHODS -------------------------------------------------------------------------------------
 
     @Test
-    fun equal_isCorrect_for_dataClass_from_sealedClass() {
+    fun `equal is correct for data class from sealed class`() {
         val barcode1 = TextBarcode(
             _id = 1L,
             _rawValue = "same_raw_value",
@@ -46,8 +46,30 @@ class BarcodeOverlayTest {
             _date = Date(5L)
         )
 
-        // Tests
+        // TEST
         assertEquals(barcode1, barcode2)
         assertNotSame(barcode1, barcode3)
+    }
+
+    @Test
+    fun `copy is correct for data class from sealed class`() {
+        val barcode = TextBarcode(
+            _id = 1L,
+            _rawValue = "same_raw_value",
+            _type = BarcodeOverlay.BarcodeType.TYPE_TEXT,
+            _format = BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D,
+            _date = Date(5L)
+        )
+
+        // THEN: Copy
+        val newBarcode = barcode.copy(_id = 0L)
+
+        // TEST
+        assertNotSame(barcode, newBarcode)
+        assertNotEquals(barcode._id, newBarcode._id)
+        assertEquals(barcode._rawValue, newBarcode._rawValue)
+        assertEquals(barcode._format, newBarcode._format)
+        assertEquals(barcode._type, newBarcode._type)
+        assertEquals(barcode._date, newBarcode._date)
     }
 }

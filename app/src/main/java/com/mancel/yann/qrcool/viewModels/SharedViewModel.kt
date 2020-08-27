@@ -51,7 +51,8 @@ class SharedViewModel(
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
-                        textBarcodes
+                        textBarcodes,
+                        TextBarcode::class.java
                     )
             }
 
@@ -59,7 +60,8 @@ class SharedViewModel(
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
-                        wifiBarcodes
+                        wifiBarcodes,
+                        WifiBarcode::class.java
                     )
             }
 
@@ -67,7 +69,8 @@ class SharedViewModel(
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
-                        urlBarcodes
+                        urlBarcodes,
+                        UrlBarcode::class.java
                     )
             }
 
@@ -75,7 +78,8 @@ class SharedViewModel(
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
-                        smsBarcodes
+                        smsBarcodes,
+                        SMSBarcode::class.java
                     )
             }
 
@@ -83,7 +87,8 @@ class SharedViewModel(
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
-                        geoPointBarcodes
+                        geoPointBarcodes,
+                        GeoPointBarcode::class.java
                     )
             }
         }
@@ -114,6 +119,20 @@ class SharedViewModel(
                 is SMSBarcode -> this@SharedViewModel._databaseRepository.insertSMSBarcodes(it)
                 is GeoPointBarcode -> this@SharedViewModel._databaseRepository.insertGeoPointBarcodes(it)
             }
+        }
+    }
+
+    /**
+     * Removes a barcode to the [MutableLiveData] of [List] of [BarcodeOverlay]
+     * @param barcode a [BarcodeOverlay]
+     */
+    fun removeBarcode(barcode: BarcodeOverlay) = viewModelScope.launch(context = Dispatchers.IO) {
+        when (barcode) {
+            is TextBarcode -> this@SharedViewModel._databaseRepository.removeTextBarcodes(barcode)
+            is WifiBarcode -> this@SharedViewModel._databaseRepository.removeWifiBarcodes(barcode)
+            is UrlBarcode -> this@SharedViewModel._databaseRepository.removeUrlBarcodes(barcode)
+            is SMSBarcode -> this@SharedViewModel._databaseRepository.removeSMSBarcodes(barcode)
+            is GeoPointBarcode -> this@SharedViewModel._databaseRepository.removeGeoPointBarcodes(barcode)
         }
     }
 
