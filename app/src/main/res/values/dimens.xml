@@ -23,4 +23,7 @@
     <dimen name="offset_y_1">64dp</dimen> <!-- 56/2 + 16 + 40/2 -->
     <dimen name="offset_y_2">120dp</dimen> <!-- 56/2 + 16 + 40 + 16 + 40/2 -->
 
+    <!-- Radius -->
+    <dimen name="radius_card">4dp</dimen>
+
 </resources>

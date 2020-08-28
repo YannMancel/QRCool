@@ -139,7 +139,7 @@ class BarcodeListFragment : BaseFragment() {
             adapter = this@BarcodeListFragment._adapter
 
             ItemTouchHelper(
-                HorizontalSwipeCallback { adapterPosition ->
+                HorizontalSwipeCallback(this@BarcodeListFragment.requireContext()) { adapterPosition ->
                     this@BarcodeListFragment.actionAfterHorizontalSwipe(adapterPosition)
                 }
             ).attachToRecyclerView(this)

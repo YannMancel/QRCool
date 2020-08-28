@@ -14,7 +14,8 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardElevation="@dimen/elevation_card">
+    app:cardElevation="@dimen/elevation_card"
+    app:cardCornerRadius="@dimen/radius_card">
 
     <!-- ConstraintLayout -->
     <androidx.constraintlayout.widget.ConstraintLayout
