@@ -60,6 +60,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    // Flow to LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$livedata_ktx_version"
+
     // Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

@@ -47,7 +47,7 @@ class SharedViewModel(
      */
     private fun configureMediatorLiveData(): MediatorLiveData<List<BarcodeOverlay>> {
         return MediatorLiveData<List<BarcodeOverlay>>().also {
-            it.addSource(this._databaseRepository.getTextBarcodes()) { textBarcodes ->
+            it.addSource(this._databaseRepository.getTextBarcodes().asLiveData()) { textBarcodes ->
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
@@ -56,7 +56,7 @@ class SharedViewModel(
                     )
             }
 
-            it.addSource(this._databaseRepository.getWifiBarcodes()) { wifiBarcodes ->
+            it.addSource(this._databaseRepository.getWifiBarcodes().asLiveData()) { wifiBarcodes ->
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
@@ -65,7 +65,7 @@ class SharedViewModel(
                     )
             }
 
-            it.addSource(this._databaseRepository.getUrlBarcodes()) { urlBarcodes ->
+            it.addSource(this._databaseRepository.getUrlBarcodes().asLiveData()) { urlBarcodes ->
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
@@ -74,7 +74,7 @@ class SharedViewModel(
                     )
             }
 
-            it.addSource(this._databaseRepository.getSMSBarcodes()) { smsBarcodes ->
+            it.addSource(this._databaseRepository.getSMSBarcodes().asLiveData()) { smsBarcodes ->
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,
@@ -83,7 +83,7 @@ class SharedViewModel(
                     )
             }
 
-            it.addSource(this._databaseRepository.getGeoPointBarcodes()) { geoPointBarcodes ->
+            it.addSource(this._databaseRepository.getGeoPointBarcodes().asLiveData()) { geoPointBarcodes ->
                 it.value =
                     BarcodeTools.combineDataFromSeveralLiveData(
                         it.value,

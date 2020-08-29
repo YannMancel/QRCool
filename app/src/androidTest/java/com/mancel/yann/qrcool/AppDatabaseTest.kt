@@ -2,6 +2,7 @@ package com.mancel.yann.qrcool
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.asLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mancel.yann.qrcool.databases.AppDatabase
@@ -84,7 +85,9 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getTextBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(
+            this@AppDatabaseTest._barcodeDAO.getTextBarcodes().asLiveData()
+        )
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -121,7 +124,9 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getWifiBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(
+            this@AppDatabaseTest._barcodeDAO.getWifiBarcodes().asLiveData()
+        )
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -160,7 +165,9 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getUrlBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(
+            this@AppDatabaseTest._barcodeDAO.getUrlBarcodes().asLiveData()
+        )
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -198,7 +205,9 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getSMSBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(
+            this@AppDatabaseTest._barcodeDAO.getSMSBarcodes().asLiveData()
+        )
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -236,7 +245,9 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(this@AppDatabaseTest._barcodeDAO.getGeoPointBarcodes())
+        val barcodes = LiveDataTestUtil.getValue(
+            this@AppDatabaseTest._barcodeDAO.getGeoPointBarcodes().asLiveData()
+        )
 
         // TEST
         assertEquals(1, barcodes.size)

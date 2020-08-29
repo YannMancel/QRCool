@@ -29,6 +29,7 @@
     * [Navigation](https://developer.android.com/guide/navigation/)
     * [Room](https://developer.android.com/topic/libraries/architecture/room)
   * [Behavior CameraX](https://developer.android.com/training/camerax)
+  * [KTX Extensions](https://developer.android.com/kotlin/ktx)
 * [Library Material Components](https://github.com/material-components/material-components-android)
 * [Library Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 * [Library ML Kit - Barcode scanning](https://developers.google.com/ml-kit/vision/barcode-scanning/android)

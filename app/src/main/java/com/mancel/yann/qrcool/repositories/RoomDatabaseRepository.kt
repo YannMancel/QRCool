@@ -1,8 +1,8 @@
 package com.mancel.yann.qrcool.repositories
 
-import androidx.lifecycle.LiveData
 import com.mancel.yann.qrcool.databases.BarcodeDAO
 import com.mancel.yann.qrcool.models.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Yann MANCEL on 23/08/2020.
@@ -36,19 +36,19 @@ class RoomDatabaseRepository(
 
     // -- Read --
 
-    override fun getTextBarcodes(): LiveData<List<TextBarcode>> =
+    override fun getTextBarcodes(): Flow<List<TextBarcode>> =
         this._barcodeDAO.getTextBarcodes()
 
-    override fun getWifiBarcodes(): LiveData<List<WifiBarcode>> =
+    override fun getWifiBarcodes(): Flow<List<WifiBarcode>> =
         this._barcodeDAO.getWifiBarcodes()
 
-    override fun getUrlBarcodes(): LiveData<List<UrlBarcode>> =
+    override fun getUrlBarcodes(): Flow<List<UrlBarcode>> =
         this._barcodeDAO.getUrlBarcodes()
 
-    override fun getSMSBarcodes(): LiveData<List<SMSBarcode>> =
+    override fun getSMSBarcodes(): Flow<List<SMSBarcode>> =
         this._barcodeDAO.getSMSBarcodes()
 
-    override fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>> =
+    override fun getGeoPointBarcodes(): Flow<List<GeoPointBarcode>> =
         this._barcodeDAO.getGeoPointBarcodes()
 
     // -- Delete --

@@ -1,7 +1,7 @@
 package com.mancel.yann.qrcool.repositories
 
-import androidx.lifecycle.LiveData
 import com.mancel.yann.qrcool.models.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Yann MANCEL on 23/08/2020.
@@ -22,11 +22,11 @@ interface DatabaseRepository {
 
     // -- Read --
 
-    fun getTextBarcodes(): LiveData<List<TextBarcode>>
-    fun getWifiBarcodes(): LiveData<List<WifiBarcode>>
-    fun getUrlBarcodes(): LiveData<List<UrlBarcode>>
-    fun getSMSBarcodes(): LiveData<List<SMSBarcode>>
-    fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>>
+    fun getTextBarcodes(): Flow<List<TextBarcode>>
+    fun getWifiBarcodes(): Flow<List<WifiBarcode>>
+    fun getUrlBarcodes(): Flow<List<UrlBarcode>>
+    fun getSMSBarcodes(): Flow<List<SMSBarcode>>
+    fun getGeoPointBarcodes(): Flow<List<GeoPointBarcode>>
 
     // -- Delete --
 

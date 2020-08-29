@@ -1,11 +1,11 @@
 package com.mancel.yann.qrcool.databases
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.mancel.yann.qrcool.models.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Yann MANCEL on 22/08/2020.
@@ -40,31 +40,31 @@ interface BarcodeDAO {
         SELECT *
         FROM text_barcode
     """)
-    fun getTextBarcodes(): LiveData<List<TextBarcode>>
+    fun getTextBarcodes(): Flow<List<TextBarcode>>
 
     @Query("""
         SELECT *
         FROM wifi_barcode
     """)
-    fun getWifiBarcodes(): LiveData<List<WifiBarcode>>
+    fun getWifiBarcodes(): Flow<List<WifiBarcode>>
 
     @Query("""
         SELECT *
         FROM url_barcode
     """)
-    fun getUrlBarcodes(): LiveData<List<UrlBarcode>>
+    fun getUrlBarcodes(): Flow<List<UrlBarcode>>
 
     @Query("""
         SELECT *
         FROM sms_barcode
     """)
-    fun getSMSBarcodes(): LiveData<List<SMSBarcode>>
+    fun getSMSBarcodes(): Flow<List<SMSBarcode>>
 
     @Query("""
         SELECT *
         FROM geo_point_barcode
     """)
-    fun getGeoPointBarcodes(): LiveData<List<GeoPointBarcode>>
+    fun getGeoPointBarcodes(): Flow<List<GeoPointBarcode>>
 
     // -- Delete --
 
