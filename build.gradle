@@ -1,25 +1,64 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.4.0"
-    ext.material_design_version = '1.2.0'
-    ext.nav_version = '2.3.0'
-    ext.room_version = '2.2.5'
-    ext.livedata_ktx_version = '2.2.0'
-    ext.coroutines_version = '1.3.9'
-    ext.camerax_version = '1.0.0-beta07'
-    ext.camerax_view_version = '1.0.0-alpha14'
-    ext.mlkit_version = '16.1.1'
-    ext.koin_version = '2.1.6'
+    ext {
+        versions = [
+            gradle: "4.0.1",
+            kotlin: "1.4.0",
+            material_design: "1.2.0",
+            navigation: "2.3.0",
+            room: "2.2.5",
+            livedata_ktx: "2.2.0",
+            coroutines: "1.3.9",
+            camerax: "1.0.0-beta07",
+            camerax_view: "1.0.0-alpha14",
+            mlkit: "16.1.1",
+            koin: "2.1.6"
+        ]
+
+        libs = [
+            // Material design
+            material_design: "com.google.android.material:material:${versions.material_design}",
+
+            // Navigation Component
+            navigation_fragment: "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+            navigation_ui: "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+
+            // Room
+            room_runtime: "androidx.room:room-runtime:${versions.room}",
+            room_ktx: "androidx.room:room-ktx:${versions.room}",
+            room_compiler: "androidx.room:room-compiler:${versions.room}",
+
+            // LiveData
+            livedata_ktx: "androidx.lifecycle:lifecycle-livedata-ktx:${versions.livedata_ktx}",
+
+            // Kotlin Coroutines
+            coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
+
+            // CameraX
+            camerax_camera2: "androidx.camera:camera-camera2:${versions.camerax}",
+            camerax_lifecycle: "androidx.camera:camera-lifecycle:${versions.camerax}",
+            camerax_view: "androidx.camera:camera-view:${versions.camerax_view}",
+
+            // ML Kit
+            mlkit_barcode: "com.google.android.gms:play-services-mlkit-barcode-scanning:${versions.mlkit}",
+
+            // Koin
+            koin_android: "org.koin:koin-android:${versions.koin}",
+            koin_viewmodel: "org.koin:koin-androidx-viewmodel:${versions.koin}"
+        ]
+    }
 
     repositories {
         google()
         jcenter()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.android.tools.build:gradle:${versions.gradle}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}"
     }
 }
 
