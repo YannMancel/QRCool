@@ -14,45 +14,78 @@ object BarcodeTools {
     /**
      * Updates the data in structured format
      */
-    fun getStructuredDataOfBarcode(context: Context, barcode: BarcodeOverlay) : String {
+    fun getStructuredDataOfBarcode(context: Context, barcode: BarcodeOverlay) : List<String?> {
         return when (barcode) {
             is TextBarcode -> {
-                context.getString(
-                    R.string.raw_value_to_text,
-                    barcode._rawValue ?: context.getString(R.string.no_raw_value)
+                listOf(
+                    null,
+                    context.getString(
+                        R.string.raw_value_to_text,
+                        barcode._rawValue ?: context.getString(R.string.no_raw_value)
+                    ),
+                    null
                 )
             }
 
             is WifiBarcode -> {
-                context.getString(
-                    R.string.raw_value_to_wifi,
-                    barcode._sSID ?: "-",
-                    barcode._password ?: "-",
-                    barcode._encryptionType
+                listOf(
+                    context.getString(
+                        R.string.ssid_of_wifi,
+                        barcode._sSID ?: "-"
+                    ),
+                    context.getString(
+                        R.string.password_of_wifi,
+                        barcode._password ?: "-"
+                    ),
+                    context.getString(
+                        R.string.encryption_type_of_wifi,
+                        barcode._encryptionType
+                    )
                 )
             }
 
             is UrlBarcode -> {
-                context.getString(
-                    R.string.raw_value_to_url,
-                    barcode._title ?: "-",
-                    barcode._url ?: "-"
+                listOf(
+                    if (barcode._title.isNullOrEmpty())
+                        null
+                    else
+                        context.getString(
+                            R.string.title_of_url,
+                            barcode._title
+                        ),
+                    context.getString(
+                        R.string.url_of_url,
+                        barcode._url ?: "-"
+                    ),
+                    null
                 )
             }
 
             is SMSBarcode -> {
-                context.getString(
-                    R.string.raw_value_to_sms,
-                    barcode._phoneNumber ?: "-",
-                    barcode._message ?: "-"
+                listOf(
+                    context.getString(
+                        R.string.phone_number_of_sms,
+                        barcode._phoneNumber ?: "-"
+                    ),
+                    context.getString(
+                        R.string.message_of_sms,
+                        barcode._message ?: "-"
+                    ),
+                    null
                 )
             }
 
             is GeoPointBarcode -> {
-                context.getString(
-                    R.string.raw_value_to_geo,
-                    "${barcode._latitude ?: "-"}",
-                    "${barcode._longitude ?: "-"}"
+                listOf(
+                    context.getString(
+                        R.string.latitude_of_geo_point,
+                        "${barcode._latitude ?: "-"}"
+                    ),
+                    context.getString(
+                        R.string.longitude_of_geo_point,
+                        "${barcode._longitude ?: "-"}"
+                    ),
+                    null
                 )
             }
         }
@@ -64,7 +97,7 @@ object BarcodeTools {
     fun <T : BarcodeOverlay> combineDataFromSeveralLiveData(
         currentData: List<BarcodeOverlay>?,
         newData: List<T>,
-        klass: Class<T>
+        cls: Class<T>
     ) : List<BarcodeOverlay> {
         // Current data is null
         if (currentData.isNullOrEmpty()) {
@@ -74,7 +107,7 @@ object BarcodeTools {
         }
 
         // Current data with the SAME CLASS of new data
-        val currentDataWithSameInstance = currentData.filterIsInstance(klass) as List<BarcodeOverlay>
+        val currentDataWithSameInstance = currentData.filterIsInstance(cls) as List<BarcodeOverlay>
 
         // Filter to have only barcodes that are really new
         /*

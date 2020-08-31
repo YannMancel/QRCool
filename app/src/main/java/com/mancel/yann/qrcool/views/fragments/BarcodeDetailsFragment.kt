@@ -72,8 +72,15 @@ class BarcodeDetailsFragment : BaseFragment() {
      * Updates the data
      */
     private fun updateData(barcode: BarcodeOverlay) {
-        this._rootView.fragment_details_data.text =
-            BarcodeTools.getStructuredDataOfBarcode(this.requireContext(), barcode)
+        this._rootView.fragment_details_data.text = StringBuilder().run {
+            BarcodeTools.getStructuredDataOfBarcode(
+                this@BarcodeDetailsFragment.requireContext(),
+                barcode
+            ).forEach { data ->
+                if (!data.isNullOrEmpty()) append("$data\n")
+            }
+            toString()
+        }
     }
 
     /**

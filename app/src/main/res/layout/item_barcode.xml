@@ -35,30 +35,73 @@
             app:tint="@color/colorPrimaryDark"
             tools:src="@drawable/ic_qrcode"/>
 
-        <!-- TextView: Raw value -->
-        <TextView
-            android:id="@+id/item_name"
+        <!-- ConstraintLayout: TextView group -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/text_view_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_little"
             app:layout_constraintTop_toTopOf="@id/item_image"
             app:layout_constraintBottom_toBottomOf="@id/item_image"
             app:layout_constraintStart_toEndOf="@id/item_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Raw value of barcode"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- TextView: Parameter A -->
+            <TextView
+                android:id="@+id/item_parameter_A"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/item_parameter_B"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Parameter A: ------------------------------------------------------------"/>
+
+            <!-- TextView: Parameter B -->
+            <TextView
+                android:id="@+id/item_parameter_B"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/item_parameter_A"
+                app:layout_constraintBottom_toTopOf="@id/item_parameter_C"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                tools:text="Parameter B: ------------------------------------------------------------"/>
+
+            <!-- TextView: Parameter C -->
+            <TextView
+                android:id="@+id/item_parameter_C"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/item_parameter_B"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Parameter C: ------------------------------------------------------------"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- TextView: Date -->
         <TextView
             android:id="@+id/item_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_little"
             android:layout_marginBottom="@dimen/margin_tiny"
             android:textSize="12sp"
             android:textAlignment="viewEnd"
+            app:layout_constraintTop_toBottomOf="@id/text_view_group"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_image"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
             tools:text="16/08/2020 21:28"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

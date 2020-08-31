@@ -134,7 +134,6 @@ class BarcodeListFragment : BaseFragment() {
 
         // RecyclerView
         with(this._rootView.fragment_list_recycler_view) {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@BarcodeListFragment.requireContext())
             adapter = this@BarcodeListFragment._adapter
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mancel.yann.qrcool.R
@@ -123,12 +124,26 @@ class BarcodeAdapter(
          * Updates the data
          */
         private fun updateData(barcode: BarcodeOverlay, context: Context) {
-            this.itemView.item_name.text =
-                BarcodeTools.getStructuredDataOfBarcode(context, barcode)
+            val data = BarcodeTools.getStructuredDataOfBarcode(context, barcode)
+
+            this.updateTextView(this.itemView.item_parameter_A, data[0])
+            this.updateTextView(this.itemView.item_parameter_B, data[1])
+            this.updateTextView(this.itemView.item_parameter_C, data[2])
         }
 
         /**
-         * Updates the date
+         * Updates the [TextView]
+         */
+        private fun updateTextView(textView: TextView, data: String?) {
+            if (data.isNullOrEmpty()) {
+                textView.visibility = View.GONE
+            } else {
+                textView.text = data
+            }
+        }
+
+        /**
+         * Updates the [Date]
          */
         private fun updateDate(date: Date) {
             val formattedDate =

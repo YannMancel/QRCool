@@ -25,9 +25,14 @@
     <!-- BarcodeTools.kt -->
     <string name="no_raw_value">No raw value</string>
     <string name="raw_value_to_text">Text: %1$s</string>
-    <string name="raw_value_to_wifi">Network Name: %1$s\nPassword: %2$s\nEncryption: %3$s</string>
-    <string name="raw_value_to_url">Title: %1$s\nUrl: %2$s</string>
-    <string name="raw_value_to_sms">Number: %1$s\nMessage: %2$s</string>
-    <string name="raw_value_to_geo">Latitude: %1$s\nLongitude: %2$s</string>
+    <string name="ssid_of_wifi">Network Name: %1$s</string>
+    <string name="password_of_wifi">Password: %1$s</string>
+    <string name="encryption_type_of_wifi">Encryption: %1$s</string>
+    <string name="title_of_url">Title: %1$s</string>
+    <string name="url_of_url">Url: %1$s</string>
+    <string name="phone_number_of_sms">Number: %1$s</string>
+    <string name="message_of_sms">Message: %1$s</string>
+    <string name="latitude_of_geo_point">Latitude: %1$s</string>
+    <string name="longitude_of_geo_point">Longitude: %1$s</string>
 
 </resources>
