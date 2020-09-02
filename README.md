@@ -10,6 +10,9 @@
 <p align="middle">
      <img src="./screenshots/phone_1.png" width="30%" height="30%"> <img src="./screenshots/phone_2.png" width="30%" height="30%"> <img src="./screenshots/phone_3.png" width="30%" height="30%">
 </p>
+<p align="middle">
+     <img src="./screenshots/phone_4.png" width="30%" height="30%"> <img src="./screenshots/phone_5.png" width="30%" height="30%">
+</p>
 
 
 ## Class diagram for database
