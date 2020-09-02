@@ -8,10 +8,10 @@
      <img src="./screenshots/record.gif" width="30%" height="30%">
 </p>
 <p align="middle">
-     <img src="./screenshots/phone_1.png" width="30%" height="30%"> <img src="./screenshots/phone_2.png" width="30%" height="30%"> <img src="./screenshots/phone_3.png" width="30%" height="30%">
+     <img src="./screenshots/phone_1_en.png" width="30%" height="30%"> <img src="./screenshots/phone_2_en.png" width="30%" height="30%"> <img src="./screenshots/phone_3_en.png" width="30%" height="30%">
 </p>
 <p align="middle">
-     <img src="./screenshots/phone_4.png" width="30%" height="30%"> <img src="./screenshots/phone_5.png" width="30%" height="30%">
+     <img src="./screenshots/phone_4_en.png" width="30%" height="30%"> <img src="./screenshots/phone_5_en.png" width="30%" height="30%">
 </p>
 
 
