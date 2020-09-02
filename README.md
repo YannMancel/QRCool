@@ -3,6 +3,21 @@
 **Goal**: Create an android application allowing to scan barcodes.
 
 
+## Phone display
+<p align="middle">
+     <img src="./screenshots/record.gif" width="30%" height="30%">
+</p>
+<p align="middle">
+     <img src="./screenshots/phone_1.png" width="30%" height="30%"> <img src="./screenshots/phone_2.png" width="30%" height="30%"> <img src="./screenshots/phone_3.png" width="30%" height="30%">
+</p>
+
+
+## Class diagram for database
+<p align="middle">
+    <img src="./database/Class_diagram_with_drawio.png" width="80%" height="80%">
+</p>
+
+
 ## Requirements
 * Computer (Windows, Mac or Linux)
 * Android Studio
