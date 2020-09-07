@@ -6,6 +6,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.View
+import androidx.annotation.Keep
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -42,11 +43,13 @@ class CameraXFragment : BaseFragment() {
 
         See CameraX's uses cases
             [2]: https://developer.android.com/training/camerax/preview
-            [3]: https://developer.android.com/training/camerax/take-photo
+            [3]: https://developer.android.com/training/camerax/analyze
      */
 
     // ENUMS ---------------------------------------------------------------------------------------
 
+    // Annotation for the ProGuard considerations of Navigation component
+    @Keep
     enum class ScanConfig { BARCODE_1D, BARCODE_2D }
 
     // FIELDS --------------------------------------------------------------------------------------
@@ -70,6 +73,10 @@ class CameraXFragment : BaseFragment() {
     companion object {
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
+
+        // For ML Kit: 1280x720 or 1920x1080 -> Ratio: 1.7
+        private const val RESOLUTION_MAX = 1920
+        private const val RESOLUTION_MIN = 1080
     }
 
     // METHODS -------------------------------------------------------------------------------------
@@ -325,11 +332,10 @@ class CameraXFragment : BaseFragment() {
      * @return a [Size]
      */
     private fun getResolution() =
-        // For ML Kit: 1280x720 or 1920x1080 -> Ratio: 1.7
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-            Size(1080,1920)
+            Size(RESOLUTION_MIN, RESOLUTION_MAX)
         else
-            Size(1920, 1080)
+            Size(RESOLUTION_MAX, RESOLUTION_MIN)
 
     // -- Analyzer --
 

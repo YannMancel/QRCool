@@ -135,11 +135,10 @@ class BarcodeAdapter(
          * Updates the [TextView]
          */
         private fun updateTextView(textView: TextView, data: String?) {
-            if (data.isNullOrEmpty()) {
+            if (data.isNullOrEmpty())
                 textView.visibility = View.GONE
-            } else {
+            else
                 textView.text = data
-            }
         }
 
         /**

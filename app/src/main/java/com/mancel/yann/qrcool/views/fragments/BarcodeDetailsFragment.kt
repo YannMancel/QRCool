@@ -72,14 +72,13 @@ class BarcodeDetailsFragment : BaseFragment() {
      * Updates the data
      */
     private fun updateData(barcode: BarcodeOverlay) {
-        this._rootView.fragment_details_data.text = StringBuilder().run {
+        this._rootView.fragment_details_data.text = buildString {
             BarcodeTools.getStructuredDataOfBarcode(
                 this@BarcodeDetailsFragment.requireContext(),
                 barcode
             ).forEach { data ->
                 if (!data.isNullOrEmpty()) append("$data\n")
             }
-            toString()
         }
     }
 
@@ -140,7 +139,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
         }
-
         this.startActivity(intent)
     }
 }

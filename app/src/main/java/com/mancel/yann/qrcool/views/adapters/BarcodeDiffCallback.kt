@@ -1,7 +1,7 @@
 package com.mancel.yann.qrcool.views.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mancel.yann.qrcool.models.BarcodeOverlay
+import com.mancel.yann.qrcool.models.*
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -29,7 +29,18 @@ class BarcodeDiffCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        // Comparison on all fields
-        return this._oldList[oldItemPosition] == this._newList[newItemPosition]
+        // No same child class (parent class is a sealed class)
+        if (this._oldList[oldItemPosition].javaClass.simpleName
+            != this._newList[oldItemPosition].javaClass.simpleName
+        ) return false
+
+        // Comparison on all fields (data class)
+        return when (this._oldList[oldItemPosition]) {
+            is TextBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
+            is WifiBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
+            is UrlBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
+            is SMSBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
+            is GeoPointBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
+        }
     }
 }

@@ -11,10 +11,18 @@ android {
         applicationId "com.mancel.yann.qrcool"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        config {
+            storeFile file(project.findProperty("STORE_FILE"))
+            storePassword project.findProperty("STORE_PASSWORD")
+            keyAlias project.findProperty("KEY_ALIAS")
+            keyPassword project.findProperty("KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -24,9 +32,10 @@ android {
 
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
             buildConfigField "Boolean", "QRCODE_SIMULATOR_ENABLED", 'false'
+            signingConfig signingConfigs.config
         }
     }
 

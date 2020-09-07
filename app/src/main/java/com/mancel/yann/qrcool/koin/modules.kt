@@ -47,4 +47,3 @@ val roomTestModule = module {
     // Repository - [DAO in argument]
     single<DatabaseRepository> { RoomDatabaseRepository(get()) }
 }
-
