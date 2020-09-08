@@ -30,6 +30,7 @@
         android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
+        app:layout_dodgeInsetEdges="bottom"
         app:name="@string/small_fab_barcode_1d"
         app:iconSrc="@drawable/ic_barcode_scan"
         app:offset_y="@dimen/offset_y_1"/>
@@ -43,6 +44,7 @@
         android:layout_marginEnd="@dimen/margin_delta_normal_and_small_fab"
         app:layout_anchor="@id/fragment_list_recycler_view"
         app:layout_anchorGravity="bottom|end"
+        app:layout_dodgeInsetEdges="bottom"
         app:name="@string/small_fab_barcode_2d"
         app:iconSrc="@drawable/ic_qrcode_scan"
         app:offset_y="@dimen/offset_y_2"/>

@@ -29,18 +29,6 @@ class BarcodeDiffCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        // No same child class (parent class is a sealed class)
-        if (this._oldList[oldItemPosition].javaClass.simpleName
-            != this._newList[oldItemPosition].javaClass.simpleName
-        ) return false
-
-        // Comparison on all fields (data class)
-        return when (this._oldList[oldItemPosition]) {
-            is TextBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
-            is WifiBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
-            is UrlBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
-            is SMSBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
-            is GeoPointBarcode -> this._oldList[oldItemPosition] == this._newList[newItemPosition]
-        }
+        return false
     }
 }
