@@ -21,9 +21,6 @@ class ExecutorLifecycleObserver : LifecycleObserver {
 
     // METHODS -------------------------------------------------------------------------------------
 
-    /**
-     * This method will be called when the event of lifecycle is [Lifecycle.Event.ON_DESTROY].
-     */
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         this._executor.shutdown()

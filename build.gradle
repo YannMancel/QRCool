@@ -4,7 +4,7 @@ buildscript {
     ext {
         versions = [
             gradle: "4.0.1",
-            kotlin: "1.4.0",
+            kotlin: "1.4.10",
             material_design: "1.2.0",
             navigation: "2.3.0",
             room: "2.2.5",

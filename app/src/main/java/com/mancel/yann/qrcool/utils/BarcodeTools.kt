@@ -11,9 +11,7 @@ import com.mancel.yann.qrcool.models.*
  */
 object BarcodeTools {
 
-    /**
-     * Updates the data in structured format
-     */
+    /** Updates the data in structured format */
     fun getStructuredDataOfBarcode(context: Context, barcode: BarcodeOverlay) : List<String?> {
         return when (barcode) {
             is TextBarcode -> {
@@ -91,9 +89,7 @@ object BarcodeTools {
         }
     }
 
-    /**
-     * Combine data from several LiveData
-     */
+    /** Combine data from several LiveData */
     fun <T : BarcodeOverlay> combineDataFromSeveralLiveData(
         currentData: List<BarcodeOverlay>?,
         newData: List<T>,

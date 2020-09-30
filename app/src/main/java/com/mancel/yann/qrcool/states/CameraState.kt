@@ -1,5 +1,7 @@
 package com.mancel.yann.qrcool.states
 
+import com.mancel.yann.qrcool.views.fragments.CameraXFragment
+
 /**
  * Created by Yann MANCEL on 04/08/2020.
  * Name of the project: QRCool
@@ -13,7 +15,7 @@ sealed class CameraState(
 
     /**
      * State:  SetupCamera
-     * Where:  CameraXFragment#onViewCreated
+     * Where:  [CameraXFragment.onViewCreated]
      * Why:    After post method of Preview widget
      */
     class SetupCamera(
@@ -22,7 +24,7 @@ sealed class CameraState(
 
     /**
      * State:  PreviewReady
-     * Where:  CameraXFragment#configureCameraProvider
+     * Where:  [CameraXFragment.configureCameraProvider]
      * Why:    After to bind Preview use case
      */
     class PreviewReady(
@@ -31,7 +33,7 @@ sealed class CameraState(
 
     /**
      * State:  Error
-     * Where:  CameraXFragment#configureCameraX
+     * Where:  [CameraXFragment.configureCameraX]
      * Why:    No permission
      */
     class Error(

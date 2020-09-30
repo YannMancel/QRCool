@@ -39,10 +39,7 @@ class MLKitBarcodeAnalyzer(
 
     // -- ML Kit - Barcode scanner --
 
-    /**
-     * Analyses an [ImageProxy] in parameter with the [ImageAnalysis] use case of CameraX
-     * @param imageProxy an [ImageProxy]
-     */
+    /** Analyses an [ImageProxy] in parameter with the [ImageAnalysis] use case of CameraX */
     private fun analyseImage(imageProxy: ImageProxy) {
         // Creates an InputImage object from a media.Image object
         imageProxy.image?.let {
@@ -56,10 +53,6 @@ class MLKitBarcodeAnalyzer(
         } ?: imageProxy.close()
     }
 
-    /**
-     * Scans the barcodes thanks to ML Kit
-     * @param image an [InputImage]
-     */
     private fun scanBarcodes(image: InputImage, actionOnComplete: () -> Unit) {
         // Options
         val options = when (this._config) {
@@ -92,11 +85,9 @@ class MLKitBarcodeAnalyzer(
 
     /**
      * Configures the [BarcodeScannerOptions] for barcode 1D.
-     *
      * Here, we know which barcode formats you expect
      * to read. This is improve the speed of the barcode detector by configuring it to only
      * detect those formats.
-     *
      * @return a [BarcodeScannerOptions]
      */
     private fun configureOptions1D(): BarcodeScannerOptions {
@@ -117,11 +108,9 @@ class MLKitBarcodeAnalyzer(
 
     /**
      * Configures the [BarcodeScannerOptions] for barcode 2D.
-     *
      * Here, we know which barcode formats you expect
      * to read. This is improve the speed of the barcode detector by configuring it to only
      * detect those formats.
-     *
      * @return a [BarcodeScannerOptions]
      */
     private fun configureOptions2D(): BarcodeScannerOptions {
@@ -137,9 +126,7 @@ class MLKitBarcodeAnalyzer(
 
     // -- Barcode conversion --
 
-    /**
-     * Converts the barcodes from ML Kit library to this application (abstract layer)
-     */
+    /** Converts the barcodes from ML Kit library to this application (abstract layer) */
     private fun convertBarcodesFromMLKitToApp(
         barcodesFromMLKit: List<Barcode>
     ) : List<BarcodeOverlay> {
@@ -207,9 +194,7 @@ class MLKitBarcodeAnalyzer(
 
     // -- Type --
 
-    /**
-     * Gets the barcode's type from ML Kit library to this application (abstract layer)
-     */
+    /** Gets the barcode's type from ML Kit library to this application (abstract layer) */
     private fun getType(
         typeFromMLKit: Int
     ) : BarcodeOverlay.BarcodeType {
@@ -224,9 +209,7 @@ class MLKitBarcodeAnalyzer(
 
     // -- Format --
 
-    /**
-     * Gets the barcode's format from ML Kit library to this application (abstract layer)
-     */
+    /** Gets the barcode's format from ML Kit library to this application (abstract layer) */
     private fun getFormat(
         formatFromMLKit: Int
     ) : BarcodeOverlay.BarcodeFormat {
@@ -252,9 +235,7 @@ class MLKitBarcodeAnalyzer(
 
     // -- Wifi type --
 
-    /**
-     * Gets the barcode's wifi type from ML Kit library to this application (abstract layer)
-     */
+    /** Gets the barcode's wifi type from ML Kit library to this application (abstract layer) */
     private fun getWifiType(
         wifiTypeFromMLKit: Int
     ) : BarcodeOverlay.WifiType {

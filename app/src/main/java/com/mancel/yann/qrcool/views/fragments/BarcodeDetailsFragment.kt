@@ -42,9 +42,6 @@ class BarcodeDetailsFragment : BaseFragment() {
 
     // -- UI --
 
-    /**
-     * Updates the UI
-     */
     private fun updateUI() {
         // There is only one item that is not null
         val barcode = this._barcodes.find { it != null }
@@ -56,9 +53,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         this.updateButton(barcode)
     }
 
-    /**
-     * Updates the image
-     */
     private fun updateImage(format: BarcodeOverlay.BarcodeFormat) {
         val resource = when (format) {
             BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
@@ -68,9 +62,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         this._rootView.fragment_details_image.setImageResource(resource)
     }
 
-    /**
-     * Updates the data
-     */
     private fun updateData(barcode: BarcodeOverlay) {
         this._rootView.fragment_details_data.text = buildString {
             BarcodeTools.getStructuredDataOfBarcode(
@@ -82,9 +73,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Updates the date
-     */
     private fun updateDate(date: Date) {
         val formattedDate =
             SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault())
@@ -92,9 +80,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         this._rootView.fragment_details_date.text = formattedDate
     }
 
-    /**
-     * Updates the button
-     */
     private fun updateButton(barcode: BarcodeOverlay) {
         val validUrlOrNull = when (barcode) {
             is UrlBarcode -> { this.checkValidityOfUrl(barcode._url) }
@@ -131,10 +116,6 @@ class BarcodeDetailsFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Opens a link thanks to the URL in argument
-     * @param url a [String] that contains the URL
-     */
     private fun openLinkFromUrl(url: String) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)

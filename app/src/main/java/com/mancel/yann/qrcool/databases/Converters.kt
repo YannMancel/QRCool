@@ -15,23 +15,14 @@ class Converters {
 
     // -- Date --
 
-    /**
-     * Converts a [Long] to a [Date]
-     */
     @TypeConverter
     fun dateFromTimestamp(value: Long?): Date? = value?.let { Date(it) }
 
-    /**
-     * Converts a [Date] to a [Long]
-     */
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? = date?.time
 
     // -- BarcodeOverlay.BarcodeType --
 
-    /**
-     * Converts a [String] to a [BarcodeOverlay.BarcodeType]
-     */
     @TypeConverter
     fun typeFromEnumName(enumName: String?): BarcodeOverlay.BarcodeType? {
         return when (enumName) {
@@ -44,9 +35,6 @@ class Converters {
         }
     }
 
-    /**
-     * Converts a [BarcodeOverlay.BarcodeType] to a [String]
-     */
     @TypeConverter
     fun typeToEnumName(barcodeType: BarcodeOverlay.BarcodeType?): String? {
         return when (barcodeType) {
@@ -61,9 +49,6 @@ class Converters {
 
     // -- BarcodeOverlay.BarcodeFormat --
 
-    /**
-     * Converts a [String] to a [BarcodeOverlay.BarcodeFormat]
-     */
     @TypeConverter
     fun formatFromEnumName(enumName: String?): BarcodeOverlay.BarcodeFormat? {
         return when (enumName) {
@@ -74,9 +59,6 @@ class Converters {
         }
     }
 
-    /**
-     * Converts a [BarcodeOverlay.BarcodeFormat] to a [String]
-     */
     @TypeConverter
     fun formatToEnumName(barcodeFormat: BarcodeOverlay.BarcodeFormat?): String? {
         return when (barcodeFormat) {
@@ -89,9 +71,6 @@ class Converters {
 
     // -- BarcodeOverlay.WifiType --
 
-    /**
-     * Converts a [String] to a [BarcodeOverlay.WifiType]
-     */
     @TypeConverter
     fun wifiTypeFromEnumName(enumName: String?): BarcodeOverlay.WifiType? {
         return when (enumName) {
@@ -102,9 +81,6 @@ class Converters {
         }
     }
 
-    /**
-     * Converts a [BarcodeOverlay.WifiType] to a [String]
-     */
     @TypeConverter
     fun wifiTypeToEnumName(wifiType: BarcodeOverlay.WifiType?): String? {
         return when (wifiType) {

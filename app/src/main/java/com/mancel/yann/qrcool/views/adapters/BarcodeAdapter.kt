@@ -56,10 +56,6 @@ class BarcodeAdapter(
 
     // -- Barcode --
 
-    /**
-     * Updates data of [BarcodeAdapter]
-     * @param newData a [List] of [BarcodeOverlay]
-     */
     fun updateData(newData: List<BarcodeOverlay>) {
         // Optimizes the performances of RecyclerView
         val diffCallback  = BarcodeDiffCallback(this._barcodes, newData)
@@ -75,9 +71,6 @@ class BarcodeAdapter(
         diffResult.dispatchUpdatesTo(this@BarcodeAdapter)
     }
 
-    /**
-     * Gets the [BarcodeOverlay] at the position in argument
-     */
     fun getDataAt(position: Int): BarcodeOverlay = this._barcodes[position]
 
     // NESTED CLASSES ------------------------------------------------------------------------------
@@ -91,9 +84,7 @@ class BarcodeAdapter(
 
         // METHODS ---------------------------------------------------------------------------------
 
-        /**
-         * Binds the [BarcodeAdapter] and the [QRCodeViewHolder]
-         */
+        /** Binds the [BarcodeAdapter] and the [QRCodeViewHolder] */
         fun bind(
             barcode: BarcodeOverlay,
             context: Context,
@@ -108,9 +99,6 @@ class BarcodeAdapter(
             this.updateDate(barcode._date)
         }
 
-        /**
-         * Updates the image
-         */
         private fun updateImage(format: BarcodeOverlay.BarcodeFormat) {
             val resource = when (format) {
                 BarcodeOverlay.BarcodeFormat.FORMAT_BARCODE_1D -> R.drawable.ic_barcode
@@ -120,9 +108,6 @@ class BarcodeAdapter(
             this.itemView.item_image.setImageResource(resource)
         }
 
-        /**
-         * Updates the data
-         */
         private fun updateData(barcode: BarcodeOverlay, context: Context) {
             val data = BarcodeTools.getStructuredDataOfBarcode(context, barcode)
 
@@ -131,9 +116,6 @@ class BarcodeAdapter(
             this.updateTextView(this.itemView.item_parameter_C, data[2])
         }
 
-        /**
-         * Updates the [TextView]
-         */
         private fun updateTextView(textView: TextView, data: String?) {
             if (data.isNullOrEmpty())
                 textView.visibility = View.GONE
@@ -141,9 +123,6 @@ class BarcodeAdapter(
                 textView.text = data
         }
 
-        /**
-         * Updates the [Date]
-         */
         private fun updateDate(date: Date) {
             val formattedDate =
                 SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault())

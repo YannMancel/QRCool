@@ -38,9 +38,6 @@ class MainActivity : BaseActivity() {
 
     // -- Action bar --
 
-    /**
-     * Configures the Action bar for the navigation
-     */
     private fun configureActionBarForNavigation() {
         // NavController
         this._navController = this.findNavController(R.id.activity_main_NavHostFragment)

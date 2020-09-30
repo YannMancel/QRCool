@@ -21,6 +21,9 @@ class QRCoolApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // Enable Debugging for Kotlin Coroutines
+        System.setProperty("kotlinx.coroutines.debug", if (BuildConfig.DEBUG) "on" else "off")
+
         // Koin: Dependency injection framework
         startKoin {
             androidContext(this@QRCoolApplication)

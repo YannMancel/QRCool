@@ -25,9 +25,6 @@ class FullScreenLifecycleObserver(
 
     // METHODS -------------------------------------------------------------------------------------
 
-    /**
-     * This method will be called when the event of lifecycle is [Lifecycle.Event.ON_RESUME].
-     */
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
         if (this._lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
@@ -40,9 +37,6 @@ class FullScreenLifecycleObserver(
         }
     }
 
-    /**
-     * This method will be called when the event of lifecycle is [Lifecycle.Event.ON_PAUSE].
-     */
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
         // Reset configuration

@@ -10,13 +10,6 @@ import com.google.android.material.snackbar.Snackbar
  */
 object MessageTools {
 
-    /**
-     * Shows a [Snackbar] with a message
-     * @param view          a [View] that will display the message
-     * @param message       a [String] that contains the message to display
-     * @param textButton    a [String] that contains the message to display into button
-     * @param actionOnClick a android.view.View.OnClickListener for the button click event
-     */
     fun showMessageWithSnackbar(
         view: View,
         message: String,

@@ -106,9 +106,6 @@ class CameraXFragment : BaseFragment() {
 
     // -- LifecycleObserver --
 
-    /**
-     * Configures a [FullScreenLifecycleObserver]
-     */
     private fun configureFullScreenLifecycleObserver() {
         this.lifecycle.addObserver(
             FullScreenLifecycleObserver(
@@ -118,9 +115,6 @@ class CameraXFragment : BaseFragment() {
         )
     }
 
-    /**
-     * Configures a [FullScreenLifecycleObserver]
-     */
     private fun configureExecutorLifecycleObserver() {
         this._cameraExecutor = ExecutorLifecycleObserver()
         this.lifecycle.addObserver(this._cameraExecutor)
@@ -128,9 +122,6 @@ class CameraXFragment : BaseFragment() {
 
     // -- CameraState --
 
-    /**
-     * Configures the LiveData of [CameraState]
-     */
     private fun configureCameraState() {
         this._viewModel
             .getCameraState()
@@ -141,10 +132,6 @@ class CameraXFragment : BaseFragment() {
             }
     }
 
-    /**
-     * Updates UI thanks to a [CameraState]
-     * @param state a [CameraState]
-     */
     private fun updateUI(state: CameraState) {
         // To update CameraSelector
         this._currentCameraState = state
@@ -156,27 +143,17 @@ class CameraXFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Handles the [CameraState.SetupCamera] state
-     */
+    /** Handles the [CameraState.SetupCamera] state */
     private fun handleStateSetupCamera() = this.configureCameraX()
 
-    /**
-     * Handles the [CameraState.PreviewReady] state
-     */
+    /** Handles the [CameraState.PreviewReady] state */
     private fun handleStatePreviewReady() { /* Do nothing here */ }
 
-    /**
-     * Handles the [CameraState.Error] state
-     * @param errorMessage a [String] that contains the error message
-     */
+    /** Handles the [CameraState.Error] state */
     private fun handleStateError(errorMessage: String) { /* Do nothing here */ }
 
     // -- CameraX --
 
-    /**
-     * Configures CameraX with Camera permission
-     */
     private fun configureCameraX() {
         if (this.hasCameraPermission())
             this.configureCameraProvider()
@@ -184,9 +161,7 @@ class CameraXFragment : BaseFragment() {
             this._viewModel.changeCameraStateToError(this.getString(R.string.no_permission))
     }
 
-    /**
-     * Configures the [ProcessCameraProvider] of CameraX
-     */
+    /** Configures the [ProcessCameraProvider] of CameraX */
     private fun configureCameraProvider() {
         this._cameraProviderFuture = ProcessCameraProvider.getInstance(this.requireContext())
 
@@ -200,10 +175,7 @@ class CameraXFragment : BaseFragment() {
         )
     }
 
-    /**
-     * Binds all use cases, [Preview] and [ImageAnalysis], to the Fragment's lifecycle
-     * @param cameraProvider a [ProcessCameraProvider]
-     */
+    /** Binds all use cases, [Preview] and [ImageAnalysis], to the Fragment's lifecycle */
     private fun bindAllUseCases(cameraProvider: ProcessCameraProvider) {
         // Metrics
         val metrics = DisplayMetrics().also {
@@ -248,22 +220,14 @@ class CameraXFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Builds a [CameraSelector] of CameraX
-     * @return a [CameraSelector]
-     */
+    /** Builds and returns a [CameraSelector] of CameraX */
     private fun buildCameraSelector(): CameraSelector {
         return CameraSelector.Builder()
             .requireLensFacing(this._currentCameraState._lensFacing)
             .build()
     }
 
-    /**
-     * Builds [Preview] use case of CameraX
-     * @param ratio     an [Int] that contains the ratio
-     * @param rotation  an [Int] that contains the rotation
-     * @return a [Preview]
-     */
+    /** Builds and returns the [Preview] use case of CameraX */
     private fun buildPreview(ratio: Int, rotation: Int): Preview {
         return Preview.Builder()
             .setTargetAspectRatio(ratio)
@@ -271,12 +235,7 @@ class CameraXFragment : BaseFragment() {
             .build()
     }
 
-    /**
-     * Builds [ImageAnalysis] use case of CameraX
-     * @param resolution    a [Size] that contains the resolution
-     * @param rotation      an [Int] that contains the rotation
-     * @return a [ImageAnalysis]
-     */
+    /** Builds and returns the [ImageAnalysis] use case of CameraX */
     private fun buildImageAnalysis(resolution: Size, rotation: Int): ImageAnalysis {
         return ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -327,10 +286,7 @@ class CameraXFragment : BaseFragment() {
 
     // -- Resolution --
 
-    /**
-     * Gets the resolution to be in accordance with ML Kit
-     * @return a [Size]
-     */
+    /** Gets the resolution, in returning a [Size], to be in accordance with ML Kit */
     private fun getResolution() =
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             Size(RESOLUTION_MIN, RESOLUTION_MAX)
@@ -339,11 +295,6 @@ class CameraXFragment : BaseFragment() {
 
     // -- Analyzer --
 
-    /**
-     * Gets a [MLKitBarcodeAnalyzer]
-     * @param imageAnalysis an [ImageAnalysis]
-     * @return a [ImageAnalysis.Analyzer]
-     */
     private fun getAnalyzer(imageAnalysis: ImageAnalysis): ImageAnalysis.Analyzer {
         return MLKitBarcodeAnalyzer(this._scanConfig) { scanState ->
             /*
@@ -393,10 +344,7 @@ class CameraXFragment : BaseFragment() {
 
     // -- Barcode --
 
-    /**
-     * Notifies when barcodes have been checked
-     * @param barcodes a [List] of [BarcodeOverlay] that contains all barcodes
-     */
+    /** Notifies when barcodes have been checked */
     private fun notifyScanOfBarcodes(barcodes: List<BarcodeOverlay>) {
         // Add barcodes
         this._viewModel.addBarcodes(barcodes)

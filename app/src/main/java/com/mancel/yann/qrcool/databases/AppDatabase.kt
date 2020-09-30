@@ -41,12 +41,6 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-
-        /**
-         * Gets the [AppDatabase]
-         * @param context a [Context]
-         * @return the [AppDatabase]
-         */
         fun getDatabase(context: Context): AppDatabase {
             val tempInstance = INSTANCE
 

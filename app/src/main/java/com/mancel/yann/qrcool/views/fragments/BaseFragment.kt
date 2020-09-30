@@ -30,16 +30,9 @@ abstract class BaseFragment : Fragment() {
 
     // METHODS -------------------------------------------------------------------------------------
 
-    /**
-     * Gets the integer value of the fragment layout
-     * @return an integer that corresponds to the fragment layout
-     */
     @LayoutRes
     protected abstract fun getFragmentLayout(): Int
 
-    /**
-     * Calls this method on [Fragment]#onCreateView method
-     */
     protected abstract fun doOnCreateView()
 
     // -- Fragment --
@@ -79,9 +72,7 @@ abstract class BaseFragment : Fragment() {
 
     // -- Permission --
 
-    /**
-     * Checks the permission: CAMERA
-     */
+    /** Checks the permission: [Manifest.permission.CAMERA] */
     protected fun hasCameraPermission(): Boolean {
         val permissionResult = ContextCompat.checkSelfPermission(
             this.requireContext(),
@@ -102,8 +93,6 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    /**
-     * Method to override to perform action after the granted permission
-     */
+    /** Method to override to perform action after the granted permission */
     protected open fun actionAfterPermission() { /* Do nothing here */ }
 }

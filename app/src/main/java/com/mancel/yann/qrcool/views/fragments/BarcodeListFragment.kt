@@ -47,9 +47,6 @@ class BarcodeListFragment : BaseFragment() {
 
     // -- Listener --
 
-    /**
-     * Configures the listener of each FloatingActionButton
-     */
     private fun configureListenerOfFABs() {
         // Normal FAB
         this._rootView.fragment_list_fab.setOnClickListener {
@@ -61,9 +58,6 @@ class BarcodeListFragment : BaseFragment() {
         this.configureFABToNavigateToCameraXFragmentInBarcode2D()
     }
 
-    /**
-     * Configures the mini FloatingActionButton to navigate to CameraXFragment in barcode 1D
-     */
     private fun configureFABToNavigateToCameraXFragmentInBarcode1D() {
         this._rootView.fragment_list_barcode_1d.setOnClickListener {
             // Action with argument
@@ -74,9 +68,6 @@ class BarcodeListFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Configures the mini FloatingActionButton to navigate to CameraXFragment in barcode 2D
-     */
     private fun configureFABToNavigateToCameraXFragmentInBarcode2D() {
         this._rootView.fragment_list_barcode_2d.setOnClickListener {
             // Action with argument
@@ -87,9 +78,6 @@ class BarcodeListFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Event from a click on a CardView
-     */
     private fun eventFromCardView(barcode: BarcodeOverlay) {
         // Action with argument
         val action = when (barcode) {
@@ -125,9 +113,6 @@ class BarcodeListFragment : BaseFragment() {
 
     // -- RecyclerView --
 
-    /**
-     * Configures the RecyclerView
-     */
     private fun configureRecyclerView() {
         // Adapter
         this._adapter = BarcodeAdapter(this.requireContext(), this::eventFromCardView)
@@ -147,9 +132,6 @@ class BarcodeListFragment : BaseFragment() {
 
     // -- LiveData --
 
-    /**
-     * Configures the barcode events from LiveData
-     */
     private fun configureBarcodeEvents() {
         this._viewModel
             .getBarcodes()
@@ -159,9 +141,6 @@ class BarcodeListFragment : BaseFragment() {
             }
     }
 
-    /**
-     * Configures the FloatingActionButton menu events from LiveData
-     */
     private fun configureFABMenuEvents() {
         this._viewModel
             .isFABMenuOpen()
@@ -175,9 +154,6 @@ class BarcodeListFragment : BaseFragment() {
 
     // -- Actions --
 
-    /**
-     * Action after the horizontal swipe on RecyclerView's item
-     */
     private fun actionAfterHorizontalSwipe(adapterPosition: Int) {
         val barcode = this._adapter.getDataAt(adapterPosition)
 
@@ -198,9 +174,6 @@ class BarcodeListFragment : BaseFragment() {
 
     // -- FAB Events --
 
-    /**
-     * Opens the FloatingActionButton menu
-     */
     private fun openFABMenu() {
         // Animate normal FAB
         ViewCompat
@@ -214,9 +187,6 @@ class BarcodeListFragment : BaseFragment() {
         this.animateOpenFAB(this.fragment_list_barcode_2d)
     }
 
-    /**
-     * Closes the FloatingActionButton menu
-     */
     private fun closeFABMenu() {
         // Animate normal FAB
         ViewCompat
@@ -230,9 +200,6 @@ class BarcodeListFragment : BaseFragment() {
         this.animateCloseFAB(this.fragment_list_barcode_2d)
     }
 
-    /**
-     * Animates the [FabSmall] during the opening
-     */
     private fun animateOpenFAB(fab: FabSmall) {
         ViewCompat
             .animate(fab)
@@ -246,9 +213,6 @@ class BarcodeListFragment : BaseFragment() {
             }
     }
 
-    /**
-     * Animates the [FabSmall] during the closing
-     */
     private fun animateCloseFAB(fab: FabSmall) {
         ViewCompat
             .animate(fab)

@@ -15,16 +15,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     // METHODS -------------------------------------------------------------------------------------
 
-    /**
-     * Gets the integer value of the activity layout
-     * @return an integer that corresponds to the activity layout
-     */
     @LayoutRes
     protected abstract fun getActivityLayout(): Int
 
-    /**
-     * Calls this method on [AppCompatActivity]#onCreate method
-     */
     protected abstract fun doOnCreate()
 
     // -- AppCompatActivity --

@@ -1,5 +1,6 @@
 package com.mancel.yann.qrcool.states
 
+import com.mancel.yann.qrcool.analyzers.MLKitBarcodeAnalyzer
 import com.mancel.yann.qrcool.models.BarcodeOverlay
 
 /**
@@ -13,14 +14,14 @@ sealed class ScanState {
 
     /**
      * State:  SuccessScan
-     * Where:  MLKitBarcodeAnalyzer#scanBarcodes
+     * Where:  [MLKitBarcodeAnalyzer.scanBarcodes]
      * Why:    Scan is a success
      */
     class SuccessScan(val _barcodes: List<BarcodeOverlay>) : ScanState()
 
     /**
      * State:  FailedScan
-     * Where:  MLKitBarcodeAnalyzer#scanBarcodes
+     * Where:  [MLKitBarcodeAnalyzer.scanBarcodes]
      * Why:    Scan is a fail
      */
     class FailedScan(val _exception: Exception) : ScanState()

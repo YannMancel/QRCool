@@ -6,8 +6,8 @@ import com.mancel.yann.qrcool.models.*
 import com.mancel.yann.qrcool.repositories.DatabaseRepository
 import com.mancel.yann.qrcool.states.CameraState
 import com.mancel.yann.qrcool.utils.BarcodeTools
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.mancel.yann.qrcool.utils.logCoroutineOnDebug
+import kotlinx.coroutines.*
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
  * A [ViewModel] subclass.
  */
 class SharedViewModel(
-    private val _databaseRepository: DatabaseRepository
+    private val _databaseRepository: DatabaseRepository,
+    private val _backgroundDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :  ViewModel() {
 
     // FIELDS --------------------------------------------------------------------------------------
@@ -42,9 +43,7 @@ class SharedViewModel(
 
     // -- Barcode --
 
-    /**
-     * Configure the [MediatorLiveData] of [List] of [BarcodeOverlay]
-     */
+    /** Configure the [MediatorLiveData] of [List] of [BarcodeOverlay] */
     private fun configureMediatorLiveData(): MediatorLiveData<List<BarcodeOverlay>> {
         return MediatorLiveData<List<BarcodeOverlay>>().also {
             it.addSource(this._databaseRepository.getTextBarcodes().asLiveData()) { textBarcodes ->
@@ -94,58 +93,51 @@ class SharedViewModel(
         }
     }
 
-    /**
-     * Gets the [LiveData] of [List] of [BarcodeOverlay]
-     */
     fun getBarcodes(): LiveData<List<BarcodeOverlay>> = this._barcodes
 
-    /**
-     * Adds barcodes to the [MutableLiveData] of [List] of [BarcodeOverlay]
-     * @param barcodes a [List] of [BarcodeOverlay]
-     */
-    fun addBarcodes(barcodes: List<BarcodeOverlay>) = viewModelScope.launch(context = Dispatchers.IO) {
-        // Filter to have only barcodes that are really new
-        val barcodeToAdd = barcodes.filterNot { newBarcode ->
-            this@SharedViewModel._barcodes.value?.any { currentBarcode ->
-                newBarcode._rawValue == currentBarcode._rawValue
-            } ?: false
-        }
+    fun addBarcodes(barcodes: List<BarcodeOverlay>) =
+        this.viewModelScope.launch(
+            context = this._backgroundDispatcher + CoroutineName("Add data in database")
+        ) {
+            this@SharedViewModel.logCoroutineOnDebug("Launch started")
 
-        barcodeToAdd.forEach {
-            when (it) {
-                is TextBarcode -> this@SharedViewModel._databaseRepository.insertTextBarcodes(it)
-                is WifiBarcode -> this@SharedViewModel._databaseRepository.insertWifiBarcodes(it)
-                is UrlBarcode -> this@SharedViewModel._databaseRepository.insertUrlBarcodes(it)
-                is SMSBarcode -> this@SharedViewModel._databaseRepository.insertSMSBarcodes(it)
-                is GeoPointBarcode -> this@SharedViewModel._databaseRepository.insertGeoPointBarcodes(it)
+            // Filter to have only barcodes that are really new
+            val barcodesToAdd = barcodes.filterNot { newBarcode ->
+                this@SharedViewModel._barcodes.value?.any { currentBarcode ->
+                    newBarcode._rawValue == currentBarcode._rawValue
+                } ?: false
+            }
+
+            barcodesToAdd.forEach {
+                when (it) {
+                    is TextBarcode -> this@SharedViewModel._databaseRepository.insertTextBarcodes(it)
+                    is WifiBarcode -> this@SharedViewModel._databaseRepository.insertWifiBarcodes(it)
+                    is UrlBarcode -> this@SharedViewModel._databaseRepository.insertUrlBarcodes(it)
+                    is SMSBarcode -> this@SharedViewModel._databaseRepository.insertSMSBarcodes(it)
+                    is GeoPointBarcode -> this@SharedViewModel._databaseRepository.insertGeoPointBarcodes(it)
+                }
             }
         }
-    }
 
-    /**
-     * Removes a barcode to the [MutableLiveData] of [List] of [BarcodeOverlay]
-     * @param barcode a [BarcodeOverlay]
-     */
-    fun removeBarcode(barcode: BarcodeOverlay) = viewModelScope.launch(context = Dispatchers.IO) {
-        when (barcode) {
-            is TextBarcode -> this@SharedViewModel._databaseRepository.removeTextBarcodes(barcode)
-            is WifiBarcode -> this@SharedViewModel._databaseRepository.removeWifiBarcodes(barcode)
-            is UrlBarcode -> this@SharedViewModel._databaseRepository.removeUrlBarcodes(barcode)
-            is SMSBarcode -> this@SharedViewModel._databaseRepository.removeSMSBarcodes(barcode)
-            is GeoPointBarcode -> this@SharedViewModel._databaseRepository.removeGeoPointBarcodes(barcode)
+    fun removeBarcode(barcode: BarcodeOverlay) =
+        this.viewModelScope.launch(
+            context = this._backgroundDispatcher + CoroutineName("Remove data in database")
+        ) {
+            this@SharedViewModel.logCoroutineOnDebug("Launch started")
+
+            when (barcode) {
+                is TextBarcode -> this@SharedViewModel._databaseRepository.removeTextBarcodes(barcode)
+                is WifiBarcode -> this@SharedViewModel._databaseRepository.removeWifiBarcodes(barcode)
+                is UrlBarcode -> this@SharedViewModel._databaseRepository.removeUrlBarcodes(barcode)
+                is SMSBarcode -> this@SharedViewModel._databaseRepository.removeSMSBarcodes(barcode)
+                is GeoPointBarcode -> this@SharedViewModel._databaseRepository.removeGeoPointBarcodes(barcode)
+            }
         }
-    }
 
     // -- FAB Menu --
 
-    /**
-     * Gets the [LiveData] of [Boolean]
-     */
     fun isFABMenuOpen() : LiveData<Boolean> = this._isFABMenuOpen
 
-    /**
-     * Toogles the FloatingActionButton menu
-     */
     fun toogleFabMenu() {
         this._isFABMenuOpen.value = !this._isFABMenuOpen.value!!
     }
@@ -154,27 +146,18 @@ class SharedViewModel(
 
     fun getCameraState(): LiveData<CameraState> = this._cameraState
 
-    /**
-     * Changes [CameraState] with [CameraState.SetupCamera] state
-     */
     fun changeCameraStateToSetupCamera() {
         this._cameraState.value = CameraState.SetupCamera(
             this._lensFacing
         )
     }
 
-    /**
-     * Changes [CameraState] with [CameraState.PreviewReady] state
-     */
     fun changeCameraStateToPreviewReady() {
         this._cameraState.value = CameraState.PreviewReady(
             this._lensFacing
         )
     }
 
-    /**
-     * Changes [CameraState] with [CameraState.Error] state
-     */
     fun changeCameraStateToError(errorMessage: String) {
         this._cameraState.value = CameraState.Error(
             errorMessage,
