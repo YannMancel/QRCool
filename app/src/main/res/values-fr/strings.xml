@@ -3,15 +3,26 @@
 <resources>
 
     <string name="app_name">QRCool</string>
+
+    <!-- nav_graph.xml -->
     <string name="name_fragment_camera_x">Scan de code-barre</string>
     <string name="name_fragment_details_barcode">Détails</string>
+
+    <!-- fragment_list_barcode.xml -->
     <string name="small_fab_barcode_2d">Code-barre 2D</string>
     <string name="small_fab_barcode_1d">Code-barre 1D</string>
-    <string name="remove_item">Suppression : %1$s</string>
+    <string name="remove_item">Suppression :\n%1$s</string>
+    <string name="error_event">Erreur :\n%1$s</string>
+
+    <!-- fragment_details_barcode.xml -->
     <string name="label_data">Données</string>
     <string name="label_date">Date</string>
+
+    <!-- CameraXFragment.kt -->
     <string name="no_permission">Aucune permission</string>
     <string name="analyzer_failed_scan">Scan de code-barre échoué :\n%1$s</string>
+
+    <!-- BarcodeTools.kt -->
     <string name="no_raw_value">Aucune donnée brute</string>
     <string name="raw_value_to_text">Texte : %1$s</string>
     <string name="ssid_of_wifi">Nom du réseau : %1$s</string>

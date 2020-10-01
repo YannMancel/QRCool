@@ -22,7 +22,7 @@ sealed class ScanState {
     /**
      * State:  FailedScan
      * Where:  [MLKitBarcodeAnalyzer.scanBarcodes]
-     * Why:    Scan is a fail
+     * Why:    Scan is a failure
      */
     class FailedScan(val _exception: Exception) : ScanState()
 }

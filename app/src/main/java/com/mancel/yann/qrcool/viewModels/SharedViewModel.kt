@@ -5,9 +5,11 @@ import androidx.lifecycle.*
 import com.mancel.yann.qrcool.models.*
 import com.mancel.yann.qrcool.repositories.DatabaseRepository
 import com.mancel.yann.qrcool.states.CameraState
+import com.mancel.yann.qrcool.states.DatabaseState
 import com.mancel.yann.qrcool.utils.BarcodeTools
 import com.mancel.yann.qrcool.utils.logCoroutineOnDebug
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by Yann MANCEL on 22/07/2020.
@@ -30,6 +32,12 @@ class SharedViewModel(
     private val _cameraState = MutableLiveData<CameraState>()
     private var _lensFacing: Int = CameraSelector.LENS_FACING_BACK
 
+    private val _databaseState = MutableLiveData<DatabaseState>()
+    private val _errorHandler = CoroutineExceptionHandler { _, throwable ->
+        this.logCoroutineOnDebug(throwable.message)
+        this.changeDatabaseStateToFailure(throwable.message)
+    }
+
     // CONSTRUCTORS --------------------------------------------------------------------------------
 
     init {
@@ -40,6 +48,11 @@ class SharedViewModel(
     }
 
     // METHODS -------------------------------------------------------------------------------------
+
+    // -- CoroutineContext --
+
+    private fun getCoroutineContext(name: String): CoroutineContext =
+        this._backgroundDispatcher + this._errorHandler + CoroutineName(name)
 
     // -- Barcode --
 
@@ -97,7 +110,7 @@ class SharedViewModel(
 
     fun addBarcodes(barcodes: List<BarcodeOverlay>) =
         this.viewModelScope.launch(
-            context = this._backgroundDispatcher + CoroutineName("Add data in database")
+            context = this.getCoroutineContext(name = "Add data in database")
         ) {
             this@SharedViewModel.logCoroutineOnDebug("Launch started")
 
@@ -117,11 +130,13 @@ class SharedViewModel(
                     is GeoPointBarcode -> this@SharedViewModel._databaseRepository.insertGeoPointBarcodes(it)
                 }
             }
+
+            this@SharedViewModel.changeDatabaseStateToSuccess()
         }
 
     fun removeBarcode(barcode: BarcodeOverlay) =
         this.viewModelScope.launch(
-            context = this._backgroundDispatcher + CoroutineName("Remove data in database")
+            context = this.getCoroutineContext(name = "Remove data in database")
         ) {
             this@SharedViewModel.logCoroutineOnDebug("Launch started")
 
@@ -132,6 +147,8 @@ class SharedViewModel(
                 is SMSBarcode -> this@SharedViewModel._databaseRepository.removeSMSBarcodes(barcode)
                 is GeoPointBarcode -> this@SharedViewModel._databaseRepository.removeGeoPointBarcodes(barcode)
             }
+
+            this@SharedViewModel.changeDatabaseStateToSuccess()
         }
 
     // -- FAB Menu --
@@ -162,6 +179,24 @@ class SharedViewModel(
         this._cameraState.value = CameraState.Error(
             errorMessage,
             this._lensFacing
+        )
+    }
+
+    // -- DatabaseState --
+
+    fun getDatabaseState(): LiveData<DatabaseState> = this._databaseState
+
+    private fun changeDatabaseStateToSuccess() {
+        this.logCoroutineOnDebug("Success")
+        // In background
+        this._databaseState.postValue(DatabaseState.Success)
+    }
+
+    private fun changeDatabaseStateToFailure(errorMessage: String?) {
+        this.logCoroutineOnDebug("Failure")
+        // In background
+        this._databaseState.postValue(
+            DatabaseState.Failure(_errorMessage = errorMessage ?: "-")
         )
     }
 }

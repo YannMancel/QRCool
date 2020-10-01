@@ -4,14 +4,14 @@
 
     <!-- nav_graph.xml -->
     <string name="name_fragment_list_barcode" translatable="false">@string/app_name</string>
-    <string name="name_fragment_zxing" translatable="false">Zxing Scan</string>
     <string name="name_fragment_camera_x">Barcode Scan</string>
     <string name="name_fragment_details_barcode">Details</string>
 
     <!-- fragment_list_barcode.xml -->
     <string name="small_fab_barcode_2d">Barcode 2D</string>
     <string name="small_fab_barcode_1d">Barcode 1D</string>
-    <string name="remove_item">Remove: %1$s</string>
+    <string name="remove_item">Remove:\n%1$s</string>
+    <string name="error_event">Error:\n%1$s</string>
 
     <!-- fragment_details_barcode.xml -->
     <string name="label_data">Data</string>

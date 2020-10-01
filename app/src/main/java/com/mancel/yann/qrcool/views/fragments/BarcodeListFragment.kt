@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancel.yann.qrcool.R
 import com.mancel.yann.qrcool.models.*
+import com.mancel.yann.qrcool.states.DatabaseState
 import com.mancel.yann.qrcool.utils.BarcodeTools
 import com.mancel.yann.qrcool.utils.MessageTools
 import com.mancel.yann.qrcool.viewModels.SharedViewModel
@@ -43,6 +44,7 @@ class BarcodeListFragment : BaseFragment() {
         this.configureRecyclerView()
         this.configureBarcodeEvents()
         this.configureFABMenuEvents()
+        this.configureDatabaseEvents()
     }
 
     // -- Listener --
@@ -152,6 +154,15 @@ class BarcodeListFragment : BaseFragment() {
             }
     }
 
+    private fun configureDatabaseEvents() {
+        this._viewModel
+            .getDatabaseState()
+            .observe(this.viewLifecycleOwner) { databaseState ->
+                databaseState?.let {
+                    this.updateUIWithDatabaseEvents(it)
+                }
+            }
+    }
     // -- Actions --
 
     private fun actionAfterHorizontalSwipe(adapterPosition: Int) {
@@ -223,5 +234,23 @@ class BarcodeListFragment : BaseFragment() {
                     .alpha(0F)
             }
             .withEndAction { fab.visibility = View.GONE }
+    }
+
+    // -- DatabaseState --
+
+    private fun updateUIWithDatabaseEvents(state: DatabaseState) {
+        when (state) {
+            DatabaseState.Success -> this.handleDatabaseStateWithSuccess()
+            is DatabaseState.Failure -> this.handleDatabaseStateWithFailure(state)
+        }
+    }
+
+    private fun handleDatabaseStateWithSuccess() { /* Do nothing here */ }
+
+    private fun handleDatabaseStateWithFailure(failure: DatabaseState.Failure) {
+        MessageTools.showMessageWithSnackbar(
+            this._rootView.fragment_list_coordinator_layout,
+            this.getString(R.string.error_event, failure._errorMessage)
+        )
     }
 }
