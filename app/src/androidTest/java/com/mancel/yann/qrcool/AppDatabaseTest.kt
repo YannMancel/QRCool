@@ -1,19 +1,18 @@
 package com.mancel.yann.qrcool
 
 import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.asLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mancel.yann.qrcool.databases.AppDatabase
 import com.mancel.yann.qrcool.databases.BarcodeDAO
 import com.mancel.yann.qrcool.koin.roomTestModule
 import com.mancel.yann.qrcool.models.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
@@ -37,12 +36,6 @@ class AppDatabaseTest {
     private lateinit var _koin: Koin
     private lateinit var _database: AppDatabase
     private lateinit var _barcodeDAO: BarcodeDAO
-
-    // RULES ---------------------------------------------------------------------------------------
-
-    // A JUnit rule that configures LiveData to execute each task synchronously
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
 
     // METHODS -------------------------------------------------------------------------------------
 
@@ -85,9 +78,34 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(
-            this@AppDatabaseTest._barcodeDAO.getTextBarcodes().asLiveData()
-        )
+        val barcodes: List<TextBarcode>
+        val flow = this@AppDatabaseTest._barcodeDAO.getTextBarcodes()
+
+        /*
+            // With LiveData:
+
+                // A JUnit rule that configures LiveData to execute each task synchronously
+                @get:Rule
+                val rule = InstantTaskExecutorRule()
+
+                barcodes = LiveDataTestUtil.getValue(flow.asLiveData())
+
+            // With launch(), collect() and join():
+
+                val job = launch {
+                    flow.take(1)
+                        .collect {
+                            barcodes = it
+                        }
+                }
+                job.join()
+         */
+
+        val deferredBarcodes = async {
+            flow.take(1)
+                .single()
+        }
+        barcodes = deferredBarcodes.await()
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -124,9 +142,13 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(
-            this@AppDatabaseTest._barcodeDAO.getWifiBarcodes().asLiveData()
-        )
+        val flow = this@AppDatabaseTest._barcodeDAO.getWifiBarcodes()
+
+        val deferredBarcodes = async {
+            flow.take(1)
+                .single()
+        }
+        val barcodes = deferredBarcodes.await()
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -165,9 +187,13 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(
-            this@AppDatabaseTest._barcodeDAO.getUrlBarcodes().asLiveData()
-        )
+        val flow = this@AppDatabaseTest._barcodeDAO.getUrlBarcodes()
+
+        val deferredBarcodes = async {
+            flow.take(1)
+                .single()
+        }
+        val barcodes = deferredBarcodes.await()
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -205,9 +231,13 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(
-            this@AppDatabaseTest._barcodeDAO.getSMSBarcodes().asLiveData()
-        )
+        val flow = this@AppDatabaseTest._barcodeDAO.getSMSBarcodes()
+
+        val deferredBarcodes = async {
+            flow.take(1)
+                .single()
+        }
+        val barcodes = deferredBarcodes.await()
 
         // TEST
         assertEquals(1, barcodes.size)
@@ -245,9 +275,13 @@ class AppDatabaseTest {
         assertEquals(1L, ids[0])
 
         // THEN: Retrieve barcode
-        val barcodes = LiveDataTestUtil.getValue(
-            this@AppDatabaseTest._barcodeDAO.getGeoPointBarcodes().asLiveData()
-        )
+        val flow = this@AppDatabaseTest._barcodeDAO.getGeoPointBarcodes()
+
+        val deferredBarcodes = async {
+            flow.take(1)
+                .single()
+        }
+        val barcodes = deferredBarcodes.await()
 
         // TEST
         assertEquals(1, barcodes.size)
