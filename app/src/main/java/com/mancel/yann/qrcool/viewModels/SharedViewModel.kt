@@ -33,9 +33,15 @@ class SharedViewModel(
     private var _lensFacing: Int = CameraSelector.LENS_FACING_BACK
 
     private val _databaseState = MutableLiveData<DatabaseState>()
+
     private val _errorHandler = CoroutineExceptionHandler { _, throwable ->
         this.logCoroutineOnDebug(throwable.message)
         this.changeDatabaseStateToFailure(throwable.message)
+    }
+
+    companion object {
+        private const val COROUTINE_ADD_DATA = "Add data in database"
+        private const val COROUTINE_REMOVE_DATA = "Remove data in database"
     }
 
     // CONSTRUCTORS --------------------------------------------------------------------------------
@@ -56,7 +62,15 @@ class SharedViewModel(
 
     // -- Barcode --
 
-    /** Configure the [MediatorLiveData] of [List] of [BarcodeOverlay] */
+    /**
+     * Configure the [MediatorLiveData] of [List] of [BarcodeOverlay].
+     * It retrieves data from 5 sources.
+     *  - [DatabaseRepository.getTextBarcodes]
+     *  - [DatabaseRepository.getWifiBarcodes]
+     *  - [DatabaseRepository.getUrlBarcodes]
+     *  - [DatabaseRepository.getSMSBarcodes]
+     *  - [DatabaseRepository.getGeoPointBarcodes]
+     */
     private fun configureMediatorLiveData(): MediatorLiveData<List<BarcodeOverlay>> {
         return MediatorLiveData<List<BarcodeOverlay>>().also {
             it.addSource(this._databaseRepository.getTextBarcodes().asLiveData()) { textBarcodes ->
@@ -110,7 +124,7 @@ class SharedViewModel(
 
     fun addBarcodes(barcodes: List<BarcodeOverlay>) =
         this.viewModelScope.launch(
-            context = this.getCoroutineContext(name = "Add data in database")
+            context = this.getCoroutineContext(name = COROUTINE_ADD_DATA)
         ) {
             this@SharedViewModel.logCoroutineOnDebug("Launch started")
 
@@ -136,7 +150,7 @@ class SharedViewModel(
 
     fun removeBarcode(barcode: BarcodeOverlay) =
         this.viewModelScope.launch(
-            context = this.getCoroutineContext(name = "Remove data in database")
+            context = this.getCoroutineContext(name = COROUTINE_REMOVE_DATA)
         ) {
             this@SharedViewModel.logCoroutineOnDebug("Launch started")
 
@@ -164,22 +178,15 @@ class SharedViewModel(
     fun getCameraState(): LiveData<CameraState> = this._cameraState
 
     fun changeCameraStateToSetupCamera() {
-        this._cameraState.value = CameraState.SetupCamera(
-            this._lensFacing
-        )
+        this._cameraState.value = CameraState.SetupCamera(this._lensFacing)
     }
 
     fun changeCameraStateToPreviewReady() {
-        this._cameraState.value = CameraState.PreviewReady(
-            this._lensFacing
-        )
+        this._cameraState.value = CameraState.PreviewReady(this._lensFacing)
     }
 
     fun changeCameraStateToError(errorMessage: String) {
-        this._cameraState.value = CameraState.Error(
-            errorMessage,
-            this._lensFacing
-        )
+        this._cameraState.value = CameraState.Error(errorMessage, this._lensFacing)
     }
 
     // -- DatabaseState --

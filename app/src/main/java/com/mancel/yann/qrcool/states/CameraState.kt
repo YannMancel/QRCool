@@ -7,9 +7,11 @@ import com.mancel.yann.qrcool.views.fragments.CameraXFragment
  * Name of the project: QRCool
  * Name of the package: com.mancel.yann.qrcool.states
  */
-sealed class CameraState(
-    val _lensFacing: Int
-) {
+sealed class CameraState {
+    
+    // FIELDS --------------------------------------------------------------------------------------
+
+    abstract val _lensFacing: Int
 
     // CLASSES -------------------------------------------------------------------------------------
 
@@ -19,17 +21,17 @@ sealed class CameraState(
      * Why:    After post method of Preview widget
      */
     class SetupCamera(
-        lensFacing: Int
-    ) : CameraState(lensFacing)
+        override val _lensFacing: Int
+    ) : CameraState()
 
     /**
      * State:  PreviewReady
-     * Where:  [CameraXFragment.configureCameraProvider]
+     * Where:  [CameraXFragment.configureCameraProviderOfCameraX]
      * Why:    After to bind Preview use case
      */
     class PreviewReady(
-        lensFacing: Int
-    ) : CameraState(lensFacing)
+        override val _lensFacing: Int
+    ) : CameraState()
 
     /**
      * State:  Error
@@ -38,6 +40,6 @@ sealed class CameraState(
      */
     class Error(
         val _errorMessage: String,
-        lensFacing: Int
-    ) : CameraState(lensFacing)
+        override val _lensFacing: Int
+    ) : CameraState()
 }

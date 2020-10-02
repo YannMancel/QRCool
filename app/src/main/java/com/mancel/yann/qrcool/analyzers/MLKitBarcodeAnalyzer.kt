@@ -68,12 +68,12 @@ class MLKitBarcodeAnalyzer(
             .addOnSuccessListener { barcodes ->
                 val data = this.convertBarcodesFromMLKitToApp(barcodes)
                 this._actionOnScanResult(
-                    ScanState.SuccessScan(data)
+                    ScanState.Success(data)
                 )
             }
             .addOnFailureListener { exception ->
                 this._actionOnScanResult(
-                    ScanState.FailedScan(exception)
+                    ScanState.Failure(exception)
                 )
             }
             .addOnCompleteListener {

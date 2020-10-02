@@ -13,16 +13,16 @@ sealed class ScanState {
     // CLASSES -------------------------------------------------------------------------------------
 
     /**
-     * State:  SuccessScan
+     * State:  Success
      * Where:  [MLKitBarcodeAnalyzer.scanBarcodes]
      * Why:    Scan is a success
      */
-    class SuccessScan(val _barcodes: List<BarcodeOverlay>) : ScanState()
+    class Success(val _barcodes: List<BarcodeOverlay>) : ScanState()
 
     /**
-     * State:  FailedScan
+     * State:  Failure
      * Where:  [MLKitBarcodeAnalyzer.scanBarcodes]
      * Why:    Scan is a failure
      */
-    class FailedScan(val _exception: Exception) : ScanState()
+    class Failure(val _exception: Exception) : ScanState()
 }

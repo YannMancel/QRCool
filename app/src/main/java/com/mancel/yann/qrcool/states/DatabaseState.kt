@@ -20,7 +20,7 @@ sealed class DatabaseState {
 
     /**
      * State:  Failure
-     * Where:  [SharedViewModel]
+     * Where:  [SharedViewModel._errorHandler]
      * Why:    Event is a failure
      */
     class Failure(val _errorMessage: String) : DatabaseState()

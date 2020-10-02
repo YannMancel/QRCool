@@ -163,6 +163,7 @@ class BarcodeListFragment : BaseFragment() {
                 }
             }
     }
+
     // -- Actions --
 
     private fun actionAfterHorizontalSwipe(adapterPosition: Int) {

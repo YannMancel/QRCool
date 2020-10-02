@@ -88,7 +88,7 @@ class CameraXFragment : BaseFragment() {
     override fun doOnCreateView() {
         this.configureFullScreenLifecycleObserver()
         this.configureExecutorLifecycleObserver()
-        this.configureCameraState()
+        this.configureCameraEvents()
     }
 
     override fun actionAfterPermission() = this.configureCameraX()
@@ -120,55 +120,53 @@ class CameraXFragment : BaseFragment() {
         this.lifecycle.addObserver(this._cameraExecutor)
     }
 
-    // -- CameraState --
+    // -- LiveData --
 
-    private fun configureCameraState() {
+    private fun configureCameraEvents() {
         this._viewModel
             .getCameraState()
             .observe(this.viewLifecycleOwner) { cameraState ->
                 cameraState?.let {
-                    this.updateUI(it)
+                    this.updateUIWithCameraEvents(it)
                 }
             }
     }
 
-    private fun updateUI(state: CameraState) {
+    // -- CameraState --
+
+    private fun updateUIWithCameraEvents(state: CameraState) {
         // To update CameraSelector
         this._currentCameraState = state
 
         when (state) {
-            is CameraState.SetupCamera -> this.handleStateSetupCamera()
-            is CameraState.PreviewReady -> this.handleStatePreviewReady()
-            is CameraState.Error -> this.handleStateError(state._errorMessage)
+            is CameraState.SetupCamera -> this.handleCameraStateWithSetupCamera()
+            is CameraState.PreviewReady -> this.handleCameraStateWithPreviewReady()
+            is CameraState.Error -> this.handleCameraStateWithError(state._errorMessage)
         }
     }
 
-    /** Handles the [CameraState.SetupCamera] state */
-    private fun handleStateSetupCamera() = this.configureCameraX()
+    private fun handleCameraStateWithSetupCamera() = this.configureCameraX()
 
-    /** Handles the [CameraState.PreviewReady] state */
-    private fun handleStatePreviewReady() { /* Do nothing here */ }
+    private fun handleCameraStateWithPreviewReady() { /* Do nothing here */ }
 
-    /** Handles the [CameraState.Error] state */
-    private fun handleStateError(errorMessage: String) { /* Do nothing here */ }
+    private fun handleCameraStateWithError(errorMessage: String) { /* Do nothing here */ }
 
     // -- CameraX --
 
     private fun configureCameraX() {
         if (this.hasCameraPermission())
-            this.configureCameraProvider()
+            this.configureCameraProviderOfCameraX()
         else
             this._viewModel.changeCameraStateToError(this.getString(R.string.no_permission))
     }
 
-    /** Configures the [ProcessCameraProvider] of CameraX */
-    private fun configureCameraProvider() {
+    private fun configureCameraProviderOfCameraX() {
         this._cameraProviderFuture = ProcessCameraProvider.getInstance(this.requireContext())
 
         this._cameraProviderFuture.addListener(
             Runnable {
                 val cameraProvider = this._cameraProviderFuture.get()
-                this.bindAllUseCases(cameraProvider)
+                this.bindAllUseCasesOfCameraX(cameraProvider)
                 this._viewModel.changeCameraStateToPreviewReady()
             },
             ContextCompat.getMainExecutor(this.requireContext())
@@ -176,7 +174,7 @@ class CameraXFragment : BaseFragment() {
     }
 
     /** Binds all use cases, [Preview] and [ImageAnalysis], to the Fragment's lifecycle */
-    private fun bindAllUseCases(cameraProvider: ProcessCameraProvider) {
+    private fun bindAllUseCasesOfCameraX(cameraProvider: ProcessCameraProvider) {
         // Metrics
         val metrics = DisplayMetrics().also {
             this._rootView.fragment_camera_preview.display.getRealMetrics(it)
@@ -186,13 +184,13 @@ class CameraXFragment : BaseFragment() {
         val rotation = this._rootView.fragment_camera_preview.display.rotation
 
         // Use case: Preview
-        this._preview = this.buildPreview(
+        this._preview = this.buildPreviewOfCameraX(
             this.getAspectRatio(metrics.widthPixels, metrics.heightPixels),
             rotation
         )
 
         // Use case: ImageAnalysis
-        this._imageAnalysis = this.buildImageAnalysis(
+        this._imageAnalysis = this.buildImageAnalysisOfCameraX(
             this.getResolution(),
             rotation
         )
@@ -204,7 +202,7 @@ class CameraXFragment : BaseFragment() {
             // Binds Preview to the Fragment's lifecycle
             this._camera = cameraProvider.bindToLifecycle(
                 this.viewLifecycleOwner,
-                this.buildCameraSelector(),
+                this.buildCameraSelectorOfCameraX(),
                 this._preview, this._imageAnalysis
             )
 
@@ -220,23 +218,20 @@ class CameraXFragment : BaseFragment() {
         }
     }
 
-    /** Builds and returns a [CameraSelector] of CameraX */
-    private fun buildCameraSelector(): CameraSelector {
+    private fun buildCameraSelectorOfCameraX(): CameraSelector {
         return CameraSelector.Builder()
             .requireLensFacing(this._currentCameraState._lensFacing)
             .build()
     }
 
-    /** Builds and returns the [Preview] use case of CameraX */
-    private fun buildPreview(ratio: Int, rotation: Int): Preview {
+    private fun buildPreviewOfCameraX(ratio: Int, rotation: Int): Preview {
         return Preview.Builder()
             .setTargetAspectRatio(ratio)
             .setTargetRotation(rotation)
             .build()
     }
 
-    /** Builds and returns the [ImageAnalysis] use case of CameraX */
-    private fun buildImageAnalysis(resolution: Size, rotation: Int): ImageAnalysis {
+    private fun buildImageAnalysisOfCameraX(resolution: Size, rotation: Int): ImageAnalysis {
         return ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setTargetResolution(resolution)
@@ -286,8 +281,7 @@ class CameraXFragment : BaseFragment() {
 
     // -- Resolution --
 
-    /** Gets the resolution, in returning a [Size], to be in accordance with ML Kit */
-    private fun getResolution() =
+    private fun getResolution(): Size =
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             Size(RESOLUTION_MIN, RESOLUTION_MAX)
         else
@@ -320,7 +314,7 @@ class CameraXFragment : BaseFragment() {
              */
 
             when (scanState) {
-                is ScanState.SuccessScan -> {
+                is ScanState.Success -> {
                     val barcodes = scanState._barcodes
 
                     if (barcodes.isNotEmpty()) {
@@ -328,11 +322,11 @@ class CameraXFragment : BaseFragment() {
                         imageAnalysis.clearAnalyzer()
 
                         // Add new barcode(s)
-                        this.notifyScanOfBarcodes(barcodes)
+                        this.notifyScanOfBarcodesBeforeToFinishFragment(barcodes)
                     }
                 }
 
-                is ScanState.FailedScan -> {
+                is ScanState.Failure -> {
                     MessageTools.showMessageWithSnackbar(
                         this._rootView.fragment_camera_coordinator_layout,
                         this.getString(R.string.analyzer_failed_scan, scanState._exception.message)
@@ -344,8 +338,7 @@ class CameraXFragment : BaseFragment() {
 
     // -- Barcode --
 
-    /** Notifies when barcodes have been checked */
-    private fun notifyScanOfBarcodes(barcodes: List<BarcodeOverlay>) {
+    private fun notifyScanOfBarcodesBeforeToFinishFragment(barcodes: List<BarcodeOverlay>) {
         // Add barcodes
         this._viewModel.addBarcodes(barcodes)
 
